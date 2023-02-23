@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Alert } from 'react-native';
+import { Alert, FlatList } from 'react-native';
 
 import { Container, Title } from './styles';
 
@@ -8,6 +8,7 @@ import SensorModel from '../../database/model/sensorModel';
 import { Q } from '@nozbe/watermelondb';
 import { Button } from '../../components/Button';
 import { createSensor, getAllSensors } from '../../database/sensor/utils';
+import { Sensor } from '../../components/Sensor';
 
 export function Sensors() {
   const [sensors, setSensors] = useState<SensorModel[]>([]);
@@ -37,8 +38,8 @@ export function Sensors() {
     const sensor = await dataBase.get<SensorModel>('sensors')
     await createSensor("test3", "AB:01:23:FF", [])
     await createSensor("test4", "34:01:03:1F", ['2a0f'])
-      
-      Alert.alert('Created!');
+    await fetchData();  
+    Alert.alert('Created!');
   }
 
   async function deleteOne() {
@@ -46,6 +47,18 @@ export function Sensors() {
     const sensor = allSensors[0]
     console.log(sensor)
     sensor.deleteSensor()
+  }
+
+  async function handleRemove(item: SensorModel){
+    try {
+
+      await item.deleteSensor()
+      
+       Alert.alert('Deleted!');
+       await fetchData();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   useEffect(()=> {
@@ -56,9 +69,18 @@ export function Sensors() {
   return (
     <Container>
       <Title>Sensors</Title>
+      <FlatList
+        data={sensors}
+        keyExtractor={item => item?.id}
+        renderItem={({ item }) => (
+          <Sensor
+            data={item}
+            onRemove={() => handleRemove(item)}
+          />
+        )}
+      />
 
       <Button title='create' onPress={makeSensors}></Button>
-      <Button title='delete' onPress={deleteOne}></Button>
     </Container>
   );
 }
