@@ -12,6 +12,10 @@ export const sensorSchema = tableSchema({
       type: "string",
     },
     {
+      name: "is_primary",
+      type: "boolean"
+    },
+    {
       name: "type",
       type: "string"
     },

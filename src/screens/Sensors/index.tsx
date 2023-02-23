@@ -7,6 +7,7 @@ import { dataBase } from '../../database';
 import SensorModel from '../../database/model/sensorModel';
 import { Q } from '@nozbe/watermelondb';
 import { Button } from '../../components/Button';
+import { createSensor, getAllSensors } from '../../database/sensor/utils';
 
 export function Sensors() {
   const [sensors, setSensors] = useState<SensorModel[]>([]);
@@ -20,33 +21,31 @@ export function Sensors() {
     
       console.log(sensorCollection);
       setSensors(sensorCollection);
+      const allSensor = await getAllSensors()
+      console.log('All: ',allSensor)
+      const numberOfBluetoothSensors = await dataBase.get('sensors').query(
+        Q.where('type', 'bluetooth')
+      ).fetchCount()
+      console.log('ble sensors = ', numberOfBluetoothSensors);
    }  catch (error) {
       console.log(error);
     }
   }
   
-  async function createSensor(){
+  async function makeSensors(){
     console.log('creating...')
-    await dataBase.write(async() => {
-        console.log('writing to db...')
-        await dataBase
-        .get<SensorModel>('sensors')
-        .create(data => {
-          console.log('Inside .create...')
-          console.log(data)
-          data.name = "Test2",
-          data.type = "bluetooth",
-          data.address = "00:00:00:00",
-          data.services = ['0a36','2a65'],
-          data.createdAt = new Date().getTime()
-          console.log(data)
-        })
-        .catch(err => {
-            console.log('got error creating sensor: ',err)
-        })
-      });
+    const sensor = await dataBase.get<SensorModel>('sensors')
+    await createSensor("test3", "AB:01:23:FF", [])
+    await createSensor("test4", "34:01:03:1F", ['2a0f'])
       
       Alert.alert('Created!');
+  }
+
+  async function deleteOne() {
+    const allSensors = await getAllSensors()
+    const sensor = allSensors[0]
+    console.log(sensor)
+    sensor.deleteSensor()
   }
 
   useEffect(()=> {
@@ -58,7 +57,8 @@ export function Sensors() {
     <Container>
       <Title>Sensors</Title>
 
-      <Button title='create' onPress={createSensor}></Button>
+      <Button title='create' onPress={makeSensors}></Button>
+      <Button title='delete' onPress={deleteOne}></Button>
     </Container>
   );
 }
