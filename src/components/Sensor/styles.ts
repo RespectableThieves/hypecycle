@@ -19,7 +19,6 @@ export const Container = styled.View`
 `;
 
 export const Icon = styled.View<Props>`
-    background-color: ${({ type }) => type === 'soft' ? "#4BC3A4" : "#A36FF7"};
     width: 50px;
     height: 50px;
     justify-content: center;
@@ -36,8 +35,9 @@ export const Name = styled.Text`
 
 export const Options = styled.View`
     height: 80px;
-    justify-content: space-between;
     padding: 12px 0;
+    justify-content: center;
+    align-items: center;
 `;
 
 export const Option = styled.TouchableOpacity``;

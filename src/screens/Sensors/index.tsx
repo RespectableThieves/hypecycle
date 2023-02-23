@@ -6,11 +6,12 @@ import { Container, Title } from './styles';
 import { dataBase } from '../../database';
 import SensorModel from '../../database/model/sensorModel';
 import { Q } from '@nozbe/watermelondb';
-import { Button } from '../../components/Button';
+import { Button, useTheme } from 'react-native-paper';
 import { createSensor, getAllSensors } from '../../database/sensor/utils';
 import { Sensor } from '../../components/Sensor';
 
 export function Sensors() {
+  const theme = useTheme();
   const [sensors, setSensors] = useState<SensorModel[]>([]);
 
   async function fetchData(){
@@ -80,7 +81,7 @@ export function Sensors() {
         )}
       />
 
-      <Button title='create' onPress={makeSensors}></Button>
+      <Button icon="camera" mode="contained" onPress={makeSensors} style={{ backgroundColor: theme.colors.roseTaupe }}> Create </Button>
     </Container>
   );
 }
