@@ -1,8 +1,8 @@
 import { appSchema } from "@nozbe/watermelondb";
-
+import { sensorSchema } from "./sensorsSchema";
 import { skillSchema } from "./skillSchema";
 
 export const schemas = appSchema({
-  version: 1,
-  tables: [skillSchema],
+  version: 2,
+  tables: [skillSchema, sensorSchema],
 });

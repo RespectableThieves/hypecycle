@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 
 import { StatusBar } from 'expo-status-bar';
-import { Home } from './src/screens/Home';
+import { Sensors } from './src/screens/Sensors';
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
         translucent
         backgroundColor="transparent"
       />
-      <Home />
+      <Sensors />
     </>
   );
 }
