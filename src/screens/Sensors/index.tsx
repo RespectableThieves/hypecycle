@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, FlatList } from 'react-native';
 
-import { Container, Title } from './styles';
+import { Container, Empty } from './styles';
 
 import { dataBase } from '../../database';
 import SensorModel from '../../database/model/sensorModel';
 import { Q } from '@nozbe/watermelondb';
-import { Button } from 'react-native-paper';
+import { Button, Text } from 'react-native-paper';
 import { createSensor, getAllSensors } from '../../database/sensor/utils';
 import { Sensor } from '../../components/Sensor';
 
-export function Sensors() {
+const _listEmptyComponent = () => {
+  console.log("Empty list")
+  return (
+      <Empty>
+          <Text variant="titleMedium">No Connected Sensors yet... Try add some!</Text>
+      </Empty>
+  )
+}
+
+export function Sensors({ navigation }) {
   const [sensors, setSensors] = useState<SensorModel[]>([]);
 
   async function fetchData(){
@@ -20,10 +29,8 @@ export function Sensors() {
       .query(Q.where('type', 'bluetooth'))
       .fetch();
     
-      console.log(sensorCollection);
       setSensors(sensorCollection);
       const allSensor = await getAllSensors()
-      console.log('All: ',allSensor)
       const numberOfBluetoothSensors = await dataBase.get('sensors').query(
         Q.where('type', 'bluetooth')
       ).fetchCount()
@@ -53,26 +60,32 @@ export function Sensors() {
       console.log(error);
     }
   }
-
-  useEffect(()=> {
-
-    fetchData();
-  }, []);
+  
+  useEffect(() => {
+    // Use `setOptions` to update the button that we previously specified
+    // Now the button includes an `onPress` handler to update the count
+    navigation.setOptions({
+      headerRight: () => (
+        <Button icon="plus-thick" mode="contained" onPress={makeSensors} buttonColor={'#93B7BE'} textColor={'#454545'}>Add</Button>
+      ),
+    });
+  }, [navigation]);
 
   return (
     <Container>
       <FlatList
         data={sensors}
         keyExtractor={item => item?.id}
+        ListEmptyComponent={_listEmptyComponent}
         renderItem={({ item }) => (
           <Sensor
             data={item}
-            onRemove={() => handleRemove(item)}
+            onAction={() => handleRemove(item)}
+            actionIcon="trash"
+            actionColor="#EE3B45"
           />
         )}
       />
-
-      <Button icon="plus-thick" mode="contained" onPress={makeSensors} buttonColor={'#93B7BE'} textColor={'#454545'}> Add Sensor </Button>
     </Container>
   );
 }

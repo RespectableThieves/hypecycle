@@ -11,15 +11,18 @@ export type SensorProps = {
   name: string;
   address: string;
   is_primary: boolean;
+  services: string[];
   type: string;
 }
 
 type Props = {
   data: SensorProps;
-  onRemove: () => void;
+  onAction: () => void;
+  actionIcon: string;
+  actionColor: string;
 }
 
-export function Sensor({ data, onRemove }: Props) {
+export function Sensor({ data, onAction, actionIcon, actionColor }: Props) {
   return (
     <View>
       <StyledListItem
@@ -27,12 +30,12 @@ export function Sensor({ data, onRemove }: Props) {
         description={data.address}
         left={(Props: any) => <List.Icon {...Props} icon={data.type == "bluetooth" ? "bluetooth" : "radio-tower"}/>}
         right={() => <Options>
-                        <SensorServiceIcons data={["aaa"]}/>
+                        <SensorServiceIcons data={data.services}/>
                         <VerticalDivider></VerticalDivider>
-                        <Option onPress={onRemove}>
+                        <Option onPress={onAction}>
                           <FontAwesome5
-                            name="trash"
-                            color="#EE3B45"
+                            name={actionIcon}
+                            color={actionColor}
                             size={20}
                           />
                         </Option>
