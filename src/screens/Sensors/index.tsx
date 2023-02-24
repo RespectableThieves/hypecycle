@@ -43,8 +43,8 @@ export function Sensors({ navigation }) {
   async function makeSensors(){
     console.log('creating...')
     const sensor = await dataBase.get<SensorModel>('sensors')
-    await createSensor("Garmin HRM Pro", "AB:01:23:FF", ['180d'])
-    await createSensor("Tacx Neo 2T", "34:01:03:1F", ['1818','1816'])
+    await createSensor("Garmin HRM Pro", "AB:01:23:FF", ['180d','180f'])
+    await createSensor("Tacx Neo 2T", "34:01:03:1F", ['180f','1818','1816'])
     await fetchData();  
     Alert.alert('Created!');
   }
