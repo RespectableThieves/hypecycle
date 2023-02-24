@@ -6,12 +6,11 @@ import { Container, Title } from './styles';
 import { dataBase } from '../../database';
 import SensorModel from '../../database/model/sensorModel';
 import { Q } from '@nozbe/watermelondb';
-import { Button, useTheme } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import { createSensor, getAllSensors } from '../../database/sensor/utils';
 import { Sensor } from '../../components/Sensor';
 
 export function Sensors() {
-  const theme = useTheme();
   const [sensors, setSensors] = useState<SensorModel[]>([]);
 
   async function fetchData(){
@@ -37,17 +36,10 @@ export function Sensors() {
   async function makeSensors(){
     console.log('creating...')
     const sensor = await dataBase.get<SensorModel>('sensors')
-    await createSensor("test3", "AB:01:23:FF", [])
-    await createSensor("test4", "34:01:03:1F", ['2a0f'])
+    await createSensor("Garmin HRM Pro", "AB:01:23:FF", ['180d'])
+    await createSensor("Tacx Neo 2T", "34:01:03:1F", ['1818','1816'])
     await fetchData();  
     Alert.alert('Created!');
-  }
-
-  async function deleteOne() {
-    const allSensors = await getAllSensors()
-    const sensor = allSensors[0]
-    console.log(sensor)
-    sensor.deleteSensor()
   }
 
   async function handleRemove(item: SensorModel){
@@ -69,7 +61,7 @@ export function Sensors() {
 
   return (
     <Container>
-      <Title>Sensors</Title>
+      <Title variant="titleLarge">Sensors</Title>
       <FlatList
         data={sensors}
         keyExtractor={item => item?.id}
@@ -81,7 +73,7 @@ export function Sensors() {
         )}
       />
 
-      <Button icon="camera" mode="contained" onPress={makeSensors} style={{ backgroundColor: theme.colors.roseTaupe }}> Create </Button>
+      <Button icon="bluetooth" mode="contained" onPress={makeSensors} buttonColor={'#93B7BE'} textColor={'#454545'}> Create </Button>
     </Container>
   );
 }
