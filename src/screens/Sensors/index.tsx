@@ -48,8 +48,9 @@ export function Sensors({ navigation }) {
   }
   
   async function makeSensors(){
+    // Create some fake sensors to test with.
     console.log('creating...')
-    const sensor = await dataBase.get<SensorModel>('sensors')
+    const sensor = dataBase.get<SensorModel>('sensors')
     await createSensor("Garmin HRM Pro", "AB:01:23:FF", ['180d','180f'])
     await createSensor("Tacx Neo 2T", "34:01:03:1F", ['180f','1818','1816'])
     await fetchData();  
@@ -57,12 +58,10 @@ export function Sensors({ navigation }) {
   }
 
   async function handleRemove(item: SensorModel){
+    // Remove the selected sensor and refetch data.
     try {
-
       await item.deleteSensor()
-      
-      //  Alert.alert('Deleted!');
-       await fetchData();
+      await fetchData();
     } catch (error) {
       console.log(error);
     }
@@ -97,9 +96,9 @@ export function Sensors({ navigation }) {
         )}
       />
       <SensorDiscoveryModal visible={visible} onDismiss={hideModal}/>
-      {/* <Button style={{marginTop: 30}} onPress={showModal}>
-        Show
-      </Button> */}
+      <Button style={{marginTop: 30}} onPress={makeSensors}>
+        Create fake sensors
+      </Button>
     </Container>
   );
 }
