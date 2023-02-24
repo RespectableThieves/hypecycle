@@ -47,7 +47,7 @@ export function Sensors() {
 
       await item.deleteSensor()
       
-       Alert.alert('Deleted!');
+      //  Alert.alert('Deleted!');
        await fetchData();
     } catch (error) {
       console.log(error);
@@ -73,7 +73,7 @@ export function Sensors() {
         )}
       />
 
-      <Button icon="bluetooth" mode="contained" onPress={makeSensors} buttonColor={'#93B7BE'} textColor={'#454545'}> Create </Button>
+      <Button icon="plus-thick" mode="contained" onPress={makeSensors} buttonColor={'#93B7BE'} textColor={'#454545'}> Add Sensor </Button>
     </Container>
   );
 }
