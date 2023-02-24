@@ -1,5 +1,5 @@
 import React from 'react';
-import { FontAwesome5 } from '@expo/vector-icons'; 
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 
 import { Container, Icon, Name, Options, Option, StyledListItem, VerticalDivider } from './styles';
 import { Divider, List, ListIconProps } from 'react-native-paper';
@@ -33,7 +33,7 @@ export function Sensor({ data, onAction, actionIcon, actionColor }: Props) {
                         <SensorServiceIcons data={data.services}/>
                         <VerticalDivider></VerticalDivider>
                         <Option onPress={onAction}>
-                          <FontAwesome5
+                          <MaterialCommunityIcons
                             name={actionIcon}
                             color={actionColor}
                             size={20}
