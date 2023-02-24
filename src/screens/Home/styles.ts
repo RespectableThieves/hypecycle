@@ -3,14 +3,15 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
 export const Container = styled.View`
   flex: 1;
-  padding: 24px;
-  padding-top: ${getStatusBarHeight() + 24}px;
+  padding: 10px;
+  align-items: center;  
+  justify-content: center;
 `;
 
 export const Title = styled.Text`
   font-size: 24px;
   font-weight: bold;
-  margin: 24px 0;
+  margin: 10px 0;
 `;
 
 export const Input = styled.TextInput`

@@ -1,15 +1,11 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { Text } from 'react-native-paper';
 import { Container, Title } from './styles';
-
-export function Home() {
-
-  useEffect(()=> {
-    console.log('Rendering Home...')
-  }, []);
-
+const ActiveRideView = () => {
   return (
     <Container>
-      <Title>Home</Title>
+      <Text variant="headlineLarge">Active Ride Screen</Text>
     </Container>
   );
 }
+
+export default ActiveRideView;

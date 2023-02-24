@@ -61,7 +61,6 @@ export function Sensors() {
 
   return (
     <Container>
-      <Title variant="titleLarge">Sensors</Title>
       <FlatList
         data={sensors}
         keyExtractor={item => item?.id}
