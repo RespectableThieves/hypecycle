@@ -31,13 +31,13 @@ const ActiveRideView = () => {
     </Row>
     <Row gx={GUTTER}>
       <Col gx={GUTTER}>
-        <SimpleMetric title={'Climbing '} data={768} icon={'image-filter-hdr'}></SimpleMetric>
+        <SimpleMetric title={'Elevation '} data={768} icon={'image-filter-hdr'}></SimpleMetric>
       </Col>
       <Col gx={GUTTER}>
         <SimpleMetric title={'NP '} data={201} icon={'lightning-bolt'}></SimpleMetric>
       </Col>
       <Col gx={GUTTER}>
-        <SimpleMetric title={'Cadence '} data={87} units={'rpm'}></SimpleMetric>
+        <SimpleMetric title={'Avg. Speed '} data={25.8} icon={'speedometer'}></SimpleMetric>
       </Col>
     </Row>
   </Container>
