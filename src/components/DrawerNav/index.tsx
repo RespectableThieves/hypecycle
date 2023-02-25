@@ -3,6 +3,7 @@ import ActiveRideView from '../../screens/Home'
 import { Sensors } from '../../screens/Sensors';
 import { useEffect } from 'react';
 import { Button } from 'react-native-paper';
+import NavigationView from '../../screens/Navigation';
 
 const Drawer = createDrawerNavigator();
 const handleError = (error: Error) => {
@@ -20,6 +21,11 @@ function DrawerNav() {
           name="Active Ride"
           component={ActiveRideView}
           options={{ drawerLabel: 'Active Ride' }}
+        />
+        <Drawer.Screen
+          name="Navigation"
+          component={NavigationView}
+          options={{ drawerLabel: 'Navigation' }}
         />
         <Drawer.Screen
           name="Sensors"
