@@ -1,5 +1,6 @@
 import { Text } from 'react-native-paper';
 import styled from 'styled-components/native';
+import MapView from 'react-native-maps';
 
 type Props = {
   widgetHeight: number;
@@ -26,3 +27,9 @@ export const Title = styled(Text)`
 export const DataText = styled(Text)`
   color: #F1FFFA;
 `;
+
+export const StyledMapView = styled(MapView)`
+  flex: 1;
+  height: ${({ widgetHeight }) => widgetHeight }px;
+  border-radius: 8px;
+`

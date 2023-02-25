@@ -88,6 +88,8 @@ def reactNativeArchitectures() {
     return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
 }
 
+
+
 android {
     ndkVersion rootProject.ext.ndkVersion
 
@@ -100,6 +102,10 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+        manifestPlaceholders = [GOOGLE_MAP_API_KEY: "${properties.getProperty('GOOGLE_MAP_API_KEY')}"]
     }
 
     splits {
