@@ -11,9 +11,7 @@ const Drawer = createDrawerNavigator();
 function App() {
   return (
     <PaperProvider theme={DefaultTheme}>
-      <StatusBar
-        hidden
-      />
+      <StatusBar hidden/>
       <NavigationContainer>
         <DrawerNav />
       </NavigationContainer>

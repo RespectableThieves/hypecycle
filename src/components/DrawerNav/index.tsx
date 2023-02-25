@@ -15,7 +15,7 @@ function DrawerNav() {
     }, []);
     
     return (
-      <Drawer.Navigator useLegacyImplementation initialRouteName="Feed">
+      <Drawer.Navigator useLegacyImplementation initialRouteName="Active Ride">
         <Drawer.Screen
           name="Active Ride"
           component={ActiveRideView}

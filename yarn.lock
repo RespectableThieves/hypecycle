@@ -7541,6 +7541,11 @@ react-native-codegen@^0.71.5:
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
 
+react-native-flex-grid@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-flex-grid/-/react-native-flex-grid-1.0.0.tgz#00364ff41d0e606e95deb8ffe978032afa9d655d"
+  integrity sha512-apeEFGMCPKsMiPGwNjq2+2KycKlcWffGfK2LgyxbjzRr4HHj3XfBkpJ9Xgr7PVzwb83m5vGBkWi80tbTtx1b4w==
+
 react-native-gesture-handler@^2.9.0:
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.9.0.tgz#2f63812e523c646f25b9ad660fc6f75948e51241"
