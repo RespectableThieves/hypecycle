@@ -1,18 +1,18 @@
 export function bleCharacteristicToIconName(char: string): string {
     switch (char) {
-    case '180f':
+    case 'Battery':
         // Battery Service
         return "battery-bluetooth-variant"
-    case '180d':
+    case 'HeartRate':
         // Heart rate service
         return "heart-pulse"
-    case '1818':
+    case ('CyclingPower'):
         // Cycling Power
         return "lightning-bolt"
-    case '1816':
+    case 'CyclingSpeedAndCadence':
         // Cycling Speed And Cadence
         return "unicycle"
     default:
-        return ""
+        return "ab-testing"
     }
 }
