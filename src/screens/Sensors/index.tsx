@@ -51,8 +51,8 @@ export function Sensors({ navigation }) {
     // Create some fake sensors to test with.
     console.log('creating...')
     const sensor = dataBase.get<SensorModel>('sensors')
-    await createSensor("Garmin HRM Pro", "AB:01:23:FF", ['180d','180f'])
-    await createSensor("Tacx Neo 2T", "34:01:03:1F", ['180f','1818','1816'])
+    await createSensor("Garmin HRM Pro", "AB:01:23:FF", ['HeartRate','Battery'])
+    await createSensor("Tacx Neo 2T", "34:01:03:1F", ['CyclingPower','CyclingSpeedAndCadence','Battery'])
     await fetchData();  
     Alert.alert('Created!');
   }

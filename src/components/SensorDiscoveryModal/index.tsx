@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
-import { Portal, Modal, Button, Text } from 'react-native-paper';
-import { FlatList } from 'react-native';
+import { Portal, Button, Text } from 'react-native-paper';
+import { FlatList, Modal } from 'react-native';
 import { Empty } from './styles';
 import { Sensor } from '../Sensor';
 import globalData from '../../lib/GlobalContext';
@@ -46,14 +46,13 @@ export function SensorDiscoveryModal(props: Props) {
         setScanning(true);
         ble.subscribeToDiscoveryStop(handleScanStop)
       }
-
     async function handlePair(item: SensorProps){
         console.log("pairing sensor...", item.id)
     }
 
   return (
     <Portal>
-        <Modal visible={props.visible} onDismiss={props.onDismiss} contentContainerStyle={containerStyle}>
+        <Modal visible={props.visible} onDismiss={props.onDismiss} onShow={discoverSensors} style={containerStyle}>
             <FlatList
                 data={discovered}
                 keyExtractor={item => item?.id}

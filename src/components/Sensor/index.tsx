@@ -1,8 +1,8 @@
 import React from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 
-import { Container, Icon, Name, Options, Option, StyledListItem, VerticalDivider } from './styles';
-import { Divider, List, ListIconProps } from 'react-native-paper';
+import { Options, Option, StyledListItem, VerticalDivider } from './styles';
+import { List } from 'react-native-paper';
 import { View } from 'react-native';
 import { SensorServiceIcons } from '../SensorServiceIcons';
 

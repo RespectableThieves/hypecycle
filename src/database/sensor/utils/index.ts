@@ -10,7 +10,7 @@ export async function createSensor(name: string, address: string, services: stri
           data.name = name,
           data.type = type,
           data.address = address,
-          data.services = services,
+          data.sensorType = services,
           data.createdAt = new Date().getTime()
           console.log(data)
         })
