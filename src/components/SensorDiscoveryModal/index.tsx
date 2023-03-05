@@ -4,7 +4,9 @@ import { Alert, FlatList, Modal, View } from 'react-native';
 import { Empty, GroupedButtons } from './styles';
 import { Sensor } from '../Sensor';
 import globalData from '../../lib/GlobalContext';
+import { dataBase } from '../../database';
 import { createSensor } from '../../database/sensor/utils';
+import { Q } from '@nozbe/watermelondb';
 
 type SensorProps = {
     id: string;
@@ -43,19 +45,35 @@ export function SensorDiscoveryModal(props: Props) {
     const containerStyle = {backgroundColor: 'white', padding: 20};
     
     const discoverSensors = async ()=>{
-        const handleScanStop = async () => {
-          console.log('Scanning Stopped');
-          setScanning(false);
-          const sensorList = await ble.getDiscoveredSensors();
-          console.log('sensorList: ',sensorList)
-          setDiscovered(sensorList)
-        };
-  
-        console.log("Starting scan")
-        await ble.startSensorDiscovery();
-        setScanning(true);
-        ble.subscribeToDiscoveryStop(handleScanStop)
-      }
+      setDiscovered([]); //Clear the list each time we run a scan
+      const handleScanStop = async () => {
+        console.log('Scanning Stopped');
+        setScanning(false);
+        const sensorList = await ble.getDiscoveredSensors();
+        console.log('sensorList: ',sensorList)
+        const unpairedList = await Promise.all(sensorList.map(async function(val, index) {
+          const existsAlready = await dataBase.get('sensors').query(
+            Q.where('address', val.id)
+          ).fetchCount();
+          if (!existsAlready) {
+            console.log('val = ', val);
+            return val;
+          } else {
+            return undefined;
+          }
+        }));
+      
+        const filteredList = unpairedList.filter(Boolean);
+      
+        console.log('unpaired list: ', filteredList);
+        setDiscovered(filteredList)
+      };
+
+      console.log("Starting scan")
+      await ble.startSensorDiscovery();
+      setScanning(true);
+      ble.subscribeToDiscoveryStop(handleScanStop)
+    }
     
       async function handlePair(item: any){
         if (item.sensorType.includes('CyclingPower')) {
