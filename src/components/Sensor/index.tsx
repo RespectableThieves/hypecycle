@@ -12,6 +12,7 @@ export type SensorProps = {
   is_primary: boolean;
   sensorType: string[];
   type: string;
+  address: string;
 }
 
 type Props = {
@@ -26,7 +27,7 @@ export function Sensor({ data, onAction, actionIcon, actionColor }: Props) {
     <View>
       <StyledListItem
         title={data.name}
-        description={data.id}
+        description={data.address || data.id}
         left={(Props: any) => <List.Icon {...Props} icon="bluetooth"/>}
         right={() => <Options>
                         <SensorServiceIcons data={data.sensorType}/>

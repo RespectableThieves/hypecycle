@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { Portal, Button, Text } from 'react-native-paper';
-import { FlatList, Modal } from 'react-native';
-import { Empty } from './styles';
+import { Alert, FlatList, Modal, View } from 'react-native';
+import { Empty, GroupedButtons } from './styles';
 import { Sensor } from '../Sensor';
 import globalData from '../../lib/GlobalContext';
+import { createSensor } from '../../database/sensor/utils';
 
 type SensorProps = {
     id: string;
@@ -26,8 +27,17 @@ const _listEmptyComponent = () => {
         </Empty>
     )
 }
+
+const handleError = (err) => {
+  Alert.alert('Failed to connect to sensor: ',err);
+}
+
 export function SensorDiscoveryModal(props: Props) {
     const ble = useContext(globalData).ble;
+    const pm = useContext(globalData).powerMeter;
+    const cm = useContext(globalData).cadenceMeter;
+    const hrm = useContext(globalData).heartRateMonitor;
+
     const [scanning, setScanning] = useState(false)
     const [discovered, setDiscovered] = useState([])
     const containerStyle = {backgroundColor: 'white', padding: 20};
@@ -46,8 +56,33 @@ export function SensorDiscoveryModal(props: Props) {
         setScanning(true);
         ble.subscribeToDiscoveryStop(handleScanStop)
       }
-    async function handlePair(item: SensorProps){
-        console.log("pairing sensor...", item.id)
+    
+      async function handlePair(item: any){
+        if (item.sensorType.includes('CyclingPower')) {
+          console.log('Pairing Power Meter...')
+          pm.address = item.id; 
+          try {
+            await pm.connect()
+            console.log('Power Connection successful: ', item.id)
+            // Write sensor to sensor table.
+            await createSensor(item.name, item.id, item.sensorType)
+            Alert.alert('Powermeter connected!');
+          } catch (error) {
+            handleError(error)
+          } 
+        } else if (item.sensorType.includes('HeartRate')) {
+          console.log('Pairing Heart Rate')
+          hrm.address = item.id;
+          try {
+            await hrm.connect()
+            console.log('HR Connection successful: ', item.id)
+            // Write sensor to sensor table.
+            await createSensor(item.name, item.id, item.sensorType)
+            Alert.alert('Heart Rate connected!');
+          } catch (error) {
+            handleError(error)
+          }
+        } 
     }
 
   return (
@@ -66,12 +101,14 @@ export function SensorDiscoveryModal(props: Props) {
                 />
                 )}
             />
-            <Button style={{marginTop: 30}} onPress={discoverSensors}>
-                Scan
-            </Button>
-            <Button style={{marginTop: 30}} onPress={props.onDismiss}>
-                close
-            </Button>
+            <GroupedButtons style={{flexDirection: 'row'}}>
+              <Button onPress={discoverSensors} loading={scanning}>
+                  Scan
+              </Button>
+              <Button onPress={props.onDismiss}>
+                  close
+              </Button>
+            </GroupedButtons>
         </Modal>
     </Portal>
   );

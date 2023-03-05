@@ -3,13 +3,16 @@ import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import { MD3LightTheme as DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { DrawerNav } from './src/components/DrawerNav';
-import { BleSensors } from 'react-native-cycling-sensors';
+import { BleSensors, PowerMeter, HeartRateMonitor, CadenceMeter } from 'react-native-cycling-sensors';
 import { useEffect } from 'react';
 import globalData from './src/lib/GlobalContext'
 
 const bleSensor = new BleSensors();
+const pMeter = new PowerMeter();
+const hrMeter = new HeartRateMonitor();
+const cMeter = new CadenceMeter();
+
 console.log('bleSensor',bleSensor.checkState())
 const UPDATE_INTERVAL = 3;
 
@@ -47,7 +50,7 @@ function App() {
   }, []);
 
   return (
-    <globalData.Provider value={{ble: bleSensor}}>
+    <globalData.Provider value={{ble: bleSensor, powerMeter: pMeter, heartRateMonitor: hrMeter, cadenceMeter: cMeter}}>
       <PaperProvider theme={DefaultTheme}>
           <StatusBar hidden/>
           <NavigationContainer>

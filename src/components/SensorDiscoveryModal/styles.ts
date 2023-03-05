@@ -10,3 +10,8 @@ export const Empty = styled.View`
   justify-content: center;
   padding: 24px;
 `;
+
+export const GroupedButtons = styled.View`
+  flexdirection: row;
+  justify-content: center;
+`

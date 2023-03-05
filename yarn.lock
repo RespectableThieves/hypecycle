@@ -7485,8 +7485,8 @@ react-native-codegen@^0.71.5:
     nullthrows "^1.1.1"
 
 "react-native-cycling-sensors@https://github.com/shaunmulligan/react-native-cycling-sensors":
-  version "0.2.0"
-  resolved "https://github.com/shaunmulligan/react-native-cycling-sensors#09f907302caaf62632757ee05a8c618b3da3a76a"
+  version "0.3.0"
+  resolved "https://github.com/shaunmulligan/react-native-cycling-sensors#c2e836e5cb43fab73f6df6c38302ee9242411917"
   dependencies:
     eventemitter3 "^5.0.0"
     react-native-ble-manager "^8.7.0"

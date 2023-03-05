@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Alert, FlatList } from 'react-native';
-
+import React, { useState, useEffect, useContext } from 'react';
+import { FlatList } from 'react-native';
 import { Container, Empty } from './styles';
-
 import { dataBase } from '../../database';
 import SensorModel from '../../database/model/sensorModel';
 import { Q } from '@nozbe/watermelondb';
 import { Button, Text } from 'react-native-paper';
-import { createSensor, getAllSensors } from '../../database/sensor/utils';
+import { getAllSensors } from '../../database/sensor/utils';
 import { Sensor } from '../../components/Sensor';
 import { SensorDiscoveryModal } from '../../components/SensorDiscoveryModal';
+import globalData from '../../lib/GlobalContext';
 
 const _listEmptyComponent = () => {
   console.log("Empty list")
@@ -21,12 +20,16 @@ const _listEmptyComponent = () => {
 }
 
 export function Sensors({ navigation }) {
+  const ble = useContext(globalData).ble;
   const [sensors, setSensors] = useState<SensorModel[]>([]);
   const [visible, setVisible] = useState(false);
   const [isRefreshing, setRefreshing] = useState(false)
 
   const showModal = () => setVisible(true);
-  const hideModal = () => setVisible(false);
+  const hideModal = async () => {
+    setVisible(false);
+    await fetchData()
+  }
   const containerStyle = {backgroundColor: 'white', padding: 20};
 
   async function fetchData(){
@@ -46,21 +49,12 @@ export function Sensors({ navigation }) {
       console.log(error);
     }
   }
-  
-  async function makeSensors(){
-    // Create some fake sensors to test with.
-    console.log('creating...')
-    const sensor = dataBase.get<SensorModel>('sensors')
-    await createSensor("Garmin HRM Pro", "AB:01:23:FF", ['HeartRate','Battery'])
-    await createSensor("Tacx Neo 2T", "34:01:03:1F", ['CyclingPower','CyclingSpeedAndCadence','Battery'])
-    await fetchData();  
-    Alert.alert('Created!');
-  }
 
   async function handleRemove(item: SensorModel){
     // Remove the selected sensor and refetch data.
     try {
-      await item.deleteSensor()
+      await item.deleteSensor();
+      await ble.disconnect(item.address).catch((err) => {console.log(err)});
       await fetchData();
     } catch (error) {
       console.log(error);
@@ -96,9 +90,6 @@ export function Sensors({ navigation }) {
         )}
       />
       <SensorDiscoveryModal visible={visible} onDismiss={hideModal}/>
-      <Button style={{marginTop: 30}} onPress={makeSensors}>
-        Create fake sensors
-      </Button>
     </Container>
   );
 }
