@@ -26,6 +26,7 @@ An opensource react native based Cycling computer
 	- Write data to "realtimeData" table whenever data is available, populate with empty data at launch. [ ]
 	- set up observables on realtimeData table linked to widgets [ ]
 - Integrate GPS location data [ ]
+	- using https://docs.expo.dev/versions/latest/sdk/location/ , preferably without background task permissions.
 - Create active Ride UX:
 	- create rides table [ ]
 	- Add fab button to start/pause/stop a ride [ ]
@@ -50,6 +51,7 @@ An opensource react native based Cycling computer
 	- Switch to using Mapbox maps [ ]
 		- use route matching API https://github.com/nitaliano/react-native-mapbox-gl/issues/1493
 	- Add mapbox navigation page [ ]
+		- using https://github.com/homeeondemand/react-native-mapbox-navigation 
 	- Add functionality for storing offline map packs [ ]
 
 ### To Try:
