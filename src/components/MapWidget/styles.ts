@@ -1,4 +1,4 @@
-import {Text} from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import styled from 'styled-components/native';
 import MapView from 'react-native-maps';
 
@@ -14,7 +14,7 @@ export const CenteredView = styled.View`
 
 export const OuterView = styled.View<Props>`
   background-color: #454545 
-  height: ${({widgetHeight}) => widgetHeight}px;
+  height: ${({ widgetHeight }: { widgetHeight: number }) => widgetHeight}px;
   margin-bottom: 3px;
   border-radius: 8px;
 `;
@@ -30,6 +30,6 @@ export const DataText = styled(Text)`
 
 export const StyledMapView = styled(MapView)`
   flex: 1;
-  height: ${({widgetHeight}) => widgetHeight}px;
+  height: ${({ widgetHeight }: { widgetHeight: number }) => widgetHeight}px;
   border-radius: 8px;
 `;
