@@ -12,11 +12,11 @@ export async function createSensor(
     await dataBase
       .get<SensorModel>('sensors')
       .create(data => {
-        (data.name = name),
-          (data.type = type),
-          (data.address = address),
-          (data.sensorType = services),
-          (data.createdAt = new Date().getTime());
+        data.name = name;
+        data.type = type;
+        data.address = address;
+        data.sensorType = services;
+        data.createdAt = new Date().getTime();
         console.log(data);
       })
       .catch(err => {

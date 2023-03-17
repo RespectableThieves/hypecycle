@@ -21,6 +21,20 @@ const _listEmptyComponent = () => {
   );
 };
 
+const HeaderRight =
+  ({showModal}: {showModal: () => void}) =>
+  () =>
+    (
+      <Button
+        icon="plus-thick"
+        mode="contained"
+        onPress={showModal}
+        buttonColor={'#93B7BE'}
+        textColor={'#454545'}>
+        Add
+      </Button>
+    );
+
 export function Sensors({navigation}) {
   const ble = useContext(globalData).ble;
   const [sensors, setSensors] = useState<SensorModel[]>([]);
@@ -69,16 +83,7 @@ export function Sensors({navigation}) {
     // Use `setOptions` to update the button that we previously specified
     // Now the button includes an `onPress` handler to update the count
     navigation.setOptions({
-      headerRight: () => (
-        <Button
-          icon="plus-thick"
-          mode="contained"
-          onPress={showModal}
-          buttonColor={'#93B7BE'}
-          textColor={'#454545'}>
-          Add
-        </Button>
-      ),
+      headerRight: HeaderRight({showModal}),
     });
     fetchData();
   }, [navigation]);

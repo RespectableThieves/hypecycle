@@ -117,7 +117,7 @@ export function SensorDiscoveryModal(props: Props) {
             />
           )}
         />
-        <GroupedButtons style={{flexDirection: 'row'}}>
+        <GroupedButtons>
           <Button onPress={discoverSensors} loading={scanning}>
             Scan
           </Button>

@@ -7,6 +7,17 @@ import NavigationView from '../../screens/Navigation';
 
 const Drawer = createDrawerNavigator();
 
+const HeaderRight = () => (
+  // Add a placeholder button without the `onPress` to avoid flicker
+  <Button
+    icon="plus-thick"
+    mode="contained"
+    buttonColor={'#93B7BE'}
+    textColor={'#454545'}>
+    Add
+  </Button>
+);
+
 function DrawerNav() {
   useEffect(() => {}, []);
 
@@ -27,16 +38,7 @@ function DrawerNav() {
         component={Sensors}
         options={{
           drawerLabel: 'Sensors',
-          headerRight: () => (
-            // Add a placeholder button without the `onPress` to avoid flicker
-            <Button
-              icon="plus-thick"
-              mode="contained"
-              buttonColor={'#93B7BE'}
-              textColor={'#454545'}>
-              Add
-            </Button>
-          ),
+          headerRight: HeaderRight,
         }}
       />
     </Drawer.Navigator>

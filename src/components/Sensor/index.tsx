@@ -22,26 +22,33 @@ type Props = {
   actionColor: string;
 };
 
+const Right =
+  ({data, onAction, actionIcon, actionColor}: Props) =>
+  () =>
+    (
+      <Options>
+        <SensorServiceIcons data={data.sensorType} />
+        <VerticalDivider />
+        <Option onPress={onAction}>
+          <MaterialCommunityIcons
+            name={actionIcon}
+            color={actionColor}
+            size={20}
+          />
+        </Option>
+      </Options>
+    );
+
+const Left = (Props: any) => <List.Icon {...Props} icon="bluetooth" />;
+
 export function Sensor({data, onAction, actionIcon, actionColor}: Props) {
   return (
     <View>
       <StyledListItem
         title={data.name}
         description={data.address || data.id}
-        left={(Props: any) => <List.Icon {...Props} icon="bluetooth" />}
-        right={() => (
-          <Options>
-            <SensorServiceIcons data={data.sensorType} />
-            <VerticalDivider />
-            <Option onPress={onAction}>
-              <MaterialCommunityIcons
-                name={actionIcon}
-                color={actionColor}
-                size={20}
-              />
-            </Option>
-          </Options>
-        )}
+        left={Left}
+        right={Right({data, onAction, actionIcon, actionColor})}
       />
     </View>
   );
