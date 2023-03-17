@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { FlatList } from 'react-native';
-import { Container, Empty } from './styles';
-import { dataBase } from '../../database';
+import React, {useState, useEffect, useContext} from 'react';
+import {FlatList} from 'react-native';
+import {Container, Empty} from './styles';
+import {dataBase} from '../../database';
 import SensorModel from '../../database/model/sensorModel';
-import { Q } from '@nozbe/watermelondb';
-import { Button, Text } from 'react-native-paper';
-import { getAllSensors } from '../../database/sensor/utils';
-import { Sensor } from '../../components/Sensor';
-import { SensorDiscoveryModal } from '../../components/SensorDiscoveryModal';
+import {Q} from '@nozbe/watermelondb';
+import {Button, Text} from 'react-native-paper';
+import {getAllSensors} from '../../database/sensor/utils';
+import {Sensor} from '../../components/Sensor';
+import {SensorDiscoveryModal} from '../../components/SensorDiscoveryModal';
 import globalData from '../../lib/GlobalContext';
-import { Navigator } from '../../components/DrawerNav'
+import {DrawerNavProps} from '../../components/DrawerNav';
 
 const _listEmptyComponent = () => {
   console.log('Empty list');
@@ -23,8 +23,8 @@ const _listEmptyComponent = () => {
 };
 
 const HeaderRight =
-  ({ showModal }: { showModal: () => void }) =>
-    () =>
+  ({showModal}: {showModal: () => void}) =>
+  () =>
     (
       <Button
         icon="plus-thick"
@@ -36,7 +36,7 @@ const HeaderRight =
       </Button>
     );
 
-export function Sensors({ navigation }: { navigation: Navigator }) {
+export function Sensors({navigation}: DrawerNavProps) {
   const ble = useContext(globalData).ble;
   const [sensors, setSensors] = useState<SensorModel[]>([]);
   const [visible, setVisible] = useState(false);
@@ -84,7 +84,7 @@ export function Sensors({ navigation }: { navigation: Navigator }) {
     // Use `setOptions` to update the button that we previously specified
     // Now the button includes an `onPress` handler to update the count
     navigation.setOptions({
-      headerRight: HeaderRight({ showModal }),
+      headerRight: HeaderRight({showModal}),
     });
     fetchData();
   }, [navigation]);
@@ -97,7 +97,7 @@ export function Sensors({ navigation }: { navigation: Navigator }) {
         ListEmptyComponent={_listEmptyComponent}
         onRefresh={fetchData}
         refreshing={isRefreshing}
-        renderItem={({ item }) => (
+        renderItem={({item}) => (
           <Sensor
             data={item}
             onAction={() => handleRemove(item)}

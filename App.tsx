@@ -12,6 +12,7 @@ import {
   PowerMeter,
   HeartRateMonitor,
   CadenceMeter,
+  // @ts-ignore
 } from 'react-native-cycling-sensors';
 import {useEffect} from 'react';
 import globalData from './src/lib/GlobalContext';
@@ -48,9 +49,9 @@ function App() {
           console.log('Ble permissions requested');
         })
         .then(() => {
-          bleSensor.start().catch(err => handleError(err));
+          bleSensor.start().catch((err: Error) => handleError(err));
         })
-        .catch(err => handleError(err));
+        .catch((err: Error) => handleError(err));
     };
 
     startServicesAndTasks(); // run it, run it
