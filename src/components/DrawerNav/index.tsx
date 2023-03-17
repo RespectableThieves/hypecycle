@@ -1,11 +1,12 @@
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import ActiveRideView from '../../screens/Home';
-import {Sensors} from '../../screens/Sensors';
-import {useEffect} from 'react';
-import {Button} from 'react-native-paper';
+import { Sensors } from '../../screens/Sensors';
+import { useEffect } from 'react';
+import { Button } from 'react-native-paper';
 import NavigationView from '../../screens/Navigation';
 
 const Drawer = createDrawerNavigator();
+export type Navigator = typeof Drawer['Navigator']
 
 const HeaderRight = () => (
   // Add a placeholder button without the `onPress` to avoid flicker
@@ -19,19 +20,19 @@ const HeaderRight = () => (
 );
 
 function DrawerNav() {
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   return (
     <Drawer.Navigator useLegacyImplementation initialRouteName="Active Ride">
       <Drawer.Screen
         name="Active Ride"
         component={ActiveRideView}
-        options={{drawerLabel: 'Active Ride'}}
+        options={{ drawerLabel: 'Active Ride' }}
       />
       <Drawer.Screen
         name="Navigation"
         component={NavigationView}
-        options={{drawerLabel: 'Navigation'}}
+        options={{ drawerLabel: 'Navigation' }}
       />
       <Drawer.Screen
         name="Sensors"
@@ -45,4 +46,4 @@ function DrawerNav() {
   );
 }
 
-export {DrawerNav};
+export { DrawerNav };
