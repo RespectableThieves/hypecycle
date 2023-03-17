@@ -32,7 +32,6 @@ export function Sensors({navigation}) {
     setVisible(false);
     await fetchData();
   };
-  const containerStyle = {backgroundColor: 'white', padding: 20};
 
   async function fetchData() {
     // Get list paired bluetooth sensors from our DB.

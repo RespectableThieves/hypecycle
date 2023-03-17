@@ -6,9 +6,6 @@ import {Button} from 'react-native-paper';
 import NavigationView from '../../screens/Navigation';
 
 const Drawer = createDrawerNavigator();
-const handleError = (error: Error) => {
-  console.log('Got error: ', error);
-};
 
 function DrawerNav() {
   useEffect(() => {}, []);

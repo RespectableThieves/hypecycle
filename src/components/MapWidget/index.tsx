@@ -1,6 +1,6 @@
 import React from 'react';
-import {OuterView, StyledMapView, Title} from './styles';
-import {Dimensions, View} from 'react-native';
+import {StyledMapView} from './styles';
+import {Dimensions} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/elements';
 import {enableLatestRenderer} from 'react-native-maps';
 import {Polyline} from 'react-native-maps';
@@ -12,7 +12,7 @@ type Props = {
   data: any;
 };
 
-export function MapWidget({title, data}: Props) {
+export function MapWidget(_: Props) {
   const headerHeight = useHeaderHeight();
   const windowHeight = Dimensions.get('window').height;
 

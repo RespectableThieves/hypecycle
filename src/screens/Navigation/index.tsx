@@ -1,4 +1,3 @@
-import {WidgetGrid} from '../../components/WidgetGrid';
 import {Container, Row, Col} from 'react-native-flex-grid';
 import {SimpleMetric} from '../../components/SimpleMetric';
 import {MapWidget} from '../../components/MapWidget';

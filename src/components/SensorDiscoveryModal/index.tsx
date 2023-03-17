@@ -1,20 +1,12 @@
 import React, {useContext, useState} from 'react';
 import {Portal, Button, Text} from 'react-native-paper';
-import {Alert, FlatList, Modal, View} from 'react-native';
+import {Alert, FlatList, Modal} from 'react-native';
 import {Empty, GroupedButtons} from './styles';
 import {Sensor} from '../Sensor';
 import globalData from '../../lib/GlobalContext';
 import {dataBase} from '../../database';
 import {createSensor} from '../../database/sensor/utils';
 import {Q} from '@nozbe/watermelondb';
-
-type SensorProps = {
-  id: string;
-  name: string;
-  is_primary: boolean;
-  services: string[];
-  type: string;
-};
 
 type Props = {
   visible: boolean;
@@ -37,7 +29,6 @@ const handleError = err => {
 export function SensorDiscoveryModal(props: Props) {
   const ble = useContext(globalData).ble;
   const pm = useContext(globalData).powerMeter;
-  const cm = useContext(globalData).cadenceMeter;
   const hrm = useContext(globalData).heartRateMonitor;
 
   const [scanning, setScanning] = useState(false);
@@ -52,7 +43,7 @@ export function SensorDiscoveryModal(props: Props) {
       const sensorList = await ble.getDiscoveredSensors();
       console.log('sensorList: ', sensorList);
       const unpairedList = await Promise.all(
-        sensorList.map(async function (val, index) {
+        sensorList.map(async function (val, _index) {
           const existsAlready = await dataBase
             .get('sensors')
             .query(Q.where('address', val.id))
@@ -64,6 +55,7 @@ export function SensorDiscoveryModal(props: Props) {
             return undefined;
           }
         }),
+      );
 
       const filteredList = unpairedList.filter(Boolean);
 

@@ -14,7 +14,7 @@ type Props = {
   widgetArray: Widget[];
 };
 
-export function WidgetGrid({widgetArray}: Props) {
+export function WidgetGrid(_: Props) {
   return (
     <Container fluid noPadding>
       <Row gx={GUTTER}>

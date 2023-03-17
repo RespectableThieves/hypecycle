@@ -1,7 +1,6 @@
 import React from 'react';
-import {Text} from 'react-native-paper';
 import {CenteredView, DataText, OuterView, Title} from './styles';
-import {Dimensions, View} from 'react-native';
+import {Dimensions} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/elements';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 
