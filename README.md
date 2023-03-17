@@ -23,20 +23,40 @@ An opensource react native based Cycling computer
 
 ### TODO:
 - Display live data [ ]
-	- Write data to "realtimeData" table whenever data is available, and populate with empty data at launch [ ]
-	- periodically (INTERVAL seconds) dump a snapshot of realtimeData into hr, pow, cad, loc tables [ ]
+	- Write data to "realtimeData" table whenever data is available, populate with empty data at launch. [ ]
 	- set up observables on realtimeData table linked to widgets [ ]
-- add battery to ble lib supported services
+- Integrate GPS location data [ ]
+- Create active Ride UX:
+	- create rides table [ ]
+	- Add fab button to start/pause/stop a ride [ ]
+	- On start:
+		- create entry in rides table with `is_active` == true [ ]
+		- set `is_riding` in realTimeTable to true [ ]
+	- On Pause:
+		- set `is_riding` in realTimeTable to false [ ]
+	- On Stop:
+		- set `is_riding` in realTimeTable to false [ ]
+		- set `is_active` of ride to false [ ]
+		- set `stop_time` of ride to current time [ ]
+		- set distance, elapsed_time, avgs, etc on ride [ ]
+			- depends on data logging tables
+		- generate TCX file and save to file system [ ]
+			- depends on data logging tables
+- Log Data in DB
+	- create data logging tables [ ]
+	- periodically (INTERVAL seconds) dump a snap shot of realtimeData into hr, pow, cad, loc tables. [ ]
+- Add battery to ble lib supported services [ ]
 - Mapping:
 	- Switch to using Mapbox maps [ ]
-	- Add Mapbox navigation page [ ]
+		- use route matching API https://github.com/nitaliano/react-native-mapbox-gl/issues/1493
+	- Add mapbox navigation page [ ]
 	- Add functionality for storing offline map packs [ ]
 
 ### To Try:
 - switch to https://wix.github.io/react-native-ui-lib/docs/components/lists/Drawer for ui components. Would be nice to have swipeable bluetooth sensor list items
 
 ## Data Structure
-### Real-Time Data Table 
+### Real Time Data Table 
 
 ```
 id: alphaNumeric (primary)
@@ -54,13 +74,21 @@ instantPower: number,
 cadence: number
 ```
 
-### table: **rides**
+### **rides** table
 A ride should be:
 ```
 *id: alphaNumeric (primary)
 *start_at: timestamp / or just use created_at
 end_at: timestamp
 *is_active: boolean
+```
+
+### settings table
+A settings table to persist settings and config
+```
+*id: alphaNumeric (primary)
+screen_brightness: number
+is_auto_uploading: bool
 ```
 
 ### Data Logging Tables
