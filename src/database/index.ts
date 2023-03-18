@@ -3,6 +3,7 @@ import SQLiteAdapters from '@nozbe/watermelondb/adapters/sqlite';
 
 import {schemas} from './schemas';
 import SensorModel from './model/sensorModel';
+import RealtimeDataModel from './model/realtimeDataModel';
 
 const adapter = new SQLiteAdapters({
   schema: schemas,
@@ -10,5 +11,5 @@ const adapter = new SQLiteAdapters({
 
 export const dataBase = new Database({
   adapter,
-  modelClasses: [SensorModel],
+  modelClasses: [SensorModel, RealtimeDataModel],
 });
