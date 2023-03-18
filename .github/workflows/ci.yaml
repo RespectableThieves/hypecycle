@@ -1,10 +1,7 @@
 name: Node.js CI
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
-    branches: [ main ]
 
 jobs:
   build:
@@ -24,3 +21,4 @@ jobs:
           cache: 'yarn'
       - run: yarn install --frozen-lockfile
       - run: yarn lint 
+      - run: yarn types 

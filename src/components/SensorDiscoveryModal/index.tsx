@@ -2,7 +2,7 @@ import React, {useContext, useState} from 'react';
 import {Portal, Button, Text} from 'react-native-paper';
 import {Alert, FlatList, Modal} from 'react-native';
 import {Empty, GroupedButtons} from './styles';
-import {Sensor} from '../Sensor';
+import {Sensor, SensorProps} from '../Sensor';
 import globalData from '../../lib/GlobalContext';
 import {dataBase} from '../../database';
 import {createSensor} from '../../database/sensor/utils';
@@ -22,8 +22,8 @@ const _listEmptyComponent = () => {
   );
 };
 
-const handleError = err => {
-  Alert.alert('Failed to connect to sensor: ', err);
+const handleError = (err: Error) => {
+  Alert.alert('Failed to connect to sensor: ', err.message);
 };
 
 export function SensorDiscoveryModal(props: Props) {
@@ -43,7 +43,7 @@ export function SensorDiscoveryModal(props: Props) {
       const sensorList = await ble.getDiscoveredSensors();
       console.log('sensorList: ', sensorList);
       const unpairedList = await Promise.all(
-        sensorList.map(async function (val, _index) {
+        sensorList.map(async function (val: SensorProps, _index: number) {
           const existsAlready = await dataBase
             .get('sensors')
             .query(Q.where('address', val.id))
@@ -80,7 +80,9 @@ export function SensorDiscoveryModal(props: Props) {
         await createSensor(item.name, item.id, item.sensorType);
         Alert.alert('Powermeter connected!');
       } catch (error) {
-        handleError(error);
+        if (error instanceof Error) {
+          handleError(error);
+        }
       }
     } else if (item.sensorType.includes('HeartRate')) {
       console.log('Pairing Heart Rate');
@@ -92,7 +94,9 @@ export function SensorDiscoveryModal(props: Props) {
         await createSensor(item.name, item.id, item.sensorType);
         Alert.alert('Heart Rate connected!');
       } catch (error) {
-        handleError(error);
+        if (error instanceof Error) {
+          handleError(error);
+        }
       }
     }
   }
@@ -104,7 +108,7 @@ export function SensorDiscoveryModal(props: Props) {
         onDismiss={props.onDismiss}
         onShow={discoverSensors}
         style={containerStyle}>
-        <FlatList
+        <FlatList<SensorProps>
           data={discovered}
           keyExtractor={item => item?.id}
           ListEmptyComponent={_listEmptyComponent}

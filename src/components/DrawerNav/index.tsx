@@ -1,4 +1,7 @@
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import {
+  createDrawerNavigator,
+  DrawerScreenProps,
+} from '@react-navigation/drawer';
 import ActiveRideView from '../../screens/Home';
 import {Sensors} from '../../screens/Sensors';
 import {useEffect} from 'react';
@@ -6,6 +9,7 @@ import {Button} from 'react-native-paper';
 import NavigationView from '../../screens/Navigation';
 
 const Drawer = createDrawerNavigator();
+export type DrawerNavProps = DrawerScreenProps<any>;
 
 const HeaderRight = () => (
   // Add a placeholder button without the `onPress` to avoid flicker
