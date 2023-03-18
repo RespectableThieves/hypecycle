@@ -7,7 +7,7 @@ import {MaterialCommunityIcons} from '@expo/vector-icons';
 type Props = {
   title: string;
   data: number;
-  icon: string;
+  icon: keyof typeof MaterialCommunityIcons.glyphMap;
 };
 
 export function SimpleMetric({title, data, icon}: Props) {

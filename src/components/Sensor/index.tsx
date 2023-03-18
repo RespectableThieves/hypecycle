@@ -18,7 +18,7 @@ export type SensorProps = {
 type Props = {
   data: SensorProps;
   onAction: () => void;
-  actionIcon: string;
+  actionIcon: keyof typeof MaterialCommunityIcons.glyphMap;
   actionColor: string;
 };
 

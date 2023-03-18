@@ -9,6 +9,7 @@ import {getAllSensors} from '../../database/sensor/utils';
 import {Sensor} from '../../components/Sensor';
 import {SensorDiscoveryModal} from '../../components/SensorDiscoveryModal';
 import globalData from '../../lib/GlobalContext';
+import {DrawerNavProps} from '../../components/DrawerNav';
 
 const _listEmptyComponent = () => {
   console.log('Empty list');
@@ -35,7 +36,7 @@ const HeaderRight =
       </Button>
     );
 
-export function Sensors({navigation}) {
+export function Sensors({navigation}: DrawerNavProps) {
   const ble = useContext(globalData).ble;
   const [sensors, setSensors] = useState<SensorModel[]>([]);
   const [visible, setVisible] = useState(false);
@@ -70,7 +71,7 @@ export function Sensors({navigation}) {
     // Remove the selected sensor and refetch data.
     try {
       await item.deleteSensor();
-      await ble.disconnect(item.address).catch(err => {
+      await ble.disconnect(item.address).catch((err: Error) => {
         console.log(err);
       });
       await fetchData();
