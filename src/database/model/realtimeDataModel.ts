@@ -1,7 +1,6 @@
 import {Model} from '@nozbe/watermelondb';
 import {field, date} from '@nozbe/watermelondb/decorators';
 
-
 export default class RealtimeDataModel extends Model {
   static table = 'realtime_data';
 
@@ -23,5 +22,4 @@ export default class RealtimeDataModel extends Model {
   @field('is_power') is_heart_rate!: boolean;
   @field('is_power') is_cadence!: boolean;
   @date('created_at') createdAt!: number;
-
 }
