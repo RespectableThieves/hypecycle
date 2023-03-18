@@ -1,31 +1,31 @@
-import { tableSchema } from "@nozbe/watermelondb";
+import {tableSchema} from '@nozbe/watermelondb';
 
 export const sensorSchema = tableSchema({
-  name: "sensors",
+  name: 'sensors',
   columns: [
     {
-      name: "name",
-      type: "string",
+      name: 'name',
+      type: 'string',
     },
     {
-      name: "address",
-      type: "string",
+      name: 'address',
+      type: 'string',
     },
     {
-      name: "is_primary",
-      type: "boolean"
+      name: 'is_primary',
+      type: 'boolean',
     },
     {
-      name: "type",
-      type: "string"
+      name: 'type',
+      type: 'string',
     },
     {
-      name: "sensorType",
-      type: "string"
+      name: 'sensorType',
+      type: 'string',
     },
     {
-      name: "created_at",
-      type: "number",
+      name: 'created_at',
+      type: 'number',
     },
   ],
 });

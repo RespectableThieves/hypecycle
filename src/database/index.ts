@@ -1,8 +1,8 @@
-import { Database } from "@nozbe/watermelondb";
-import SQLiteAdapters from "@nozbe/watermelondb/adapters/sqlite";
+import {Database} from '@nozbe/watermelondb';
+import SQLiteAdapters from '@nozbe/watermelondb/adapters/sqlite';
 
-import { schemas } from "./schemas";
-import SensorModel from "./model/sensorModel";
+import {schemas} from './schemas';
+import SensorModel from './model/sensorModel';
 
 const adapter = new SQLiteAdapters({
   schema: schemas,

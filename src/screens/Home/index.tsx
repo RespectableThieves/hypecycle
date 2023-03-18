@@ -1,14 +1,7 @@
-import { Container, Row, Col } from 'react-native-flex-grid';
-import { WidgetGrid } from '../../components/WidgetGrid';
-
-const GUTTER = 1;
+import {WidgetGrid} from '../../components/WidgetGrid';
 
 const ActiveRideView = () => {
-
-  return (
-    <WidgetGrid widgetArray={[]}/>
-  );
-}
-
+  return <WidgetGrid widgetArray={[]} />;
+};
 
 export default ActiveRideView;

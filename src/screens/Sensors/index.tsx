@@ -1,73 +1,89 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { FlatList } from 'react-native';
-import { Container, Empty } from './styles';
-import { dataBase } from '../../database';
+import React, {useState, useEffect, useContext} from 'react';
+import {FlatList} from 'react-native';
+import {Container, Empty} from './styles';
+import {dataBase} from '../../database';
 import SensorModel from '../../database/model/sensorModel';
-import { Q } from '@nozbe/watermelondb';
-import { Button, Text } from 'react-native-paper';
-import { getAllSensors } from '../../database/sensor/utils';
-import { Sensor } from '../../components/Sensor';
-import { SensorDiscoveryModal } from '../../components/SensorDiscoveryModal';
+import {Q} from '@nozbe/watermelondb';
+import {Button, Text} from 'react-native-paper';
+import {getAllSensors} from '../../database/sensor/utils';
+import {Sensor} from '../../components/Sensor';
+import {SensorDiscoveryModal} from '../../components/SensorDiscoveryModal';
 import globalData from '../../lib/GlobalContext';
 
 const _listEmptyComponent = () => {
-  console.log("Empty list")
+  console.log('Empty list');
   return (
-      <Empty>
-          <Text variant="titleMedium">No Connected Sensors yet... Try add some!</Text>
-      </Empty>
-  )
-}
+    <Empty>
+      <Text variant="titleMedium">
+        No Connected Sensors yet... Try add some!
+      </Text>
+    </Empty>
+  );
+};
 
-export function Sensors({ navigation }) {
+const HeaderRight =
+  ({showModal}: {showModal: () => void}) =>
+  () =>
+    (
+      <Button
+        icon="plus-thick"
+        mode="contained"
+        onPress={showModal}
+        buttonColor={'#93B7BE'}
+        textColor={'#454545'}>
+        Add
+      </Button>
+    );
+
+export function Sensors({navigation}) {
   const ble = useContext(globalData).ble;
   const [sensors, setSensors] = useState<SensorModel[]>([]);
   const [visible, setVisible] = useState(false);
-  const [isRefreshing, setRefreshing] = useState(false)
+  const [isRefreshing, setRefreshing] = useState(false);
 
   const showModal = () => setVisible(true);
   const hideModal = async () => {
     setVisible(false);
-    await fetchData()
-  }
-  const containerStyle = {backgroundColor: 'white', padding: 20};
+    await fetchData();
+  };
 
-  async function fetchData(){
+  async function fetchData() {
     // Get list paired bluetooth sensors from our DB.
-    setRefreshing(true)
-   try {
-      setRefreshing(true)
-      console.log("Fetching paired sensors from DB...")
-      const allSensor = await getAllSensors()
+    setRefreshing(true);
+    try {
+      setRefreshing(true);
+      console.log('Fetching paired sensors from DB...');
+      const allSensor = await getAllSensors();
       setSensors(allSensor);
-      setRefreshing(false)
-      const numberOfBluetoothSensors = await dataBase.get('sensors').query(
-        Q.where('type', 'bluetooth')
-      ).fetchCount()
+      setRefreshing(false);
+      const numberOfBluetoothSensors = await dataBase
+        .get('sensors')
+        .query(Q.where('type', 'bluetooth'))
+        .fetchCount();
       console.log('ble sensors = ', numberOfBluetoothSensors);
-   }  catch (error) {
+    } catch (error) {
       console.log(error);
     }
   }
 
-  async function handleRemove(item: SensorModel){
+  async function handleRemove(item: SensorModel) {
     // Remove the selected sensor and refetch data.
     try {
       await item.deleteSensor();
-      await ble.disconnect(item.address).catch((err) => {console.log(err)});
+      await ble.disconnect(item.address).catch(err => {
+        console.log(err);
+      });
       await fetchData();
     } catch (error) {
       console.log(error);
     }
   }
-  
+
   useEffect(() => {
     // Use `setOptions` to update the button that we previously specified
     // Now the button includes an `onPress` handler to update the count
     navigation.setOptions({
-      headerRight: () => (
-        <Button icon="plus-thick" mode="contained" onPress={showModal} buttonColor={'#93B7BE'} textColor={'#454545'}>Add</Button>
-      ),
+      headerRight: HeaderRight({showModal}),
     });
     fetchData();
   }, [navigation]);
@@ -80,7 +96,7 @@ export function Sensors({ navigation }) {
         ListEmptyComponent={_listEmptyComponent}
         onRefresh={fetchData}
         refreshing={isRefreshing}
-        renderItem={({ item }) => (
+        renderItem={({item}) => (
           <Sensor
             data={item}
             onAction={() => handleRemove(item)}
@@ -89,7 +105,7 @@ export function Sensors({ navigation }) {
           />
         )}
       />
-      <SensorDiscoveryModal visible={visible} onDismiss={hideModal}/>
+      <SensorDiscoveryModal visible={visible} onDismiss={hideModal} />
     </Container>
   );
 }
