@@ -16,6 +16,8 @@ import {
 } from 'react-native-cycling-sensors';
 import {useEffect} from 'react';
 import globalData from './src/lib/GlobalContext';
+import useLocation from './src/hooks/useLocation';
+import { LocationObject } from 'expo-location';
 
 const bleSensor = new BleSensors();
 const pMeter = new PowerMeter();
@@ -30,17 +32,19 @@ const handleError = (error: Error) => {
 };
 
 function App() {
+  const [error] = useLocation(true, (location: LocationObject) => {
+    console.log(location)
+  });
+
   useEffect(() => {
     const startServicesAndTasks = async () => {
       console.log('Starting Services and Tasks to pull sensor data');
-
       async function periodicTasks() {
-        console.log('Update every 3 seconds');
         // TODO: Get accelerometer, light, temp, battery data here
+        console.log("Periodically run tasks every " + UPDATE_INTERVAL + " seconds");
         setTimeout(periodicTasks, 1000 * UPDATE_INTERVAL);
       }
       periodicTasks(); // Start periodic tasks
-      // await launchLocationTracking() //Start the background GPS location service
 
       // Create our global ble object
       bleSensor
