@@ -29,5 +29,6 @@ jest.mock('react-native-reanimated', () => {
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 
 it('renders correctly', () => {
-  renderer.create(<App />);
+  const tree = renderer.create(<App />);
+  tree.unmount()
 });
