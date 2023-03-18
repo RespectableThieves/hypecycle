@@ -14,8 +14,8 @@ class Sensor {
 
 const BleSensors = Sensor;
 
-const PowerMeter = jest.fn();
-const CadenceMeter = jest.fn();
-const HeartRateMonitor = jest.fn();
+const PowerMeter = Sensor;
+const CadenceMeter = Sensor;
+const HeartRateMonitor = Sensor;
 
 export {BleSensors, PowerMeter, CadenceMeter, HeartRateMonitor};
