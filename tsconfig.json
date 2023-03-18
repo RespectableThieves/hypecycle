@@ -8,5 +8,8 @@
       "styled-components-react-native"
     ]
   },
-  "extends": "@tsconfig/react-native/tsconfig.json"
+  "extends": "@tsconfig/react-native/tsconfig.json",
+  "modulePaths": [
+    "<rootDir>/src"
+  ]
 }
