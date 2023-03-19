@@ -30,9 +30,9 @@ const handleError = (error: Error) => {
 };
 
 function App() {
-  // todo type
   useEffect(() => {
-    let timer: any;
+    let timer: number;
+
     const startServicesAndTasks = async () => {
       console.log('Starting Services and Tasks to pull sensor data');
 
