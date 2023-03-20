@@ -63,17 +63,22 @@ An opensource react native based Cycling computer
 ```
 id: alphaNumeric (primary)
 distance: number,
-elapsedTime: number,
+elapsed_time: number,
 speed: number,
 latitude: number,
 longitude: number,
 altitude: number,
 heading: number,
-heartRate: number,
-instantPower: number,
-3sPower: number,
-10sPower: number,
-cadence: number
+heart_rate: number,
+instant_power: number,
+three_sec_power: number,
+ten_sec_power: number,
+cadence: number,
+is_bluetooth: boolean,
+is_wifi: boolean,
+is_power: boolean,
+is_heart_rate: boolean,
+is_cadence
 ```
 
 ### **rides** table

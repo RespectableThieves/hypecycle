@@ -1,7 +1,8 @@
 import {appSchema} from '@nozbe/watermelondb';
 import {sensorSchema} from './sensorsSchema';
+import {realtimeDataSchema} from './realtimeDataSchema';
 
 export const schemas = appSchema({
-  version: 4,
-  tables: [sensorSchema],
+  version: 5,
+  tables: [sensorSchema, realtimeDataSchema],
 });
