@@ -5,21 +5,21 @@ export default class RealtimeDataModel extends Model {
   static table = 'realtime_data';
 
   @field('distance') distance!: number;
-  @field('elapsed_time') elapsed_time!: number;
+  @field('elapsed_time') elapsedTime!: number;
   @field('speed') speed!: number;
   @field('latitude') latitude!: number;
   @field('longitude') longitude!: number;
   @field('altitude') altitude!: number;
   @field('heading') heading!: number;
-  @field('heart_rate') heart_rate!: number;
-  @field('instant_power') instant_power!: number;
-  @field('three_sec_power') three_sec_power!: number;
-  @field('ten_sec_power') ten_sec_power!: number;
+  @field('heart_rate') heartRate!: number;
+  @field('instant_power') instantPower!: number;
+  @field('three_sec_power') threeSecPower!: number;
+  @field('ten_sec_power') tenSecPower!: number;
   @field('cadence') cadence!: number;
-  @field('is_bluetooth') is_bluetooth!: boolean;
-  @field('is_wifi') is_wifi!: boolean;
-  @field('is_power') is_power!: boolean;
-  @field('is_power') is_heart_rate!: boolean;
-  @field('is_power') is_cadence!: boolean;
+  @field('is_bluetooth') isBluetooth!: boolean;
+  @field('is_wifi') isWifi!: boolean;
+  @field('is_power') isPower!: boolean;
+  @field('is_heart_rate') isHeartRate!: boolean;
+  @field('is_cadence') isCadence!: boolean;
   @date('created_at') createdAt!: number;
 }
