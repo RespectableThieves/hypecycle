@@ -6,10 +6,10 @@ export async function createSensor(
   address: string,
   services: string[],
   type: string = 'bluetooth',
-) {
+): Promise<SensorModel> {
   console.log('creating...');
-  await dataBase.write(async () => {
-    await dataBase
+  return dataBase.write(async () => {
+    return dataBase
       .get<SensorModel>('sensors')
       .create(data => {
         data.name = name;
@@ -17,7 +17,8 @@ export async function createSensor(
         data.address = address;
         data.sensorType = services;
         data.createdAt = new Date().getTime();
-        console.log(data);
+        console.log('creating sensor', data);
+        return data;
       })
       .catch(err => {
         console.log('got error creating sensor: ', err);
@@ -26,6 +27,6 @@ export async function createSensor(
   });
 }
 
-export async function getAllSensors() {
-  return await dataBase.get<SensorModel>('sensors').query().fetch();
+export function getAllSensors() {
+  return dataBase.get<SensorModel>('sensors').query().fetch();
 }

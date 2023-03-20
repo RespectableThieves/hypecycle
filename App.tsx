@@ -7,24 +7,19 @@ import {
 import {StatusBar} from 'expo-status-bar';
 import {NavigationContainer} from '@react-navigation/native';
 import {DrawerNav} from './src/components/DrawerNav';
-import {
-  BleSensors,
-  PowerMeter,
-  HeartRateMonitor,
-  CadenceMeter,
-  // @ts-ignore
-} from 'react-native-cycling-sensors';
 import {useEffect, useState} from 'react';
 import globalData from './src/lib/GlobalContext';
 import {getOrCreateRealtimeRecord, updateRealTimeRecord} from './src/utils';
 import Loading from './src/components/Loading';
+import {
+  ble,
+  powerMeter,
+  heartRateMonitor,
+  cadenceMeter,
+} from './src/lib/sensors';
+import {navigationRef} from './src/lib/navigation';
 
-const bleSensor = new BleSensors();
-const pMeter = new PowerMeter();
-const hrMeter = new HeartRateMonitor();
-const cMeter = new CadenceMeter();
-
-console.log('bleSensor', bleSensor.checkState());
+console.log('ble', ble.checkState());
 const UPDATE_INTERVAL = 3;
 
 const handleError = (error: Error) => {
@@ -37,7 +32,7 @@ function App() {
   const [hasBooted, setHasBooted] = useState(false);
 
   useEffect(() => {
-    let timer: number;
+    let timer: NodeJS.Timer;
 
     const startServicesAndTasks = async () => {
       const realtimeRecord = await getOrCreateRealtimeRecord();
@@ -49,13 +44,13 @@ function App() {
       // await launchLocationTracking() //Start the background GPS location service
 
       // Create our global ble object
-      bleSensor
+      ble
         .requestPermissions()
         .then(() => {
           console.log('Ble permissions requested');
         })
         .then(() => {
-          bleSensor.start().catch((err: Error) => handleError(err));
+          ble.start().catch((err: Error) => handleError(err));
         })
         .catch((err: Error) => handleError(err));
 
@@ -78,14 +73,14 @@ function App() {
   return (
     <globalData.Provider
       value={{
-        ble: bleSensor,
-        powerMeter: pMeter,
-        heartRateMonitor: hrMeter,
-        cadenceMeter: cMeter,
+        ble,
+        powerMeter,
+        heartRateMonitor,
+        cadenceMeter,
       }}>
       <PaperProvider theme={DefaultTheme}>
         <StatusBar hidden />
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}>
           <DrawerNav />
         </NavigationContainer>
       </PaperProvider>

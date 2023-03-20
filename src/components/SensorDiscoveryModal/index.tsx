@@ -14,7 +14,7 @@ type Props = {
 };
 
 const _listEmptyComponent = () => {
-  console.log('Empty list');
+  console.log('Empty list!!!');
   return (
     <Empty>
       <Text variant="titleMedium">No sensors found, run a scan!</Text>
@@ -35,8 +35,11 @@ export function SensorDiscoveryModal(props: Props) {
   const [discovered, setDiscovered] = useState([]);
   const containerStyle = {backgroundColor: 'white', padding: 20};
 
+  console.log({discovered});
+
   const discoverSensors = async () => {
     setDiscovered([]); //Clear the list each time we run a scan
+
     const handleScanStop = async () => {
       console.log('Scanning Stopped');
       setScanning(false);
@@ -122,10 +125,15 @@ export function SensorDiscoveryModal(props: Props) {
           )}
         />
         <GroupedButtons>
-          <Button onPress={discoverSensors} loading={scanning}>
+          <Button
+            id="discovery-modal-scan"
+            onPress={discoverSensors}
+            loading={scanning}>
             Scan
           </Button>
-          <Button onPress={props.onDismiss}>close</Button>
+          <Button id="discovery-modal-close" onPress={props.onDismiss}>
+            close
+          </Button>
         </GroupedButtons>
       </Modal>
     </Portal>
