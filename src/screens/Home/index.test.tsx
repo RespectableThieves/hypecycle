@@ -1,5 +1,7 @@
 import ActiveRideView from './';
-import renderer from 'react-test-renderer';
+import renderer, {ReactTestRenderer} from 'react-test-renderer';
+import {updateRealTimeRecord, getOrCreateRealtimeRecord} from '../../utils';
+import RealtimeDataModel from '../../database/model/realtimeDataModel';
 
 // mocking call because we aren't rendering
 // under a navigation context.
@@ -7,21 +9,39 @@ jest.mock('@react-navigation/elements', () => ({
   useHeaderHeight: jest.fn().mockImplementation(() => 200),
 }));
 
-it('Widget page renders & updates correctly', () => {
-  // TODO:
-  // 1. write to the realtime db table.
-  // 2. render component
-  // 3. check values
-  // 4. write to db to update values
-  // 5. Check component values again.
-  const tree = renderer.create(<ActiveRideView />);
-
-  const widget = tree.root.findByProps({
+it('Widget page renders & updates correctly', async () => {
+  // write the first realtime row.
+  const powerProps = {
     title: 'Power ',
-    data: 301,
     icon: 'lightning-bolt',
+  };
+
+  let tree!: ReactTestRenderer;
+
+  let record = await getOrCreateRealtimeRecord();
+  let updatedRecord!: RealtimeDataModel;
+
+  // render the widget screen
+  await renderer.act(async () => {
+    tree = renderer.create(<ActiveRideView />);
   });
-  expect(widget.props).toBeTruthy();
+
+  // Check the widget is using the realtime table.
+  // initial value should be 0
+  const widget = tree.root.findByProps({...powerProps, data: 0});
+  expect(widget).toBeTruthy();
+
+  // write to the db updating the realtime table.
+  await renderer.act(async () => {
+    updatedRecord = await updateRealTimeRecord(record);
+  });
+
+  // again check the component to see that it's re-rendered correctly
+  const updatedWidget = tree.root.findByProps({
+    ...powerProps,
+    data: updatedRecord.instantPower,
+  });
+  expect(updatedWidget).toBeTruthy();
 
   tree.unmount();
 });

@@ -1,6 +1,10 @@
 import React from 'react';
 import {Container, Row, Col} from 'react-native-flex-grid';
+import withObservables from '@nozbe/with-observables';
+import RealtimeDataModel from '../../database/model/realtimeDataModel';
 import {SimpleMetric} from '../SimpleMetric';
+import {REALTIME_DATA_ID} from '../../utils/contants';
+import {dataBase} from '../../database';
 
 const GUTTER = 1;
 
@@ -12,24 +16,33 @@ type Widget = {
 
 type Props = {
   widgetArray: Widget[];
+  realtimeData: RealtimeDataModel;
 };
 
-export function WidgetGrid(_: Props) {
+function WidgetGrid({realtimeData}: Props) {
   return (
     <Container fluid noPadding>
       <Row gx={GUTTER}>
         <Col gx={GUTTER}>
-          <SimpleMetric title={'Power '} data={301} icon={'lightning-bolt'} />
+          <SimpleMetric
+            title={'Power '}
+            data={realtimeData.instantPower}
+            icon={'lightning-bolt'}
+          />
         </Col>
         <Col gx={GUTTER}>
           <SimpleMetric
             title={'Distance '}
-            data={102.6}
+            data={realtimeData.distance}
             icon={'map-marker-distance'}
           />
         </Col>
         <Col gx={GUTTER}>
-          <SimpleMetric title={'Cadence '} data={87} icon={'unicycle'} />
+          <SimpleMetric
+            title={'Cadence '}
+            data={realtimeData.cadence}
+            icon={'unicycle'}
+          />
         </Col>
         <Col gx={GUTTER}>
           <SimpleMetric
@@ -41,17 +54,25 @@ export function WidgetGrid(_: Props) {
       </Row>
       <Row gx={GUTTER}>
         <Col gx={GUTTER}>
-          <SimpleMetric title={'Speed '} data={28.9} icon={'speedometer'} />
+          <SimpleMetric
+            title={'Speed '}
+            data={realtimeData.speed}
+            icon={'speedometer'}
+          />
         </Col>
         <Col gx={GUTTER}>
-          <SimpleMetric title={'Heart Rate '} data={172} icon={'heart'} />
+          <SimpleMetric
+            title={'Heart Rate '}
+            data={realtimeData.heartRate}
+            icon={'heart'}
+          />
         </Col>
       </Row>
       <Row gx={GUTTER}>
         <Col gx={GUTTER}>
           <SimpleMetric
             title={'Elevation '}
-            data={768}
+            data={realtimeData.instantPower}
             icon={'image-filter-hdr'}
           />
         </Col>
@@ -69,3 +90,11 @@ export function WidgetGrid(_: Props) {
     </Container>
   );
 }
+
+const enhance = withObservables([], () => ({
+  realtimeData: dataBase
+    .get<RealtimeDataModel>('realtime_data')
+    .findAndObserve(REALTIME_DATA_ID),
+}));
+
+export default enhance(WidgetGrid);
