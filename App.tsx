@@ -31,15 +31,16 @@ const handleError = (error: Error) => {
 
 function App() {
   useEffect(() => {
+    let timer: number;
+
     const startServicesAndTasks = async () => {
       console.log('Starting Services and Tasks to pull sensor data');
 
-      async function periodicTasks() {
+      timer = setInterval(() => {
         console.log('Update every 3 seconds');
         // TODO: Get accelerometer, light, temp, battery data here
-        setTimeout(periodicTasks, 1000 * UPDATE_INTERVAL);
-      }
-      periodicTasks(); // Start periodic tasks
+      }, 1000 * UPDATE_INTERVAL);
+
       // await launchLocationTracking() //Start the background GPS location service
 
       // Create our global ble object
@@ -57,6 +58,7 @@ function App() {
     startServicesAndTasks(); // run it, run it
 
     return () => {
+      clearInterval(timer);
       // this now gets called when the component unmounts
     };
   }, []);

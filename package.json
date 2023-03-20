@@ -19,6 +19,7 @@
     "expo-font": "^11.0.1",
     "expo-location": "^15.1.1",
     "expo-status-bar": "^1.4.2",
+    "jest-expo": "^48.0.2",
     "react": "18.2.0",
     "react-native": "0.71.3",
     "react-native-ble-manager": "^8.8.0",
@@ -54,6 +55,12 @@
     "typescript": "4.8.4"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "jest-expo",
+    "setupFiles": [
+      "<rootDir>/setup.ts"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|react-native-cycling-sensors)"
+    ]
   }
 }
