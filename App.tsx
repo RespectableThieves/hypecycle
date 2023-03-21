@@ -19,7 +19,6 @@ import {
 } from './src/lib/sensors';
 import {navigationRef} from './src/lib/navigation';
 
-console.log('ble', ble.checkState());
 const UPDATE_INTERVAL = 3;
 
 const handleError = (error: Error) => {
@@ -35,6 +34,7 @@ function App() {
     let timer: NodeJS.Timer;
 
     const startServicesAndTasks = async () => {
+      console.log('ble', ble.checkState());
       const realtimeRecord = await getOrCreateRealtimeRecord();
 
       timer = setInterval(async () => {

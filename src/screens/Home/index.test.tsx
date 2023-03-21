@@ -15,13 +15,13 @@ beforeEach(async () => {
   // becuase this screen relies
   // on providers like globalData
   // navigation etc. We'll just load
-  // the app then navigate to it.
+  // the app then navigate to the screen.
   await renderer.act(async () => {
     tree = renderer.create(<App />);
   });
 
   renderer.act(() => {
-    navigate('Sensors');
+    navigate('Active Ride');
   });
 
   screen = tree.root.findByType(ActiveRideView);

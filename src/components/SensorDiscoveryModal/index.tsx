@@ -14,7 +14,7 @@ type Props = {
 };
 
 const _listEmptyComponent = () => {
-  console.log('Empty list!!!');
+  console.log('Empty list');
   return (
     <Empty>
       <Text variant="titleMedium">No sensors found, run a scan!</Text>
@@ -34,8 +34,6 @@ export function SensorDiscoveryModal(props: Props) {
   const [scanning, setScanning] = useState(false);
   const [discovered, setDiscovered] = useState([]);
   const containerStyle = {backgroundColor: 'white', padding: 20};
-
-  console.log({discovered});
 
   const discoverSensors = async () => {
     setDiscovered([]); //Clear the list each time we run a scan

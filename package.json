@@ -15,8 +15,6 @@
     "@nozbe/watermelondb": "^0.25.5",
     "@react-navigation/drawer": "^6.6.1",
     "@react-navigation/native": "^6.1.5",
-    "@testing-library/react": "^14.0.0",
-    "@testing-library/react-native": "^12.0.0",
     "expo": "^48.0.4",
     "expo-font": "^11.0.1",
     "expo-location": "^15.1.1",
@@ -42,7 +40,6 @@
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
     "@react-native-community/eslint-config": "^3.2.0",
-    "@testing-library/jest-native": "^5.4.2",
     "@tsconfig/react-native": "^2.0.2",
     "@types/jest": "^29.2.1",
     "@types/react": "^18.0.24",
@@ -59,9 +56,6 @@
   },
   "jest": {
     "preset": "jest-expo",
-    "setupFilesAfterEnv": [
-      "@testing-library/jest-native/extend-expect"
-    ],
     "setupFiles": [
       "<rootDir>/setup.ts"
     ],

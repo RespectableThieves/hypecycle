@@ -22,7 +22,7 @@ const _listEmptyComponent = () => {
   );
 };
 
-export const HeaderRight =
+const HeaderRight =
   ({showModal}: {showModal: () => void}) =>
   () =>
     (
