@@ -6,7 +6,7 @@ const sanitizeServices = (rawServices: any[]) => {
 };
 
 export default class SensorModel extends Model {
-  static table = 'sensors';
+  static table = 'sensor';
 
   @field('name') name!: string;
   @field('address') address!: string;
