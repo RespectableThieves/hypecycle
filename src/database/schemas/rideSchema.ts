@@ -12,8 +12,8 @@ export const rideSchema = tableSchema({
       type: 'number',
     },
     {
-      name: 'name',
-      type: 'string',
+      name: 'is_paused',
+      type: 'boolean',
     },
   ],
 });
