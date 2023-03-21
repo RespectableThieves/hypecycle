@@ -1,4 +1,4 @@
-import {Model} from '@nozbe/watermelondb';
+import {Model, Relation} from '@nozbe/watermelondb';
 import {field} from '@nozbe/watermelondb/decorators';
 import {immutableRelation} from '@nozbe/watermelondb/decorators';
 import Ride from './ride';
@@ -20,5 +20,5 @@ export default class RideSummary extends Model {
   @field('accumulated_accent') accumulatedAccent!: number;
   @field('accumulated_decent') accumulatedDecent!: boolean;
 
-  @immutableRelation('ride', 'ride_id') ride!: Ride;
+  @immutableRelation('ride', 'ride_id') ride!: Relation<Ride>;
 }
