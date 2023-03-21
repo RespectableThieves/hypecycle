@@ -1,4 +1,4 @@
-import { tableSchema } from '@nozbe/watermelondb';
+import {tableSchema} from '@nozbe/watermelondb';
 
 export const rideSummarySchema = tableSchema({
   name: 'rideSummary',
