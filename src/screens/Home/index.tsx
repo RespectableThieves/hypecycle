@@ -1,4 +1,4 @@
-import {WidgetGrid} from '../../components/WidgetGrid';
+import WidgetGrid from '../../components/WidgetGrid';
 
 const ActiveRideView = () => {
   return <WidgetGrid widgetArray={[]} />;

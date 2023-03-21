@@ -14,8 +14,10 @@ import {
   CadenceMeter,
   // @ts-ignore
 } from 'react-native-cycling-sensors';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import globalData from './src/lib/GlobalContext';
+import {getOrCreateRealtimeRecord, updateRealTimeRecord} from './src/utils';
+import Loading from './src/components/Loading';
 
 const bleSensor = new BleSensors();
 const pMeter = new PowerMeter();
@@ -30,17 +32,20 @@ const handleError = (error: Error) => {
 };
 
 function App() {
+  // hasBooted is a flag for all required vars
+  // needed before mounting app.
+  const [hasBooted, setHasBooted] = useState(false);
+
   useEffect(() => {
     let timer: number;
 
     const startServicesAndTasks = async () => {
-      console.log('Starting Services and Tasks to pull sensor data');
+      const realtimeRecord = await getOrCreateRealtimeRecord();
 
-      timer = setInterval(() => {
-        console.log('Update every 3 seconds');
-        // TODO: Get accelerometer, light, temp, battery data here
+      timer = setInterval(async () => {
+        await updateRealTimeRecord(realtimeRecord);
+        console.log('updated realtime data');
       }, 1000 * UPDATE_INTERVAL);
-
       // await launchLocationTracking() //Start the background GPS location service
 
       // Create our global ble object
@@ -53,15 +58,22 @@ function App() {
           bleSensor.start().catch((err: Error) => handleError(err));
         })
         .catch((err: Error) => handleError(err));
+
+      setHasBooted(true);
     };
 
-    startServicesAndTasks(); // run it, run it
+    startServicesAndTasks(); // run it
 
     return () => {
       clearInterval(timer);
       // this now gets called when the component unmounts
     };
   }, []);
+
+  if (!hasBooted) {
+    // TODO style splash screen
+    return <Loading />;
+  }
 
   return (
     <globalData.Provider
