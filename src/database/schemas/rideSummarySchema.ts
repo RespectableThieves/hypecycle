@@ -1,7 +1,7 @@
 import {tableSchema} from '@nozbe/watermelondb';
 
 export const rideSummarySchema = tableSchema({
-  name: 'rideSummary',
+  name: 'ride_summary',
   columns: [
     {
       name: 'distance',
@@ -54,6 +54,10 @@ export const rideSummarySchema = tableSchema({
     {
       name: 'accumulated_deccent',
       type: 'number',
+    },
+    {
+      name: 'ride_id',
+      type: 'string',
     },
   ],
 });
