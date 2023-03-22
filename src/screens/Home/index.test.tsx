@@ -60,3 +60,56 @@ it('Widget page renders & updates correctly', async () => {
 
   tree.unmount();
 });
+
+it('Can start/pause/unpause and stop a ride', async () => {
+  const labels = {
+    pause: 'Pause ride',
+    start: 'Start ride',
+    end: 'End ride',
+    unpause: 'Continue ride',
+  };
+  const rideFabGroup = tree.root.findByProps({testID: 'ride-fab-group'});
+
+  const getActionLabels = () => {
+    return rideFabGroup.props.actions.map((a: any) => a.label);
+  };
+
+  const findActionLabel = (label: string) => {
+    return rideFabGroup.props.actions.find((a: any) => a.label === label);
+  };
+
+  // only option should be Start ride
+  expect(getActionLabels()).toEqual([labels.start]);
+
+  // now lets start a ride t
+  await renderer.act(async () => {
+    await findActionLabel(labels.start).onPress();
+  });
+
+  // now lets check our options
+  expect(getActionLabels()).toEqual([labels.end, labels.pause]);
+
+  // now let's pause the ride
+  await renderer.act(async () => {
+    await findActionLabel(labels.pause).onPress();
+  });
+
+  // now lets check our options
+  expect(getActionLabels()).toEqual([labels.end, labels.unpause]);
+
+  // now let's unpause the ride
+  await renderer.act(async () => {
+    await findActionLabel(labels.unpause).onPress();
+  });
+
+  // now lets check our options
+  expect(getActionLabels()).toEqual([labels.end, labels.pause]);
+
+  // now let's stop the ride
+  await renderer.act(async () => {
+    await findActionLabel(labels.end).onPress();
+  });
+
+  // check we can only see the start option again.
+  expect(getActionLabels()).toEqual([labels.start]);
+});
