@@ -37,6 +37,7 @@ export function SensorDiscoveryModal(props: Props) {
 
   const discoverSensors = async () => {
     setDiscovered([]); //Clear the list each time we run a scan
+
     const handleScanStop = async () => {
       console.log('Scanning Stopped');
       setScanning(false);
@@ -122,10 +123,15 @@ export function SensorDiscoveryModal(props: Props) {
           )}
         />
         <GroupedButtons>
-          <Button onPress={discoverSensors} loading={scanning}>
+          <Button
+            id="discovery-modal-scan"
+            onPress={discoverSensors}
+            loading={scanning}>
             Scan
           </Button>
-          <Button onPress={props.onDismiss}>close</Button>
+          <Button id="discovery-modal-close" onPress={props.onDismiss}>
+            close
+          </Button>
         </GroupedButtons>
       </Modal>
     </Portal>

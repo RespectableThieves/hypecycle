@@ -36,7 +36,7 @@ const HeaderRight =
       </Button>
     );
 
-export function Sensors({navigation}: DrawerNavProps) {
+export default function Sensors({navigation}: DrawerNavProps) {
   const ble = useContext(globalData).ble;
   const [sensors, setSensors] = useState<SensorModel[]>([]);
   const [visible, setVisible] = useState(false);

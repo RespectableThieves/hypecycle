@@ -3,7 +3,7 @@ import {
   DrawerScreenProps,
 } from '@react-navigation/drawer';
 import ActiveRideView from '../../screens/Home';
-import {Sensors} from '../../screens/Sensors';
+import Sensors from '../../screens/Sensors';
 import {useEffect} from 'react';
 import {Button} from 'react-native-paper';
 import NavigationView from '../../screens/Navigation';
