@@ -4,7 +4,7 @@ import { immutableRelation } from '@nozbe/watermelondb/decorators';
 import Ride from './ride';
 
 export default class RideSummaryModal extends Model {
-  static table = 'ride_summarys';
+  static table = 'ride_summary';
 
   @field('distance') distance!: number;
   @field('elapsed_time') elapsedTime!: number;

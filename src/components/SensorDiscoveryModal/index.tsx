@@ -46,7 +46,7 @@ export function SensorDiscoveryModal(props: Props) {
       const unpairedList = await Promise.all(
         sensorList.map(async function (val: SensorProps, _index: number) {
           const existsAlready = await dataBase
-            .get('sensors')
+            .get('sensor')
             .query(Q.where('address', val.id))
             .fetchCount();
           if (!existsAlready) {

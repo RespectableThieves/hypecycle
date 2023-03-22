@@ -1,7 +1,7 @@
-import {tableSchema} from '@nozbe/watermelondb';
+import { tableSchema } from '@nozbe/watermelondb';
 
 export const sensorSchema = tableSchema({
-  name: 'sensors',
+  name: 'sensor',
   columns: [
     {
       name: 'name',

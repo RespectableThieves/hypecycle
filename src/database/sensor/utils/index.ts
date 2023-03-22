@@ -1,4 +1,4 @@
-import {dataBase} from '../..';
+import { dataBase } from '../..';
 import SensorModel from '../../model/sensorModel';
 
 export async function createSensor(
@@ -10,7 +10,7 @@ export async function createSensor(
   console.log('creating...');
   return dataBase.write(async () => {
     return dataBase
-      .get<SensorModel>('sensors')
+      .get<SensorModel>('sensor')
       .create(data => {
         data.name = name;
         data.type = type;
@@ -28,5 +28,5 @@ export async function createSensor(
 }
 
 export function getAllSensors() {
-  return dataBase.get<SensorModel>('sensors').query().fetch();
+  return dataBase.get<SensorModel>('sensor').query().fetch();
 }
