@@ -1,4 +1,4 @@
-import { dataBase } from '../..';
+import {dataBase} from '../..';
 import SensorModel from '../../model/sensorModel';
 
 export async function createSensor(

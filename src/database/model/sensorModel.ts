@@ -1,5 +1,5 @@
-import { Model } from '@nozbe/watermelondb';
-import { field, date, json, writer } from '@nozbe/watermelondb/decorators';
+import {Model} from '@nozbe/watermelondb';
+import {field, date, json, writer} from '@nozbe/watermelondb/decorators';
 
 const sanitizeServices = (rawServices: any[]) => {
   return Array.isArray(rawServices) ? rawServices.map(String) : [];
