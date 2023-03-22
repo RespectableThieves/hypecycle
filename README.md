@@ -23,12 +23,12 @@ An opensource react native based Cycling computer
 
 ### TODO:
 - Display live data [ ]
-	- Write data to "realtimeData" table whenever data is available, populate with empty data at launch. [ ]
-	- set up observables on realtimeData table linked to widgets [ ]
+	- Write data to "realtimeData" table whenever data is available, populate with empty data at launch. [x]
+	- set up observables on realtimeData table linked to widgets [x]
 - Integrate GPS location data [ ]
 	- using https://docs.expo.dev/versions/latest/sdk/location/ , preferably without background task permissions.
 - Create active Ride UX:
-	- create rides table [ ]
+	- create rides table [x]
 	- Add fab button to start/pause/stop a ride [ ]
 	- On start:
 		- create entry in rides table with `is_active` == true [ ]
