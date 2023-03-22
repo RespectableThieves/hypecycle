@@ -4,7 +4,7 @@ import {Alert, FlatList, Modal} from 'react-native';
 import {Empty, GroupedButtons} from './styles';
 import {Sensor, SensorProps} from '../Sensor';
 import globalData from '../../lib/GlobalContext';
-import {dataBase} from '../../database';
+import {db} from '../../database';
 import {createSensor} from '../../lib/sensors';
 import {Q} from '@nozbe/watermelondb';
 
@@ -45,7 +45,7 @@ export function SensorDiscoveryModal(props: Props) {
       console.log('sensorList: ', sensorList);
       const unpairedList = await Promise.all(
         sensorList.map(async function (val: SensorProps, _index: number) {
-          const existsAlready = await dataBase
+          const existsAlready = await db
             .get('sensor')
             .query(Q.where('address', val.id))
             .fetchCount();

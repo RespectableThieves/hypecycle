@@ -1,9 +1,9 @@
 import {REALTIME_DATA_ID} from '../constants';
 import RealtimeDataModel from '../database/model/realtimeDataModel';
-import {dataBase} from '../database';
+import {db} from '../database';
 
 export async function getOrCreateRealtimeRecord(): Promise<RealtimeDataModel> {
-  const collection = dataBase.get<RealtimeDataModel>('realtime_data');
+  const collection = db.get<RealtimeDataModel>('realtime_data');
 
   try {
     const record = await collection.find(REALTIME_DATA_ID);
@@ -11,7 +11,7 @@ export async function getOrCreateRealtimeRecord(): Promise<RealtimeDataModel> {
   } catch (err) {
     // not found
     // create record on first boot.
-    return dataBase.write(async () => {
+    return db.write(async () => {
       return collection.create(r => {
         r._raw.id = REALTIME_DATA_ID;
         return r;
@@ -26,7 +26,7 @@ function randomInt(max: number = 100) {
 
 // update the record on a timer
 export async function updateRealTimeRecord(record: RealtimeDataModel) {
-  return dataBase.write(async () => {
+  return db.write(async () => {
     return record.update(() => {
       record.instantPower = randomInt();
       record.speed = randomInt();

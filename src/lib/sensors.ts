@@ -5,7 +5,7 @@ import {
   CadenceMeter,
   // @ts-ignore
 } from 'react-native-cycling-sensors';
-import {dataBase} from '../database';
+import {db} from '../database';
 import SensorModel from '../database/model/sensorModel';
 
 export const ble = new BleSensors();
@@ -39,8 +39,8 @@ export async function createSensor(
   type: string = 'bluetooth',
 ): Promise<SensorModel> {
   console.log('creating...');
-  return dataBase.write(async () => {
-    return dataBase
+  return db.write(async () => {
+    return db
       .get<SensorModel>('sensor')
       .create(data => {
         data.name = name;
@@ -59,5 +59,5 @@ export async function createSensor(
 }
 
 export function getAllSensors() {
-  return dataBase.get<SensorModel>('sensor').query().fetch();
+  return db.get<SensorModel>('sensor').query().fetch();
 }

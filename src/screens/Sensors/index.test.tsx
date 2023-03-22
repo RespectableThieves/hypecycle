@@ -9,7 +9,7 @@ import App from '../../../App';
 import {navigate} from '../../lib/navigation';
 import {ble} from '../../lib/sensors';
 import Sensors from './';
-import {dataBase} from '../../database';
+import {db} from '../../database';
 import {createSensor, getAllSensors} from '../../lib/sensors';
 import SensorModel from '../../database/model/sensorModel';
 import {Sensor} from '../../components/Sensor';
@@ -35,7 +35,7 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
-  await dataBase.write(async () => {
+  await db.write(async () => {
     for (let record of records) {
       await record.destroyPermanently();
     }
