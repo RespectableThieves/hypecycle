@@ -19,7 +19,7 @@ import {
   powerMeter,
   heartRateMonitor,
   cadenceMeter,
-} from './src/lib/sensors';
+} from './src/lib/sensor';
 import {navigationRef} from './src/lib/navigation';
 
 const UPDATE_INTERVAL = 3;

@@ -5,7 +5,7 @@ import {db} from '../../database';
 import SensorModel from '../../database/model/sensorModel';
 import {Q} from '@nozbe/watermelondb';
 import {Button, Text} from 'react-native-paper';
-import {getAllSensors} from '../../lib/sensors';
+import {getAllSensors} from '../../lib/sensor';
 import {Sensor} from '../../components/Sensor';
 import {SensorDiscoveryModal} from '../../components/SensorDiscoveryModal';
 import globalData from '../../lib/GlobalContext';
