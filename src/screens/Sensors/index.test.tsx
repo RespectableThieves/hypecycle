@@ -10,7 +10,7 @@ import {navigate} from '../../lib/navigation';
 import {ble} from '../../lib/sensors';
 import Sensors from './';
 import {dataBase} from '../../database';
-import {createSensor, getAllSensors} from '../../database/sensor/utils';
+import {createSensor, getAllSensors} from '../../lib/sensors';
 import SensorModel from '../../database/model/sensorModel';
 import {Sensor} from '../../components/Sensor';
 

@@ -5,7 +5,7 @@ import {Empty, GroupedButtons} from './styles';
 import {Sensor, SensorProps} from '../Sensor';
 import globalData from '../../lib/GlobalContext';
 import {dataBase} from '../../database';
-import {createSensor} from '../../database/sensor/utils';
+import {createSensor} from '../../lib/sensors';
 import {Q} from '@nozbe/watermelondb';
 
 type Props = {

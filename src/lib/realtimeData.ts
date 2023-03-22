@@ -1,25 +1,6 @@
-import {REALTIME_DATA_ID} from './contants';
+import {REALTIME_DATA_ID} from '../constants';
 import RealtimeDataModel from '../database/model/realtimeDataModel';
 import {dataBase} from '../database';
-
-export function bleCharacteristicToIconName(char: string): string {
-  switch (char) {
-    case 'Battery':
-      // Battery Service
-      return 'battery-bluetooth-variant';
-    case 'HeartRate':
-      // Heart rate service
-      return 'heart-pulse';
-    case 'CyclingPower':
-      // Cycling Power
-      return 'lightning-bolt';
-    case 'CyclingSpeedAndCadence':
-      // Cycling Speed And Cadence
-      return 'unicycle';
-    default:
-      return 'ab-testing';
-  }
-}
 
 export async function getOrCreateRealtimeRecord(): Promise<RealtimeDataModel> {
   const collection = dataBase.get<RealtimeDataModel>('realtime_data');

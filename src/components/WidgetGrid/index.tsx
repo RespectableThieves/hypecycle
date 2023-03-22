@@ -3,7 +3,7 @@ import {Container, Row, Col} from 'react-native-flex-grid';
 import withObservables from '@nozbe/with-observables';
 import RealtimeDataModel from '../../database/model/realtimeDataModel';
 import {SimpleMetric} from '../SimpleMetric';
-import {REALTIME_DATA_ID} from '../../utils/contants';
+import {REALTIME_DATA_ID} from '../../constants';
 import {dataBase} from '../../database';
 
 const GUTTER = 1;

@@ -9,7 +9,10 @@ import {NavigationContainer} from '@react-navigation/native';
 import {DrawerNav} from './src/components/DrawerNav';
 import {useEffect, useState} from 'react';
 import globalData from './src/lib/GlobalContext';
-import {getOrCreateRealtimeRecord, updateRealTimeRecord} from './src/utils';
+import {
+  getOrCreateRealtimeRecord,
+  updateRealTimeRecord,
+} from './src/lib/realtimeData';
 import Loading from './src/components/Loading';
 import {
   ble,
