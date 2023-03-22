@@ -1,6 +1,5 @@
 import {REALTIME_DATA_ID} from '../constants';
-import RealtimeDataModel from '../database/model/realtimeDataModel';
-import {db} from '../database';
+import {db, RealtimeDataModel} from '../database';
 
 export async function getOrCreateRealtimeRecord(): Promise<RealtimeDataModel> {
   const collection = db.get<RealtimeDataModel>('realtime_data');

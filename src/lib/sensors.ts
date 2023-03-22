@@ -5,8 +5,7 @@ import {
   CadenceMeter,
   // @ts-ignore
 } from 'react-native-cycling-sensors';
-import {db} from '../database';
-import SensorModel from '../database/model/sensorModel';
+import {db, SensorModel} from '../database';
 
 export const ble = new BleSensors();
 export const powerMeter = new PowerMeter();

@@ -9,9 +9,8 @@ import App from '../../../App';
 import {navigate} from '../../lib/navigation';
 import {ble} from '../../lib/sensors';
 import Sensors from './';
-import {db} from '../../database';
+import {db, SensorModel} from '../../database';
 import {createSensor, getAllSensors} from '../../lib/sensors';
-import SensorModel from '../../database/model/sensorModel';
 import {Sensor} from '../../components/Sensor';
 
 let screen!: ReactTestInstance;

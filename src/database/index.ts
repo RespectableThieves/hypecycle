@@ -9,3 +9,5 @@ export const db = new Database({
   adapter,
   modelClasses: [SensorModel, RealtimeDataModel, RideModel, RideSummaryModel],
 });
+
+export {SensorModel, RealtimeDataModel, RideModel, RideSummaryModel};

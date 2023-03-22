@@ -1,5 +1,4 @@
-import RideModel from '../database/model/ride';
-import {db} from '../database';
+import {db, RideModel} from '../database';
 
 export function startRide() {
   // TODO stop any current rides.
