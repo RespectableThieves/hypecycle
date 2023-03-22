@@ -1,10 +1,10 @@
-import {Model, Relation} from '@nozbe/watermelondb';
-import {field} from '@nozbe/watermelondb/decorators';
-import {immutableRelation} from '@nozbe/watermelondb/decorators';
+import { Model, Relation } from '@nozbe/watermelondb';
+import { field } from '@nozbe/watermelondb/decorators';
+import { immutableRelation } from '@nozbe/watermelondb/decorators';
 import Ride from './ride';
 
-export default class RideSummary extends Model {
-  static table = 'ride_summary';
+export default class RideSummaryModal extends Model {
+  static table = 'ride_summarys';
 
   @field('distance') distance!: number;
   @field('elapsed_time') elapsedTime!: number;
