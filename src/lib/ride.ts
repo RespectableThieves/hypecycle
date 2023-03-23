@@ -14,6 +14,7 @@ export function stopRide(ride: RideModel) {
   return db.write(async () => {
     return ride.update(() => {
       ride.endedAt = new Date().getUTCMilliseconds();
+      ride.isPaused = false;
       return ride;
     });
   });
