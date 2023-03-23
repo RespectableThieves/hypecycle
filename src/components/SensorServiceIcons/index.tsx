@@ -1,6 +1,6 @@
 import React from 'react';
 import {List} from 'react-native-paper';
-import {bleCharacteristicToIconName} from '../../utils';
+import {bleCharacteristicToIconName} from '../../lib/sensor';
 
 type Props = {
   data: string[];

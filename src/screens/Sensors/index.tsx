@@ -1,11 +1,11 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {FlatList} from 'react-native';
 import {Container, Empty} from './styles';
-import {dataBase} from '../../database';
+import {db} from '../../database';
 import SensorModel from '../../database/model/sensorModel';
 import {Q} from '@nozbe/watermelondb';
 import {Button, Text} from 'react-native-paper';
-import {getAllSensors} from '../../database/sensor/utils';
+import {getAllSensors} from '../../lib/sensor';
 import {Sensor} from '../../components/Sensor';
 import {SensorDiscoveryModal} from '../../components/SensorDiscoveryModal';
 import globalData from '../../lib/GlobalContext';
@@ -57,7 +57,7 @@ export default function Sensors({navigation}: DrawerNavProps) {
       const allSensor = await getAllSensors();
       setSensors(allSensor);
       setRefreshing(false);
-      const numberOfBluetoothSensors = await dataBase
+      const numberOfBluetoothSensors = await db
         .get('sensors')
         .query(Q.where('type', 'bluetooth'))
         .fetchCount();

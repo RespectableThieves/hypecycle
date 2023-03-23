@@ -1,10 +1,9 @@
 import React from 'react';
 import {Container, Row, Col} from 'react-native-flex-grid';
 import withObservables from '@nozbe/with-observables';
-import RealtimeDataModel from '../../database/model/realtimeDataModel';
 import {SimpleMetric} from '../SimpleMetric';
-import {REALTIME_DATA_ID} from '../../utils/contants';
-import {dataBase} from '../../database';
+import {REALTIME_DATA_ID} from '../../constants';
+import {db, RealtimeDataModel} from '../../database';
 
 const GUTTER = 1;
 
@@ -92,7 +91,7 @@ function WidgetGrid({realtimeData}: Props) {
 }
 
 const enhance = withObservables([], () => ({
-  realtimeData: dataBase
+  realtimeData: db
     .get<RealtimeDataModel>('realtime_data')
     .findAndObserve(REALTIME_DATA_ID),
 }));

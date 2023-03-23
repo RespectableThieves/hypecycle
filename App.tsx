@@ -9,14 +9,17 @@ import {NavigationContainer} from '@react-navigation/native';
 import {DrawerNav} from './src/components/DrawerNav';
 import {useEffect, useState} from 'react';
 import globalData from './src/lib/GlobalContext';
-import {getOrCreateRealtimeRecord, updateRealTimeRecord} from './src/utils';
+import {
+  getOrCreateRealtimeRecord,
+  updateRealTimeRecord,
+} from './src/lib/realtimeData';
 import Loading from './src/components/Loading';
 import {
   ble,
   powerMeter,
   heartRateMonitor,
   cadenceMeter,
-} from './src/lib/sensors';
+} from './src/lib/sensor';
 import {navigationRef} from './src/lib/navigation';
 
 const UPDATE_INTERVAL = 3;
