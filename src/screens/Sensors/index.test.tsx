@@ -7,11 +7,9 @@ import {Button, Text} from 'react-native-paper';
 
 import App from '../../../App';
 import {navigate} from '../../lib/navigation';
-import {ble} from '../../lib/sensors';
 import Sensors from './';
-import {dataBase} from '../../database';
-import {createSensor, getAllSensors} from '../../database/sensor/utils';
-import SensorModel from '../../database/model/sensorModel';
+import {db, SensorModel} from '../../database';
+import {ble, createSensor, getAllSensors} from '../../lib/sensor';
 import {Sensor} from '../../components/Sensor';
 
 let screen!: ReactTestInstance;
@@ -35,7 +33,7 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
-  await dataBase.write(async () => {
+  await db.write(async () => {
     for (let record of records) {
       await record.destroyPermanently();
     }

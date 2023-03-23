@@ -3,7 +3,10 @@ import renderer, {
   ReactTestRenderer,
   ReactTestInstance,
 } from 'react-test-renderer';
-import {updateRealTimeRecord, getOrCreateRealtimeRecord} from '../../utils';
+import {
+  updateRealTimeRecord,
+  getOrCreateRealtimeRecord,
+} from '../../lib/realtimeData';
 import App from '../../../App';
 import RealtimeDataModel from '../../database/model/realtimeDataModel';
 import {navigate} from '../../lib/navigation';

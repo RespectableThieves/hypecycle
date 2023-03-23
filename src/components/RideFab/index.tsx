@@ -1,8 +1,7 @@
 import * as React from 'react';
 import {FAB, Portal} from 'react-native-paper';
-import {dataBase} from '../../database';
+import {db, RideModel} from '../../database';
 import withObservables from '@nozbe/with-observables';
-import RideModel from '../../database/model/ride';
 import {Q} from '@nozbe/watermelondb';
 import {unpauseRide, pauseRide, stopRide, startRide} from '../../lib/ride';
 
@@ -82,7 +81,7 @@ const RideFab = ({activeRides = []}: Props) => {
 };
 
 const enhance = withObservables([], () => ({
-  activeRides: dataBase
+  activeRides: db
     .get<RideModel>('ride')
     .query(Q.where('ended_at', null))
     // NOTE: use need to explicitly set observe
