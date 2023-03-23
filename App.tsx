@@ -18,6 +18,9 @@ import {
   cadenceMeter,
 } from './src/lib/sensors';
 import {navigationRef} from './src/lib/navigation';
+import {LocationCallback} from 'expo-location';
+import useLocation from './src/hooks/useLocation';
+import {Alert} from 'react-native';
 
 const UPDATE_INTERVAL = 3;
 
@@ -29,10 +32,23 @@ function App() {
   // hasBooted is a flag for all required vars
   // needed before mounting app.
   const [hasBooted, setHasBooted] = useState(false);
+  // Set shouldTrack based on if we want GPS location trackin on or not
+  const shouldTrack = true;
+
+  // Define the callback to handle location updates
+  const handleLocationUpdate: LocationCallback = location => {
+    console.log('New location:', location);
+    // TODO: update realtimeData table here
+  };
+  // Use the useLocation hook
+  const [locationError] = useLocation(shouldTrack, handleLocationUpdate);
 
   useEffect(() => {
     let timer: NodeJS.Timer;
 
+    if (locationError) {
+      Alert.alert('Error getting location');
+    }
     const startServicesAndTasks = async () => {
       console.log('ble', ble.checkState());
       const realtimeRecord = await getOrCreateRealtimeRecord();
@@ -63,7 +79,7 @@ function App() {
       clearInterval(timer);
       // this now gets called when the component unmounts
     };
-  }, []);
+  }, [locationError]);
 
   if (!hasBooted) {
     // TODO style splash screen
