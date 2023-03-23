@@ -7,7 +7,7 @@ import {
 } from 'expo-location';
 
 const useLocation = (shouldTrack: boolean, callback: LocationCallback) => {
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<Error | null>(null);
   const subscriberRef = useRef<LocationSubscription | null>(null);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ const useLocation = (shouldTrack: boolean, callback: LocationCallback) => {
         );
         subscriberRef.current = newSubscriber;
       } catch (err) {
-        setError(err);
+        setError(err as Error);
       }
     };
 

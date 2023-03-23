@@ -58,17 +58,13 @@ describe('useLocation hook', () => {
     const errorMessage = 'Location permission denied';
     watchPositionAsyncMock.mockRejectedValue(new Error(errorMessage));
 
-    let result;
-    await act(async () => {
-      result = renderHook(
-        ({shouldTrack}) => useLocation(shouldTrack, callback),
-        {
-          initialProps: {shouldTrack: true},
-        },
-      ).result;
-    });
+    const {result, waitForNextUpdate} = renderHook(() =>
+      useLocation(true, callback),
+    );
+    await waitForNextUpdate();
 
-    expect(result.current[0]).toBeInstanceOf(Error);
-    expect(result.current[0].message).toBe(errorMessage);
+    const [error] = result.current as [Error | null];
+    expect(error).toBeInstanceOf(Error);
+    expect(error?.message).toBe(errorMessage);
   });
 });
