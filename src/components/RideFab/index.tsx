@@ -69,9 +69,9 @@ const RideFab = ({activeRides = []}: Props) => {
   return (
     <Portal>
       <FAB.Group
+        visible
         open={open}
         testID="ride-fab-group"
-        visible
         icon={open ? 'minus' : 'plus'}
         actions={actions}
         onStateChange={onStateChange}
