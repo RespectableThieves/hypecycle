@@ -8,6 +8,7 @@ jest.mock('./src/database/adapter');
 jest.mock('react-native-cycling-sensors');
 jest.mock('expo-font');
 jest.mock('expo-asset');
+jest.mock('expo-location');
 jest.mock('react-native-reanimated', () => {
   const Reanimated = require('react-native-reanimated/mock');
 

@@ -11,6 +11,7 @@ const useLocation = (shouldTrack: boolean, callback: LocationCallback) => {
   const subscriberRef = useRef<LocationSubscription | null>(null);
 
   useEffect(() => {
+    console.log({shouldTrack});
     const startWatching = async () => {
       try {
         const newSubscriber = await watchPositionAsync(
