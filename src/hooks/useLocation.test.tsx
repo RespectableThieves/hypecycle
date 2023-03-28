@@ -21,10 +21,6 @@ const TestComponent = ({
 };
 
 describe('useLocation hook', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('should start watching location when shouldTrack is true', async () => {
     const callback = jest.fn();
     const removeMock = jest.fn();

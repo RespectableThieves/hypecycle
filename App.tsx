@@ -5,7 +5,6 @@ import {
   Provider as PaperProvider,
 } from 'react-native-paper';
 import {StatusBar} from 'expo-status-bar';
-import {NavigationContainer} from '@react-navigation/native';
 import {DrawerNav} from './src/components/DrawerNav';
 import {useEffect, useState} from 'react';
 import globalData from './src/lib/GlobalContext';
@@ -20,10 +19,14 @@ import {
   heartRateMonitor,
   cadenceMeter,
 } from './src/lib/sensor';
-import {navigationRef} from './src/lib/navigation';
 import {LocationCallback} from 'expo-location';
 import useLocation from './src/hooks/useLocation';
 import {Alert} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {navigationRef} from './src/lib/navigation';
+import {StravaProvider} from './src/lib/StravaContext';
+import Signin from './src/components/Signin';
+import * as strava from './src/lib/strava';
 
 const UPDATE_INTERVAL = 3;
 
@@ -45,6 +48,7 @@ function App() {
   };
   // Use the useLocation hook
   const [locationError] = useLocation(shouldTrack, handleLocationUpdate);
+  const [stravaToken, setStravaToken] = useState<strava.Token | null>(null);
 
   useEffect(() => {
     let timer: NodeJS.Timer;
@@ -73,6 +77,9 @@ function App() {
         })
         .catch((err: Error) => handleError(err));
 
+      const token = await strava.loadToken();
+      setStravaToken(token);
+
       setHasBooted(true);
     };
 
@@ -99,9 +106,13 @@ function App() {
       }}>
       <PaperProvider theme={DefaultTheme}>
         <StatusBar hidden />
-        <NavigationContainer ref={navigationRef}>
-          <DrawerNav />
-        </NavigationContainer>
+        <StravaProvider stravaToken={stravaToken}>
+          <NavigationContainer ref={navigationRef}>
+            <Signin>
+              <DrawerNav />
+            </Signin>
+          </NavigationContainer>
+        </StravaProvider>
       </PaperProvider>
     </globalData.Provider>
   );

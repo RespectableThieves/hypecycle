@@ -16,8 +16,11 @@
     "@react-navigation/drawer": "^6.6.1",
     "@react-navigation/native": "^6.1.5",
     "expo": "^48.0.4",
+    "expo-auth-session": "^4.0.3",
     "expo-font": "^11.0.1",
     "expo-location": "^15.1.1",
+    "expo-random": "^13.1.1",
+    "expo-secure-store": "^12.1.1",
     "expo-status-bar": "^1.4.2",
     "react": "18.2.0",
     "react-native": "0.71.3",
@@ -31,7 +34,8 @@
     "react-native-safe-area-context": "^4.5.0",
     "react-native-screens": "^3.20.0",
     "react-native-vector-icons": "^9.2.0",
-    "styled-components": "^5.3.6"
+    "styled-components": "^5.3.6",
+    "uri-scheme": "^1.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
@@ -58,6 +62,9 @@
     "preset": "jest-expo",
     "setupFiles": [
       "<rootDir>/setup.ts"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/setupHooks.ts"
     ],
     "reporters": [
       "<rootDir>/reporter.js"

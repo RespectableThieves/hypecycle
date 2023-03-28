@@ -4,9 +4,9 @@ import {
 } from '@react-navigation/drawer';
 import ActiveRideView from '../../screens/Home';
 import Sensors from '../../screens/Sensors';
-import {useEffect} from 'react';
 import {Button} from 'react-native-paper';
 import NavigationView from '../../screens/Navigation';
+import SettingsView from '../../screens/Settings';
 
 const Drawer = createDrawerNavigator();
 export type DrawerNavProps = DrawerScreenProps<any>;
@@ -23,8 +23,6 @@ const HeaderRight = () => (
 );
 
 function DrawerNav() {
-  useEffect(() => {}, []);
-
   return (
     <Drawer.Navigator useLegacyImplementation initialRouteName="Active Ride">
       <Drawer.Screen
@@ -44,6 +42,11 @@ function DrawerNav() {
           drawerLabel: 'Sensors',
           headerRight: HeaderRight,
         }}
+      />
+      <Drawer.Screen
+        name="Settings"
+        component={SettingsView}
+        options={{drawerLabel: 'Settings'}}
       />
     </Drawer.Navigator>
   );
