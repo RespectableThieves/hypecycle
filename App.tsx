@@ -11,6 +11,7 @@ import globalData from './src/lib/GlobalContext';
 import {
   getOrCreateRealtimeRecord,
   updateRealTimeRecord,
+  onLocation,
 } from './src/lib/realtimeData';
 import Loading from './src/components/Loading';
 import {
@@ -19,7 +20,6 @@ import {
   heartRateMonitor,
   cadenceMeter,
 } from './src/lib/sensor';
-import {LocationCallback} from 'expo-location';
 import useLocation from './src/hooks/useLocation';
 import {Alert} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
@@ -41,13 +41,7 @@ function App() {
   // Set shouldTrack based on if we want GPS location trackin on or not
   const shouldTrack = true;
 
-  // Define the callback to handle location updates
-  const handleLocationUpdate: LocationCallback = location => {
-    console.log('New location:', location);
-    // TODO: update realtimeData table here
-  };
-  // Use the useLocation hook
-  const [locationError] = useLocation(shouldTrack, handleLocationUpdate);
+  const [locationError] = useLocation(shouldTrack, onLocation);
   const [stravaToken, setStravaToken] = useState<strava.Token | null>(null);
 
   useEffect(() => {
