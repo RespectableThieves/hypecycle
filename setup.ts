@@ -5,7 +5,6 @@ jest.mock('./src/database/adapter');
 jest.mock('react-native-cycling-sensors');
 jest.mock('expo-font');
 jest.mock('expo-asset');
-jest.mock('expo-location');
 jest.mock('expo-secure-store');
 jest.mock('expo-linking');
 
@@ -79,6 +78,23 @@ jest.mock('./src/lib/strava', () => {
   };
 });
 
+jest.mock('expo-location', () => {
+  const mod = jest.requireActual('expo-location');
+  const _callbacks: any[] = [];
+
+  return {
+    ...mod,
+    _emitLocation: (loc: any) => {
+      return Promise.all([_callbacks.map(cb => cb(loc))]);
+    },
+    watchPositionAsync: jest.fn(function (_opts, cb) {
+      _callbacks.push(cb);
+
+      return Promise.resolve({remove: jest.fn()});
+      // jest.fn().mockResolvedValue()
+    }),
+  };
+});
 // Silence the warning: Animated: `useNativeDriver` is not supported because the native animated module is missing
 // jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper');
 // As of react-native@0.64.X file has moved
