@@ -37,7 +37,6 @@ export default function Signin({children}: {children: ReactNode}) {
     // redirect we load the authcode and authorize
     // the user
     if (response?.type === 'success') {
-      console.log('authorizing');
       authorizeUser({code: response.params.code})
         .then(() => {
           setLoading(false);
