@@ -1,7 +1,6 @@
 import * as Location from 'expo-location';
 import renderer, {ReactTestRenderer} from 'react-test-renderer';
 import {Text} from 'react-native';
-import {LocationCallback} from 'expo-location';
 
 import useLocation from './useLocation';
 
@@ -12,7 +11,7 @@ const TestComponent = ({
   handleLocationUpdate,
 }: {
   shouldTrack: boolean;
-  handleLocationUpdate: LocationCallback;
+  handleLocationUpdate: Location.LocationCallback;
 }) => {
   // Test component used for renderering the hook
   const [locationError] = useLocation(shouldTrack, handleLocationUpdate);
@@ -21,10 +20,6 @@ const TestComponent = ({
 };
 
 describe('useLocation hook', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('should start watching location when shouldTrack is true', async () => {
     const callback = jest.fn();
     const removeMock = jest.fn();

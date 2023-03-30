@@ -5,13 +5,13 @@ import {
   Provider as PaperProvider,
 } from 'react-native-paper';
 import {StatusBar} from 'expo-status-bar';
-import {NavigationContainer} from '@react-navigation/native';
 import {DrawerNav} from './src/components/DrawerNav';
 import {useEffect, useState} from 'react';
 import globalData from './src/lib/GlobalContext';
 import {
   getOrCreateRealtimeRecord,
   updateRealTimeRecord,
+  onLocation,
 } from './src/lib/realtimeData';
 import Loading from './src/components/Loading';
 import {
@@ -20,10 +20,12 @@ import {
   heartRateMonitor,
   cadenceMeter,
 } from './src/lib/sensor';
-import {navigationRef} from './src/lib/navigation';
-import {LocationCallback} from 'expo-location';
 import useLocation from './src/hooks/useLocation';
 import {Alert} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {navigationRef} from './src/lib/navigation';
+import {StravaProvider} from './src/lib/StravaContext';
+import * as strava from './src/lib/strava';
 
 const UPDATE_INTERVAL = 3;
 
@@ -38,13 +40,8 @@ function App() {
   // Set shouldTrack based on if we want GPS location trackin on or not
   const shouldTrack = true;
 
-  // Define the callback to handle location updates
-  const handleLocationUpdate: LocationCallback = location => {
-    console.log('New location:', location);
-    // TODO: update realtimeData table here
-  };
-  // Use the useLocation hook
-  const [locationError] = useLocation(shouldTrack, handleLocationUpdate);
+  const [locationError] = useLocation(shouldTrack, onLocation);
+  const [stravaToken, setStravaToken] = useState<strava.Token | null>(null);
 
   useEffect(() => {
     let timer: NodeJS.Timer;
@@ -73,6 +70,9 @@ function App() {
         })
         .catch((err: Error) => handleError(err));
 
+      const token = await strava.loadToken();
+      setStravaToken(token);
+
       setHasBooted(true);
     };
 
@@ -99,9 +99,11 @@ function App() {
       }}>
       <PaperProvider theme={DefaultTheme}>
         <StatusBar hidden />
-        <NavigationContainer ref={navigationRef}>
-          <DrawerNav />
-        </NavigationContainer>
+        <StravaProvider stravaToken={stravaToken}>
+          <NavigationContainer ref={navigationRef}>
+            <DrawerNav />
+          </NavigationContainer>
+        </StravaProvider>
       </PaperProvider>
     </globalData.Provider>
   );
