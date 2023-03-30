@@ -29,7 +29,7 @@ export async function updateRealTimeRecord(record: RealtimeDataModel) {
   return db.write(async () => {
     return record.update(() => {
       record.instantPower = randomInt();
-      record.speed = randomInt();
+      // record.speed = randomInt();
       record.heartRate = randomInt();
       record.cadence = randomInt();
       record.distance = randomInt();
