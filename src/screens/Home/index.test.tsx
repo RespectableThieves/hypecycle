@@ -46,7 +46,7 @@ it('Widget page renders & updates correctly', async () => {
 
   // Check the widget is using the realtime table.
   // initial value should be 0
-  const widget = screen.findByProps({...powerProps, data: 0});
+  const widget = screen.findByProps({...powerProps, data: null});
   expect(widget).toBeTruthy();
 
   // write to the db updating the realtime table.

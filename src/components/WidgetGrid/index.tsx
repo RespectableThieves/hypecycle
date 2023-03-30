@@ -18,6 +18,14 @@ type Props = {
   realtimeData: RealtimeDataModel;
 };
 
+function rounded(data: number | null) {
+  if (data === null) {
+    return data;
+  }
+
+  return parseFloat(data.toFixed(2));
+}
+
 function WidgetGrid({realtimeData}: Props) {
   return (
     <Container fluid noPadding>
@@ -55,7 +63,7 @@ function WidgetGrid({realtimeData}: Props) {
         <Col gx={GUTTER}>
           <SimpleMetric
             title={'Speed '}
-            data={parseFloat(realtimeData.speed.toFixed(2))}
+            data={rounded(realtimeData.speed)}
             icon={'speedometer'}
           />
         </Col>
@@ -71,7 +79,7 @@ function WidgetGrid({realtimeData}: Props) {
         <Col gx={GUTTER}>
           <SimpleMetric
             title={'Elevation '}
-            data={parseFloat(realtimeData.altitude.toFixed(2))}
+            data={rounded(realtimeData.altitude)}
             icon={'image-filter-hdr'}
           />
         </Col>

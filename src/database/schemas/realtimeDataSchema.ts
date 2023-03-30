@@ -1,4 +1,4 @@
-import { tableSchema } from '@nozbe/watermelondb';
+import {tableSchema} from '@nozbe/watermelondb';
 
 export const realtimeDataSchema = tableSchema({
   name: 'realtime_data',
@@ -6,62 +6,62 @@ export const realtimeDataSchema = tableSchema({
     {
       name: 'distance',
       type: 'number',
-      isOptional: true
+      isOptional: true,
     },
     {
       name: 'elapsed_time',
       type: 'number',
-      isOptional: true
+      isOptional: true,
     },
     {
       name: 'speed',
       type: 'number',
-      isOptional: true
+      isOptional: true,
     },
     {
       name: 'latitude',
       type: 'number',
-      isOptional: true
+      isOptional: true,
     },
     {
       name: 'longitude',
       type: 'number',
-      isOptional: true
+      isOptional: true,
     },
     {
       name: 'altitude',
       type: 'number',
-      isOptional: true
+      isOptional: true,
     },
     {
       name: 'heading',
       type: 'number',
-      isOptional: true
+      isOptional: true,
     },
     {
       name: 'heart_rate',
       type: 'number',
-      isOptional: true
+      isOptional: true,
     },
     {
       name: 'instant_power',
       type: 'number',
-      isOptional: true
+      isOptional: true,
     },
     {
       name: 'three_sec_power',
       type: 'number',
-      isOptional: true
+      isOptional: true,
     },
     {
       name: 'ten_sec_power',
       type: 'number',
-      isOptional: true
+      isOptional: true,
     },
     {
       name: 'cadence',
       type: 'number',
-      isOptional: true
+      isOptional: true,
     },
     {
       name: 'is_bluetooth',
