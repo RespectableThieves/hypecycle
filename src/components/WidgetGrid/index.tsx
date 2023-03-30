@@ -55,7 +55,7 @@ function WidgetGrid({realtimeData}: Props) {
         <Col gx={GUTTER}>
           <SimpleMetric
             title={'Speed '}
-            data={realtimeData.speed}
+            data={parseFloat(realtimeData.speed.toFixed(2))}
             icon={'speedometer'}
           />
         </Col>
@@ -71,7 +71,7 @@ function WidgetGrid({realtimeData}: Props) {
         <Col gx={GUTTER}>
           <SimpleMetric
             title={'Elevation '}
-            data={realtimeData.instantPower}
+            data={parseFloat(realtimeData.altitude.toFixed(2))}
             icon={'image-filter-hdr'}
           />
         </Col>
