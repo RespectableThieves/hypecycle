@@ -25,7 +25,6 @@ import {Alert} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {navigationRef} from './src/lib/navigation';
 import {StravaProvider} from './src/lib/StravaContext';
-import Signin from './src/components/Signin';
 import * as strava from './src/lib/strava';
 
 const UPDATE_INTERVAL = 3;
@@ -108,9 +107,7 @@ function App() {
         <StatusBar hidden />
         <StravaProvider stravaToken={stravaToken}>
           <NavigationContainer ref={navigationRef}>
-            <Signin>
-              <DrawerNav />
-            </Signin>
+            <DrawerNav />
           </NavigationContainer>
         </StravaProvider>
       </PaperProvider>

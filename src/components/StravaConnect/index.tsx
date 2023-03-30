@@ -1,10 +1,10 @@
-import {ReactNode, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import {makeRedirectUri, useAuthRequest} from 'expo-auth-session';
 import {Button, Text} from 'react-native-paper';
 import {useStrava} from '../../lib/StravaContext';
 import {STRAVA_CLIENT_ID} from '../../constants';
-import Container from '../Container';
+import {View} from 'react-native';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -15,10 +15,10 @@ const discovery = {
   revocationEndpoint: 'https://www.strava.com/oauth/deauthorize',
 };
 
-export default function Signin({children}: {children: ReactNode}) {
+export default function StravaConnect() {
   // This will render a signin screen if not signed in.
   // otherwise render children.
-  const {athlete: currentUser, authorize: authorizeUser} = useStrava();
+  const {athlete, authorize, logout} = useStrava();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [request, response, promptAsync] = useAuthRequest(
@@ -26,7 +26,7 @@ export default function Signin({children}: {children: ReactNode}) {
       clientId: STRAVA_CLIENT_ID,
       scopes: ['activity:write'],
       redirectUri: makeRedirectUri({
-        native: 'hypecycle://signin',
+        native: 'hypecycle://settings',
       }),
     },
     discovery,
@@ -36,9 +36,10 @@ export default function Signin({children}: {children: ReactNode}) {
     // If we get a response back from the browser
     // redirect we load the authcode and authorize
     // the user
-    if (response?.type === 'success') {
-      authorizeUser({code: response.params.code})
+    if (loading && response?.type === 'success') {
+      authorize({code: response.params.code})
         .then(() => {
+          setError('');
           setLoading(false);
         })
         .catch(err => {
@@ -50,18 +51,31 @@ export default function Signin({children}: {children: ReactNode}) {
       // @ts-ignore
       setError(response?.error?.message);
     }
-  }, [response, authorizeUser]);
+  }, [response, authorize, loading]);
 
-  if (currentUser) {
-    return <>{children}</>;
+  if (athlete) {
+    return (
+      <View>
+        <Text>{error}</Text>
+        <Button
+          testID="strava-disconnect-button"
+          mode="contained-tonal"
+          onPress={async () => {
+            await logout();
+            console.log('Logged out');
+          }}>
+          Disconnect Strava
+        </Button>
+      </View>
+    );
   }
 
+  // Not connected with strava
   return (
-    <Container>
-      <Text>Signin with Strava</Text>
-      {error && <Text>{error}</Text>}
+    <View>
+      <Text>{error}</Text>
       <Button
-        testID="signin-button"
+        testID="strava-connect-button"
         mode="contained"
         disabled={!request || loading}
         loading={!request || loading}
@@ -69,8 +83,8 @@ export default function Signin({children}: {children: ReactNode}) {
           setLoading(true);
           promptAsync();
         }}>
-        Signin
+        Connect Strava
       </Button>
-    </Container>
+    </View>
   );
 }

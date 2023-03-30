@@ -1,6 +1,6 @@
-import Signin from './';
+import StravaConnect from './';
 import renderer, {ReactTestRenderer} from 'react-test-renderer';
-import {Text, Button} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 import {StravaProvider} from '../../lib/StravaContext';
 import * as strava from '../../lib/strava';
 
@@ -16,23 +16,23 @@ it('Should only call authorize once when logging in.', async () => {
   await renderer.act(() => {
     tree = renderer.create(
       <StravaProvider stravaToken={null}>
-        <Signin children={<Text>Home</Text>} />
+        <StravaConnect />
       </StravaProvider>,
     );
   });
 
-  const button = tree.root.findByType(Button);
+  const connectButton = tree.root.findByType(Button);
   expect(strava.authorize).toHaveBeenCalledTimes(0);
 
   await renderer.act(async () => {
-    await button.props.onPress();
+    await connectButton.props.onPress();
   });
 
   expect(strava.authorize).toHaveBeenCalledTimes(1);
   expect(strava.authorize).toHaveBeenCalledWith({code: '123'});
 
-  const text = tree.root.findByType(Text);
-  expect(text.props.children).toBe('Home');
+  const disconnectButton = tree.root.findByType(Button);
+  expect(disconnectButton.props.children).toBe('Disconnect Strava');
 
   tree.unmount();
 });
