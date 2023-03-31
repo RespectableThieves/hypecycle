@@ -2,15 +2,15 @@ import renderer, {
   ReactTestRenderer,
   ReactTestInstance,
 } from 'react-test-renderer';
-import {FlatList} from 'react-native';
-import {Button, Text} from 'react-native-paper';
+import { FlatList } from 'react-native';
+import { Button, Text } from 'react-native-paper';
 
 import App from '../../../App';
-import {navigate} from '../../lib/navigation';
+import { navigate } from '../../lib/navigation';
 import Sensors from './';
-import {db, SensorModel} from '../../database';
-import {ble, createSensor, getAllSensors} from '../../lib/sensor';
-import {Sensor} from '../../components/Sensor';
+import { db, SensorModel } from '../../database';
+import { ble, createSensor, getAllSensors } from '../../lib/sensor';
+import { Sensor } from '../../components/Sensor';
 
 let screen!: ReactTestInstance;
 let tree!: ReactTestRenderer;
@@ -25,7 +25,7 @@ beforeEach(async () => {
     tree = renderer.create(<App />);
   });
 
-  renderer.act(() => {
+  await renderer.act(async () => {
     navigate('Sensors');
   });
 
@@ -112,7 +112,7 @@ it('Screen allows adding a sensor', async () => {
     .find(t => t.props.children === 'No sensors found, run a scan!');
   expect(text).toBeTruthy();
 
-  const scanButton = tree.root.findByProps({id: 'discovery-modal-scan'});
+  const scanButton = tree.root.findByProps({ id: 'discovery-modal-scan' });
   ble.sensorsDiscovered = [
     {
       id: 'ble-xyz',
@@ -143,7 +143,7 @@ it('Screen allows adding a sensor', async () => {
     await sensor.props.onAction();
   });
 
-  const closeButton = tree.root.findByProps({id: 'discovery-modal-close'});
+  const closeButton = tree.root.findByProps({ id: 'discovery-modal-close' });
   await renderer.act(async () => {
     // dismiss modal
     await closeButton.props.onPress();

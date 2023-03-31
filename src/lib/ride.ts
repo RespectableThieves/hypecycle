@@ -1,7 +1,7 @@
-import {db, RideModel} from '../database';
-import {Q} from '@nozbe/watermelondb';
+import { db, RideModel } from '../database';
+import { Q } from '@nozbe/watermelondb';
 import EventEmitter from 'events';
-import {getOrCreateRealtimeRecord} from './realtimeData';
+import { getOrCreateRealtimeRecord } from './realtimeData';
 
 export const rideEventEmitter = new EventEmitter();
 
