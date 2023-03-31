@@ -1,4 +1,4 @@
-import { tableSchema } from '@nozbe/watermelondb';
+import {tableSchema} from '@nozbe/watermelondb';
 
 export const historySchema = tableSchema({
   name: 'history',
@@ -64,7 +64,7 @@ export const historySchema = tableSchema({
     {
       name: 'ride_id',
       type: 'string',
-      isOptional: true
-    }
+      isOptional: true,
+    },
   ],
 });

@@ -1,6 +1,6 @@
-import { Relation, Model } from '@nozbe/watermelondb';
-import { relation, field, date } from '@nozbe/watermelondb/decorators';
-import Ride from './ride'
+import {Relation, Model} from '@nozbe/watermelondb';
+import {relation, field, date} from '@nozbe/watermelondb/decorators';
+import Ride from './ride';
 
 export default class HistoryModel extends Model {
   static table = 'history';
@@ -17,5 +17,5 @@ export default class HistoryModel extends Model {
   @field('ten_sec_power') tenSecPower!: number | null;
   @field('cadence') cadence!: number | null;
   @date('created_at') createdAt!: number;
-  @relation('ride', 'ride_id') ride!: Relation<Ride> | null
+  @relation('ride', 'ride_id') ride!: Relation<Ride> | null;
 }
