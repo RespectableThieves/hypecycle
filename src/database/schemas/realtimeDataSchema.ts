@@ -85,5 +85,10 @@ export const realtimeDataSchema = tableSchema({
       name: 'created_at',
       type: 'number',
     },
+    {
+      name: 'ride_id',
+      type: 'string',
+      isOptional: true,
+    },
   ],
 });

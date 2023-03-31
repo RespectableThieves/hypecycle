@@ -1,8 +1,9 @@
 import {db, RideModel} from '../database';
 import {Q} from '@nozbe/watermelondb';
 import EventEmitter from 'events';
+import {getOrCreateRealtimeRecord} from './realtimeData';
 
-const rideEventEmitter = new EventEmitter();
+export const rideEventEmitter = new EventEmitter();
 
 export async function startRide(): Promise<RideModel> {
   // TODO stop any current rides.
@@ -10,6 +11,13 @@ export async function startRide(): Promise<RideModel> {
     return db.get<RideModel>('ride').create(r => {
       r.startedAt = new Date().getUTCMilliseconds();
       return r;
+    });
+  });
+
+  const realtimeData = await getOrCreateRealtimeRecord();
+  await db.write(() => {
+    return realtimeData.update(() => {
+      realtimeData.ride!.set(ride);
     });
   });
 
@@ -23,6 +31,14 @@ export async function stopRide(ride: RideModel): Promise<RideModel> {
       ride.endedAt = new Date().getUTCMilliseconds();
       ride.isPaused = false;
       return ride;
+    });
+  });
+
+  const realtimeData = await getOrCreateRealtimeRecord();
+
+  await db.write(() => {
+    return realtimeData.update(() => {
+      realtimeData.ride!.id = null;
     });
   });
 

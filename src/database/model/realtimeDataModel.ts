@@ -1,5 +1,6 @@
-import {Model} from '@nozbe/watermelondb';
-import {field, date} from '@nozbe/watermelondb/decorators';
+import {Relation, Model} from '@nozbe/watermelondb';
+import {relation, field, date} from '@nozbe/watermelondb/decorators';
+import Ride from './ride';
 
 export default class RealtimeDataModel extends Model {
   static table = 'realtime_data';
@@ -22,4 +23,5 @@ export default class RealtimeDataModel extends Model {
   @field('is_heart_rate') isHeartRate!: boolean;
   @field('is_cadence') isCadence!: boolean;
   @date('created_at') createdAt!: number;
+  @relation('ride', 'ride_id') ride!: Relation<Ride> | null;
 }
