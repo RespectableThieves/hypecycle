@@ -1,3 +1,6 @@
+import RealtimeDataModel from '../database/model/realtimeDataModel';
+import {LocationObject} from 'expo-location';
+
 export type LatLngAlt = {
   lat: number;
   lng: number;
@@ -33,4 +36,30 @@ export function haversineDistanceWithAltitude(
   return Math.sqrt(
     surfaceDistance * surfaceDistance + altitudeDifference * altitudeDifference,
   );
+}
+
+// Calculates the distance between the current location and the last RealTimeRecord location and adds that to the currentDistance.
+export function accumulateDistance(
+  lastRealTimeRecord: RealtimeDataModel,
+  currentLocation: LocationObject,
+): number {
+    if (
+        lastRealTimeRecord.latitude === null ||
+        lastRealTimeRecord.longitude === null ||
+        lastRealTimeRecord.altitude === null
+      ) {
+        return 0;
+      }
+  const lastPoint: LatLngAlt = {
+    lat: lastRealTimeRecord.latitude,
+    lng: lastRealTimeRecord.longitude,
+    alt: lastRealTimeRecord.altitude,
+  };
+  const nextPoint: LatLngAlt = {
+    lat: currentLocation.coords.latitude,
+    lng: currentLocation.coords.longitude,
+    alt: currentLocation.coords.altitude ? currentLocation.coords.altitude : lastRealTimeRecord.altitude, // If we don't have a current Alt then assume we are same alt still.
+  };
+  const segmentDistance = haversineDistanceWithAltitude(lastPoint, nextPoint);
+  return lastRealTimeRecord.distance + segmentDistance;
 }
