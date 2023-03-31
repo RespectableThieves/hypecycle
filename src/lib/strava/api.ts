@@ -1,5 +1,4 @@
-import {SECURE_STORE_CURRENT_USER_KEY, BACKEND} from '../constants';
-import * as SecureStore from 'expo-secure-store';
+import {BACKEND} from '../../constants';
 
 export type Athlete = {
   id: number;
@@ -55,16 +54,26 @@ export async function authorize(params: any): Promise<Token> {
   return data;
 }
 
-export async function loadToken(): Promise<Token | null> {
-  // loads the current user from secure storage.
-  // TODO - add a fresh param which will check the expiration date
-  // and refresh the token if it's expired - we will probably only want that
-  // at boot and when uploading the ride file
-  const user = await SecureStore.getItemAsync(SECURE_STORE_CURRENT_USER_KEY);
+export async function refresh(
+  refreshToken: Token['refresh_token'],
+): Promise<Token> {
+  const res = await fetch(`${BACKEND}/refresh`, {
+    body: JSON.stringify({refreshToken}),
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  });
 
-  if (user) {
-    return JSON.parse(user);
+  const data = await res.json();
+
+  if (!res.ok) {
+    console.log('Authorization fail', data.data);
+    throw Error(data.message);
+  } else {
+    console.log('Authorization success');
   }
 
-  return null;
+  return data;
 }
