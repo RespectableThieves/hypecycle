@@ -4,8 +4,8 @@ import {field, date} from '@nozbe/watermelondb/decorators';
 export default class RealtimeDataModel extends Model {
   static table = 'realtime_data';
 
-  @field('distance') distance!: number | null;
-  @field('elapsed_time') elapsedTime!: number | null;
+  @field('distance') distance!: number;
+  @field('elapsed_time') elapsedTime!: number;
   @field('speed') speed!: number | null;
   @field('latitude') latitude!: number | null;
   @field('longitude') longitude!: number | null;

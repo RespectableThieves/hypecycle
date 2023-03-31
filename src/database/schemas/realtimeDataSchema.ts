@@ -6,12 +6,10 @@ export const realtimeDataSchema = tableSchema({
     {
       name: 'distance',
       type: 'number',
-      isOptional: true,
     },
     {
       name: 'elapsed_time',
       type: 'number',
-      isOptional: true,
     },
     {
       name: 'speed',
