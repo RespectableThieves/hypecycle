@@ -1,9 +1,20 @@
-import {rideService, stopRide, startRide} from './ride';
+import { rideService, stopRide, startRide } from './ride';
+import { getOrCreateRealtimeRecord } from './realtimeData'
+
+describe('ride and realtime db interactions', () => {
+  it('should write to realtime_data.ride_id on stop start', async () => {
+    let realtimeData = await getOrCreateRealtimeRecord()
+    expect(realtimeData.ride?.id).toBeNull()
+    const ride = await startRide();
+    expect(realtimeData.ride?.id).toBeTruthy()
+    await stopRide(ride);
+    expect(realtimeData.ride?.id).toBeNull()
+  })
+})
 
 describe('ride service', () => {
   it('should start and watch for ride/start/stop events', async () => {
     const mockCallback = jest.fn();
-
     const unsubscribe = await rideService(mockCallback, 1000);
     expect(mockCallback).not.toHaveBeenCalled();
     const ride = await startRide();
