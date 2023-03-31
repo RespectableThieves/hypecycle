@@ -1,6 +1,7 @@
 import {LocationObject} from 'expo-location';
 import {REALTIME_DATA_ID} from '../constants';
 import {db, RealtimeDataModel} from '../database';
+import {accumulateDistance} from './distance';
 
 export async function getOrCreateRealtimeRecord(): Promise<RealtimeDataModel> {
   const collection = db.get<RealtimeDataModel>('realtime_data');
@@ -44,6 +45,7 @@ export async function onLocation(
   console.log('New location', location);
 
   const realtimeData = await getOrCreateRealtimeRecord();
+  const distance = accumulateDistance(realtimeData, location);
   const {speed, latitude, longitude, heading, altitude} = location.coords;
 
   return db.write(async () => {
@@ -53,6 +55,7 @@ export async function onLocation(
       record.longitude = longitude;
       record.heading = heading;
       record.altitude = altitude;
+      record.distance = distance;
 
       return record;
     });

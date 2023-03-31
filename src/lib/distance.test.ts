@@ -39,7 +39,8 @@ describe('toRadians', () => {
 });
 
 // Mocked types
-interface RealtimeDataModel { // This type is not a complete version of the data type, so it annoys the typechecker but still works.
+interface RealtimeDataModel {
+  // This type is not a complete version of the data type, so it annoys the typechecker but still works.
   latitude: number | null;
   longitude: number | null;
   altitude: number | null;
@@ -76,17 +77,20 @@ describe('accumulateDistance', () => {
     const lastRealTimeRecord: RealtimeDataModel = {
       latitude: 41.4027,
       longitude: 2.1743,
-      altitude: 41.00,
+      altitude: 41.0,
       distance: 100,
     };
     const currentLocation: LocationObject = {
       coords: {
         latitude: 41.4035,
         longitude: 2.1732,
-        altitude: 49.00,
+        altitude: 49.0,
       },
     };
-    expect(accumulateDistance(lastRealTimeRecord, currentLocation)).toBeCloseTo(228.0, 0);
+    expect(accumulateDistance(lastRealTimeRecord, currentLocation)).toBeCloseTo(
+      228.0,
+      0,
+    );
   });
 
   it('calculates the correct distance when currentLocation has no altitude', () => {
@@ -103,7 +107,9 @@ describe('accumulateDistance', () => {
         altitude: null,
       },
     };
-    expect(accumulateDistance(lastRealTimeRecord, currentLocation)).toBeCloseTo(1170, 0);
+    expect(accumulateDistance(lastRealTimeRecord, currentLocation)).toBeCloseTo(
+      1170,
+      0,
+    );
   });
 });
-

@@ -43,13 +43,13 @@ export function accumulateDistance(
   lastRealTimeRecord: RealtimeDataModel,
   currentLocation: LocationObject,
 ): number {
-    if (
-        lastRealTimeRecord.latitude === null ||
-        lastRealTimeRecord.longitude === null ||
-        lastRealTimeRecord.altitude === null
-      ) {
-        return 0;
-      }
+  if (
+    lastRealTimeRecord.latitude === null ||
+    lastRealTimeRecord.longitude === null ||
+    lastRealTimeRecord.altitude === null
+  ) {
+    return 0;
+  }
   const lastPoint: LatLngAlt = {
     lat: lastRealTimeRecord.latitude,
     lng: lastRealTimeRecord.longitude,
@@ -58,7 +58,9 @@ export function accumulateDistance(
   const nextPoint: LatLngAlt = {
     lat: currentLocation.coords.latitude,
     lng: currentLocation.coords.longitude,
-    alt: currentLocation.coords.altitude ? currentLocation.coords.altitude : lastRealTimeRecord.altitude, // If we don't have a current Alt then assume we are same alt still.
+    alt: currentLocation.coords.altitude
+      ? currentLocation.coords.altitude
+      : lastRealTimeRecord.altitude, // If we don't have a current Alt then assume we are same alt still.
   };
   const segmentDistance = haversineDistanceWithAltitude(lastPoint, nextPoint);
   return lastRealTimeRecord.distance + segmentDistance;
