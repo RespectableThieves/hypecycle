@@ -2,7 +2,6 @@ import * as SecureStore from 'expo-secure-store';
 import * as strava from './src/lib/strava';
 import * as Location from 'expo-location';
 
-
 export async function writeStravaToken() {
   const dummyStravaToken = await strava.authorize({code: '123'});
   await strava.saveToken(dummyStravaToken);
