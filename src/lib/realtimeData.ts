@@ -45,8 +45,9 @@ export async function onLocation(
   console.log('New location', location);
 
   const realtimeData = await getOrCreateRealtimeRecord();
-  // TODO: only accumulate distance when there is an active ride.
-  const distance = accumulateDistance(realtimeData, location);
+  const distance = realtimeData.ride?.id
+    ? accumulateDistance(realtimeData, location)
+    : 0;
   console.log('accumulated distance: ', distance);
   const {speed, latitude, longitude, heading, altitude} = location.coords;
 
@@ -80,7 +81,6 @@ export async function onSnapshotEvent() {
     cadence,
     ride,
   } = await getOrCreateRealtimeRecord();
-
   console.log('snapshoting realtime data');
 
   return db.write(function historySnapshot() {
