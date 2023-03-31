@@ -2,9 +2,9 @@ import {db, RideModel} from '../database';
 import {Q} from '@nozbe/watermelondb';
 import EventEmitter from 'events';
 
-const ev = new EventEmitter();
+const rideEventEmitter = new EventEmitter();
 
-export async function startRide() {
+export async function startRide(): Promise<RideModel> {
   // TODO stop any current rides.
   const ride = await db.write(async () => {
     return db.get<RideModel>('ride').create(r => {
@@ -13,11 +13,11 @@ export async function startRide() {
     });
   });
 
-  ev.emit('start', ride);
+  rideEventEmitter.emit('start', ride);
   return ride;
 }
 
-export async function stopRide(ride: RideModel) {
+export async function stopRide(ride: RideModel): Promise<RideModel> {
   const stoppedRide = await db.write(async () => {
     return ride.update(() => {
       ride.endedAt = new Date().getUTCMilliseconds();
@@ -26,11 +26,11 @@ export async function stopRide(ride: RideModel) {
     });
   });
 
-  ev.emit('stop', ride);
+  rideEventEmitter.emit('stop', ride);
   return stoppedRide;
 }
 
-export function pauseRide(ride: RideModel) {
+export function pauseRide(ride: RideModel): Promise<RideModel> {
   return db.write(async () => {
     return ride.update(() => {
       ride.isPaused = true;
@@ -39,7 +39,7 @@ export function pauseRide(ride: RideModel) {
   });
 }
 
-export function unpauseRide(ride: RideModel) {
+export function unpauseRide(ride: RideModel): Promise<RideModel> {
   return db.write(async () => {
     return ride.update(() => {
       ride.isPaused = false;
@@ -65,7 +65,7 @@ export async function rideService(
     timer = setInterval(() => callback('tick', ride.id), tickInterval);
   }
 
-  ev.on('start', ride => {
+  rideEventEmitter.on('start', ride => {
     if (!timer) {
       // callback immediately
       callback('start', ride.id);
@@ -74,7 +74,7 @@ export async function rideService(
     }
   });
 
-  ev.on('stop', ride => {
+  rideEventEmitter.on('stop', ride => {
     callback('stop', ride.id);
     if (timer) {
       clearInterval(timer);
