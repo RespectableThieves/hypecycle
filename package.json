@@ -15,7 +15,6 @@
     "@nozbe/watermelondb": "^0.25.5",
     "@react-navigation/drawer": "^6.6.1",
     "@react-navigation/native": "^6.1.5",
-    "events": "^3.3.0",
     "expo": "^48.0.4",
     "expo-auth-session": "^4.0.3",
     "expo-font": "^11.0.1",
@@ -67,6 +66,9 @@
     ],
     "setupFilesAfterEnv": [
       "<rootDir>/setupHooks.ts"
+    ],
+    "reporters": [
+      "<rootDir>/reporter.js"
     ],
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|react-native-cycling-sensors)"
