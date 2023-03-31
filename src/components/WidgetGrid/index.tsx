@@ -4,6 +4,7 @@ import withObservables from '@nozbe/with-observables';
 import {SimpleMetric} from '../SimpleMetric';
 import {REALTIME_DATA_ID} from '../../constants';
 import {db, RealtimeDataModel} from '../../database';
+import {metersToKilometers} from '../../lib/distance';
 
 const GUTTER = 1;
 
@@ -40,7 +41,7 @@ function WidgetGrid({realtimeData}: Props) {
         <Col gx={GUTTER}>
           <SimpleMetric
             title={'Distance '}
-            data={realtimeData.distance}
+            data={metersToKilometers(realtimeData.distance)} // Maybe this converstion should be so
             icon={'map-marker-distance'}
           />
         </Col>

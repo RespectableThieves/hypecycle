@@ -89,10 +89,13 @@ jest.mock('./src/lib/strava/api', () => {
 
 jest.mock('expo-location', () => {
   const mod = jest.requireActual('expo-location');
-  const _callbacks: any[] = [];
+  let _callbacks: any[] = [];
 
   return {
     ...mod,
+    clearAll: () => {
+      _callbacks = [];
+    },
     _emitLocation: (loc: any) => {
       return Promise.all([_callbacks.map(cb => cb(loc))]);
     },

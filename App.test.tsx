@@ -14,23 +14,22 @@ it('App renders correctly for signed user.', async () => {
   tree.unmount();
 });
 
-it('App registers location service and logs to db', async () => {
-  // check the home pages renders
+it('App registers location service and logs to db with distance calculated', async () => {
   let tree!: ReactTestRenderer;
   await renderer.act(() => {
     tree = renderer.create(<App />);
   });
   tree.root.findByType(Home);
   const newLocation = {
-    timestamp: new Date().getUTCMinutes(),
+    timestamp: new Date().getUTCMilliseconds(),
     mocked: true,
     coords: {
       accuracy: 110,
-      latitude: 10.5,
-      longitude: 150.1,
+      latitude: 41.4027,
+      longitude: 2.1743,
       heading: 10,
       speed: 5,
-      altitude: 200,
+      altitude: 41.0,
       altitudeAccuracy: 0,
     },
   };
@@ -43,9 +42,35 @@ it('App registers location service and logs to db', async () => {
   });
 
   let record = await getOrCreateRealtimeRecord();
-
+  expect(record.distance).toBe(0);
   expect(record.latitude).toBe(newLocation.coords.latitude);
   expect(record.longitude).toBe(newLocation.coords.longitude);
+
+  const nextLocation = {
+    timestamp: new Date().getUTCMilliseconds() + 1000,
+    mocked: true,
+    coords: {
+      accuracy: 110,
+      latitude: 41.4035,
+      longitude: 2.1732,
+      heading: 10,
+      speed: 5,
+      altitude: 49.0,
+      altitudeAccuracy: 0,
+    },
+  };
+
+  // Trigger a location update.
+  await renderer.act(() => {
+    // @ts-ignore
+    // this is a mock method
+    Location._emitLocation(nextLocation);
+  });
+
+  let updatedRecord = await getOrCreateRealtimeRecord();
+  expect(updatedRecord.distance).toBeCloseTo(128.0, 0);
+  expect(updatedRecord.latitude).toBe(nextLocation.coords.latitude);
+  expect(updatedRecord.longitude).toBe(nextLocation.coords.longitude);
 
   // Now check for record in realtime db.
   tree.unmount();
