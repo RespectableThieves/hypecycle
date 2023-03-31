@@ -30,10 +30,9 @@ export async function updateRealTimeRecord(record: RealtimeDataModel) {
   return db.write(async () => {
     return record.update(() => {
       record.instantPower = randomInt();
-      // record.speed = randomInt();
       record.heartRate = randomInt();
       record.cadence = randomInt();
-      record.distance = randomInt();
+
       return record;
     });
   });
@@ -45,7 +44,9 @@ export async function onLocation(
   console.log('New location', location);
 
   const realtimeData = await getOrCreateRealtimeRecord();
+  // TODO: only accumulate distance when there is an active ride.
   const distance = accumulateDistance(realtimeData, location);
+  console.log('accumulated distance: ', distance);
   const {speed, latitude, longitude, heading, altitude} = location.coords;
 
   return db.write(async () => {
