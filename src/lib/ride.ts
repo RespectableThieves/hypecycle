@@ -1,9 +1,5 @@
-import { db, RideModel } from '../database';
-import { Q } from '@nozbe/watermelondb';
-import EventEmitter from 'events';
-import { getOrCreateRealtimeRecord } from './realtimeData';
-
-export const rideEventEmitter = new EventEmitter();
+import {db, RideModel} from '../database';
+import {getOrCreateRealtimeRecord} from './realtimeData';
 
 export async function startRide(): Promise<RideModel> {
   // TODO stop any current rides.
@@ -21,7 +17,6 @@ export async function startRide(): Promise<RideModel> {
     });
   });
 
-  rideEventEmitter.emit('start', ride);
   return ride;
 }
 
@@ -42,7 +37,6 @@ export async function stopRide(ride: RideModel): Promise<RideModel> {
     });
   });
 
-  rideEventEmitter.emit('stop', ride);
   return stoppedRide;
 }
 
@@ -62,44 +56,4 @@ export function unpauseRide(ride: RideModel): Promise<RideModel> {
       return ride;
     });
   });
-}
-
-export type RideEvent = 'start' | 'stop' | 'tick';
-export async function rideService(
-  callback: (eventType: RideEvent, rideId: RideModel['id']) => {},
-  tickInterval: number,
-) {
-  let timer: NodeJS.Timer | null = null;
-  const inProgress = await db
-    .get<RideModel>('ride')
-    .query(Q.where('ended_at', null))
-    .fetch();
-
-  if (inProgress.length > 0) {
-    const [ride] = inProgress;
-    // service booted with an inProgress ride
-    timer = setInterval(() => callback('tick', ride.id), tickInterval);
-  }
-
-  rideEventEmitter.on('start', ride => {
-    if (!timer) {
-      // callback immediately
-      callback('start', ride.id);
-      // then start timer
-      timer = setInterval(() => callback('tick', ride.id), tickInterval);
-    }
-  });
-
-  rideEventEmitter.on('stop', ride => {
-    callback('stop', ride.id);
-    if (timer) {
-      clearInterval(timer);
-    }
-  });
-
-  return () => {
-    if (timer) {
-      clearInterval(timer);
-    }
-  };
 }

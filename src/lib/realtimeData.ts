@@ -1,7 +1,8 @@
-import { LocationObject } from 'expo-location';
-import { REALTIME_DATA_ID } from '../constants';
-import { db, HistoryModel, RealtimeDataModel, RideModel } from '../database';
-import { accumulateDistance } from './distance';
+import {LocationObject} from 'expo-location';
+import {REALTIME_DATA_ID} from '../constants';
+import {Subscription} from 'rxjs';
+import {db, HistoryModel, RealtimeDataModel, RideModel} from '../database';
+import {accumulateDistance} from './distance';
 
 export async function getOrCreateRealtimeRecord(): Promise<RealtimeDataModel> {
   const collection = db.get<RealtimeDataModel>('realtime_data');
@@ -47,7 +48,7 @@ export async function onLocation(
   // TODO: only accumulate distance when there is an active ride.
   const distance = accumulateDistance(realtimeData, location);
   console.log('accumulated distance: ', distance);
-  const { speed, latitude, longitude, heading, altitude } = location.coords;
+  const {speed, latitude, longitude, heading, altitude} = location.coords;
 
   return db.write(async () => {
     return realtimeData.update(record => {
@@ -63,7 +64,7 @@ export async function onLocation(
   });
 }
 
-export async function onRideServiceEvent() {
+export async function onSnapshotEvent() {
   // this is responsible snapshotting realtime_data to the history table.
   const {
     speed,
@@ -80,9 +81,11 @@ export async function onRideServiceEvent() {
     ride,
   } = await getOrCreateRealtimeRecord();
 
-  return db.write(async () => {
-    db.get<HistoryModel>('history').create(history => {
-      history.ride = ride;
+  console.log('snapshoting realtime data');
+
+  return db.write(function historySnapshot() {
+    return db.get<HistoryModel>('history').create(history => {
+      history.ride!.id = ride?.id;
       history.speed = speed;
       history.latitude = latitude;
       history.longitude = longitude;
@@ -98,37 +101,55 @@ export async function onRideServiceEvent() {
   });
 }
 
-export async function snapshotService(callback: (r: RealtimeDataModel) => {}, interval: number) {
-  const record = await getOrCreateRealtimeRecord();
-  let timer: NodeJS.Timer
-  const subscription = record.ride!.observe()
+export function snapshotService(callback: (r: RealtimeDataModel) => {}) {
+  let timer: NodeJS.Timer | null;
+  let observeable: Subscription;
 
-  if (record.ride?.id) {
-    console.log("In progress!")
-    // inprogress journey on boot
-    timer = setInterval(() => callback(record), interval)
-  }
+  const start = async (interval: number) => {
+    const record = await getOrCreateRealtimeRecord();
+    const subscription = record.ride!.observe();
+    console.log('snapshot service: starting');
 
-  const observeable = subscription.subscribe((ride: RideModel | null) => {
-    if (ride?.id) {
-      // ride started. 
-      if (!timer) {
-        callback(record)
-        timer = setInterval(() => callback(record), interval)
-      }
-    } else {
-      if (timer) {
-        // ride finished
-        callback(record)
-        clearInterval(timer)
-      }
+    if (record.ride?.id) {
+      // inprogress journey on boot
+      console.log('snapshot service: resuming');
+      timer = setInterval(() => callback(record), interval);
     }
-  })
 
-  const unsubscribe = () => {
-    observeable.unsubscribe()
-    clearInterval(timer)
-  }
+    observeable = subscription.subscribe((ride: RideModel | null) => {
+      if (ride?.id) {
+        // ride started.
+        if (!timer) {
+          console.log('snapshot service: resuming');
+          callback(record);
+          timer = setInterval(() => callback(record), interval);
+        }
+      } else {
+        if (timer) {
+          // ride finished
+          console.log('snapshot service: pausing');
+          callback(record);
+          clearInterval(timer);
+          timer = null;
+        }
+      }
+    });
+  };
 
-  return unsubscribe
+  const stop = () => {
+    console.log('snapshot service: stopping');
+    if (observeable) {
+      observeable.unsubscribe();
+    }
+    if (timer) {
+      clearInterval(timer);
+    }
+  };
+
+  return {
+    start,
+    stop,
+  };
 }
+
+export const snapshotWorker = snapshotService(onSnapshotEvent);
