@@ -17,5 +17,5 @@ beforeEach(async () => {
 afterEach(async () => {
   // @ts-ignore: TODO fix mock type.
   await SecureStore.clearAll();
-  jest.clearAllMocks();
+  jest.resetAllMocks();
 });
