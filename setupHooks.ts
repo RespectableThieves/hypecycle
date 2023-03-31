@@ -1,5 +1,6 @@
 import {SECURE_STORE_CURRENT_USER_KEY} from './src/constants';
 import * as SecureStore from 'expo-secure-store';
+import * as Location from 'expo-location';
 import {authorize} from './src/lib/strava';
 
 export async function writeStravaToken() {
@@ -16,6 +17,8 @@ beforeEach(async () => {
 
 afterEach(async () => {
   // @ts-ignore: TODO fix mock type.
+  await Location.clearAll();
+  // @ts-ignore: TODO fix mock type.
   await SecureStore.clearAll();
-  jest.resetAllMocks();
+  jest.clearAllMocks();
 });

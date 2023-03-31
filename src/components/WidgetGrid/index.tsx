@@ -4,7 +4,7 @@ import withObservables from '@nozbe/with-observables';
 import {SimpleMetric} from '../SimpleMetric';
 import {REALTIME_DATA_ID} from '../../constants';
 import {db, RealtimeDataModel} from '../../database';
-import { metersToKilometers } from '../../lib/distance';
+import {metersToKilometers} from '../../lib/distance';
 
 const GUTTER = 1;
 

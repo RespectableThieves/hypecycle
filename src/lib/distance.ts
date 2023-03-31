@@ -39,8 +39,8 @@ export function haversineDistanceWithAltitude(
 }
 
 // Convert meters to kilometers with 1 decimal accuracy
-export function metersToKilometers(m: number) : number{
-  return parseFloat((m/1_000).toFixed(1))
+export function metersToKilometers(m: number): number {
+  return parseFloat((m / 1_000).toFixed(1));
 }
 
 // Calculates the distance between the current location and the last RealTimeRecord location and adds that to the currentDistance.
