@@ -38,10 +38,9 @@ jest.mock('expo-auth-session', () => {
 });
 
 jest.mock('./src/lib/strava/api', () => {
-  const mod = jest.requireActual('./src/lib/strava/api');
   const dummyToken = {
     token_type: 'Bearer',
-    expires_at: new Date().getUTCSeconds() - 21600,
+    expires_at: Math.round(Date.now() / 1000) + 21600,
     expires_in: 21600,
     refresh_token: 'xyz',
     access_token: 'abc',
@@ -71,13 +70,20 @@ jest.mock('./src/lib/strava/api', () => {
     },
   };
 
+  const {token_type, expires_at, expires_in, refresh_token, access_token} =
+    dummyToken;
+
   return {
-    __esModule: true,
-    ...mod,
     // ensure we don't call the API in
     // tests accidentally
     authorize: jest.fn().mockResolvedValue(dummyToken),
-    refresh: jest.fn().mockResolvedValue(dummyToken),
+    refreshToken: jest.fn().mockResolvedValue({
+      token_type,
+      expires_at,
+      expires_in,
+      refresh_token,
+      access_token,
+    }),
   };
 });
 

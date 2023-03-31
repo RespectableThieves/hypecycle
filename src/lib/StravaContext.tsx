@@ -6,8 +6,6 @@ import {
   useCallback,
 } from 'react';
 import * as strava from '../lib/strava';
-import * as SecureStore from 'expo-secure-store';
-import {SECURE_STORE_CURRENT_USER_KEY} from '../constants';
 
 type AuthorizeInput = {
   code: string;
@@ -42,16 +40,13 @@ export const StravaProvider = ({
   // see: https://react.dev/reference/react/useCallback#skipping-re-rendering-of-components
   const authorize = useCallback(async (params: AuthorizeInput) => {
     const data = await strava.authorize(params);
-    await SecureStore.setItemAsync(
-      SECURE_STORE_CURRENT_USER_KEY,
-      JSON.stringify(data),
-    );
+    await strava.saveToken(data);
     setAthlete(data.athlete);
   }, []);
 
   const logout = useCallback(async () => {
     // clear storage
-    await SecureStore.deleteItemAsync(SECURE_STORE_CURRENT_USER_KEY);
+    await strava.deleteToken();
     setAthlete(null);
     return;
   }, []);

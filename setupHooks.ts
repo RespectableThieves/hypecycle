@@ -1,13 +1,9 @@
-import {SECURE_STORE_CURRENT_USER_KEY} from './src/constants';
 import * as SecureStore from 'expo-secure-store';
-import {authorize} from './src/lib/strava';
+import * as strava from './src/lib/strava';
 
 export async function writeStravaToken() {
-  const dummyStravaToken = await authorize({code: '123'});
-  await SecureStore.setItemAsync(
-    SECURE_STORE_CURRENT_USER_KEY,
-    JSON.stringify(dummyStravaToken),
-  );
+  const dummyStravaToken = await strava.authorize({code: '123'});
+  await strava.saveToken(dummyStravaToken);
 }
 
 beforeEach(async () => {

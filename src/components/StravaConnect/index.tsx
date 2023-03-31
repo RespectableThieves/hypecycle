@@ -21,7 +21,7 @@ export default function StravaConnect() {
   const {athlete, authorize, logout} = useStrava();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [request, response, promptAsync] = useAuthRequest(
+  const [_, response, promptAsync] = useAuthRequest(
     {
       clientId: STRAVA_CLIENT_ID,
       scopes: ['activity:write'],
@@ -47,7 +47,6 @@ export default function StravaConnect() {
           setLoading(false);
         });
     } else {
-      setLoading(false);
       // @ts-ignore
       setError(response?.error?.message);
     }
@@ -77,8 +76,8 @@ export default function StravaConnect() {
       <Button
         testID="strava-connect-button"
         mode="contained"
-        disabled={!request || loading}
-        loading={!request || loading}
+        disabled={loading}
+        loading={loading}
         onPress={() => {
           setLoading(true);
           promptAsync();

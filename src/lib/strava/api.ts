@@ -32,8 +32,20 @@ export type Token = {
   athlete: Athlete;
 };
 
-export async function authorize(params: any): Promise<Token> {
-  const res = await fetch(`${BACKEND}/auth`, {
+// same as token but without Athlete
+export type RefreshToken = {
+  token_type: string;
+  expires_at: number;
+  expires_in: number;
+  refresh_token: string;
+  access_token: string;
+};
+
+async function getToken<T>(
+  type: 'auth' | 'refresh',
+  params: {code: string} | {refreshToken: Token['refresh_token']},
+): Promise<T> {
+  const res = await fetch(`${BACKEND}/${type}`, {
     body: JSON.stringify(params),
     method: 'POST',
     headers: {
@@ -45,35 +57,22 @@ export async function authorize(params: any): Promise<Token> {
   const data = await res.json();
 
   if (!res.ok) {
-    console.log('Authorization fail', data.data);
+    console.log(`token ${type} fail`, data.data);
     throw Error(data.message);
   } else {
-    console.log('Authorization success');
+    console.log(`token ${type} success`);
   }
 
   return data;
 }
 
-export async function refresh(
-  refreshToken: Token['refresh_token'],
-): Promise<Token> {
-  const res = await fetch(`${BACKEND}/refresh`, {
-    body: JSON.stringify({refreshToken}),
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  });
+export async function authorize({code}: {code: string}): Promise<Token> {
+  return getToken<Token>('auth', {code});
+}
 
-  const data = await res.json();
-
-  if (!res.ok) {
-    console.log('Authorization fail', data.data);
-    throw Error(data.message);
-  } else {
-    console.log('Authorization success');
-  }
-
-  return data;
+export async function refreshToken(
+  t: Token['refresh_token'],
+): Promise<RefreshToken> {
+  // fresh will
+  return getToken<RefreshToken>('refresh', {refreshToken: t});
 }
