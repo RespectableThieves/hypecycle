@@ -48,11 +48,11 @@ export async function onLocation(
 
   return db.write(async () => {
     return realtimeData.update(record => {
-      record.speed = speed ? speed : 0;
+      record.speed = speed;
       record.latitude = latitude;
       record.longitude = longitude;
-      record.heading = heading || 0;
-      record.altitude = altitude || 0;
+      record.heading = heading;
+      record.altitude = altitude;
 
       return record;
     });

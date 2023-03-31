@@ -6,7 +6,7 @@ import {MaterialCommunityIcons} from '@expo/vector-icons';
 
 type Props = {
   title: string;
-  data: number;
+  data: number | null;
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
 };
 
@@ -22,7 +22,7 @@ export function SimpleMetric({title, data, icon}: Props) {
       </Title>
 
       <CenteredView>
-        <DataText variant="displaySmall">{data}</DataText>
+        <DataText variant="displaySmall">{data || '--'}</DataText>
       </CenteredView>
     </OuterView>
   );

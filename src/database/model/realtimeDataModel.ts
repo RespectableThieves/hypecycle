@@ -6,16 +6,16 @@ export default class RealtimeDataModel extends Model {
 
   @field('distance') distance!: number;
   @field('elapsed_time') elapsedTime!: number;
-  @field('speed') speed!: number;
-  @field('latitude') latitude!: number;
-  @field('longitude') longitude!: number;
-  @field('altitude') altitude!: number;
-  @field('heading') heading!: number;
-  @field('heart_rate') heartRate!: number;
-  @field('instant_power') instantPower!: number;
-  @field('three_sec_power') threeSecPower!: number;
-  @field('ten_sec_power') tenSecPower!: number;
-  @field('cadence') cadence!: number;
+  @field('speed') speed!: number | null;
+  @field('latitude') latitude!: number | null;
+  @field('longitude') longitude!: number | null;
+  @field('altitude') altitude!: number | null;
+  @field('heading') heading!: number | null;
+  @field('heart_rate') heartRate!: number | null;
+  @field('instant_power') instantPower!: number | null;
+  @field('three_sec_power') threeSecPower!: number | null;
+  @field('ten_sec_power') tenSecPower!: number | null;
+  @field('cadence') cadence!: number | null;
   @field('is_bluetooth') isBluetooth!: boolean;
   @field('is_wifi') isWifi!: boolean;
   @field('is_power') isPower!: boolean;

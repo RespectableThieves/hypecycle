@@ -6,5 +6,5 @@ export default class RideModel extends Model {
 
   @field('is_paused') isPaused!: boolean;
   @date('started_at') startedAt!: number;
-  @date('ended_at') endedAt!: number;
+  @date('ended_at') endedAt!: number | null;
 }

@@ -14,42 +14,52 @@ export const realtimeDataSchema = tableSchema({
     {
       name: 'speed',
       type: 'number',
+      isOptional: true,
     },
     {
       name: 'latitude',
       type: 'number',
+      isOptional: true,
     },
     {
       name: 'longitude',
       type: 'number',
+      isOptional: true,
     },
     {
       name: 'altitude',
       type: 'number',
+      isOptional: true,
     },
     {
       name: 'heading',
       type: 'number',
+      isOptional: true,
     },
     {
       name: 'heart_rate',
       type: 'number',
+      isOptional: true,
     },
     {
       name: 'instant_power',
       type: 'number',
+      isOptional: true,
     },
     {
       name: 'three_sec_power',
       type: 'number',
+      isOptional: true,
     },
     {
       name: 'ten_sec_power',
       type: 'number',
+      isOptional: true,
     },
     {
       name: 'cadence',
       type: 'number',
+      isOptional: true,
     },
     {
       name: 'is_bluetooth',
