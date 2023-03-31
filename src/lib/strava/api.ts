@@ -1,5 +1,4 @@
-import {SECURE_STORE_CURRENT_USER_KEY, BACKEND} from '../constants';
-import * as SecureStore from 'expo-secure-store';
+import {BACKEND} from '../../constants';
 
 export type Athlete = {
   id: number;
@@ -33,8 +32,20 @@ export type Token = {
   athlete: Athlete;
 };
 
-export async function authorize(params: any): Promise<Token> {
-  const res = await fetch(`${BACKEND}/auth`, {
+// same as token but without Athlete
+export type RefreshToken = {
+  token_type: string;
+  expires_at: number;
+  expires_in: number;
+  refresh_token: string;
+  access_token: string;
+};
+
+async function getToken<T>(
+  type: 'auth' | 'refresh',
+  params: {code: string} | {refreshToken: Token['refresh_token']},
+): Promise<T> {
+  const res = await fetch(`${BACKEND}/${type}`, {
     body: JSON.stringify(params),
     method: 'POST',
     headers: {
@@ -46,25 +57,22 @@ export async function authorize(params: any): Promise<Token> {
   const data = await res.json();
 
   if (!res.ok) {
-    console.log('Authorization fail', data.data);
+    console.log(`token ${type} fail`, data.data);
     throw Error(data.message);
   } else {
-    console.log('Authorization success');
+    console.log(`token ${type} success`);
   }
 
   return data;
 }
 
-export async function loadToken(): Promise<Token | null> {
-  // loads the current user from secure storage.
-  // TODO - add a fresh param which will check the expiration date
-  // and refresh the token if it's expired - we will probably only want that
-  // at boot and when uploading the ride file
-  const user = await SecureStore.getItemAsync(SECURE_STORE_CURRENT_USER_KEY);
+export async function authorize({code}: {code: string}): Promise<Token> {
+  return getToken<Token>('auth', {code});
+}
 
-  if (user) {
-    return JSON.parse(user);
-  }
-
-  return null;
+export async function refreshToken(
+  t: Token['refresh_token'],
+): Promise<RefreshToken> {
+  // fresh will
+  return getToken<RefreshToken>('refresh', {refreshToken: t});
 }

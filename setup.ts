@@ -37,43 +37,52 @@ jest.mock('expo-auth-session', () => {
   };
 });
 
-jest.mock('./src/lib/strava', () => {
-  const mod = jest.requireActual('./src/lib/strava');
+jest.mock('./src/lib/strava/api', () => {
+  const dummyToken = {
+    token_type: 'Bearer',
+    expires_at: Math.round(Date.now() / 1000) + 21600,
+    expires_in: 21600,
+    refresh_token: 'xyz',
+    access_token: 'abc',
+    athlete: {
+      id: 101,
+      username: null,
+      resource_state: 2,
+      firstname: 'Craig',
+      lastname: 'Mulligan',
+      bio: null,
+      city: '',
+      state: '',
+      country: null,
+      sex: null,
+      premium: false,
+      summit: false,
+      created_at: '2022-03-30T16:36:16Z',
+      updated_at: '2023-03-28T17:43:08Z',
+      badge_type_id: 0,
+      weight: 84.0008,
+      profile_medium:
+        'https://lh3.googleusercontent.com/a/AGNmyxafxyza4C7yewDLpgLWrmXW-Rmrds543HpKSrA_=s96-c',
+      profile:
+        'https://lh3.googleusercontent.com/a/AGNmyxafxyza4C7yewDLpgLWrmXW-Rmrds543HpKSrA_=s96-c',
+      friend: null,
+      follower: null,
+    },
+  };
+
+  const {token_type, expires_at, expires_in, refresh_token, access_token} =
+    dummyToken;
 
   return {
-    ...mod,
     // ensure we don't call the API in
     // tests accidentally
-    authorize: jest.fn().mockResolvedValue({
-      token_type: 'Bearer',
-      expires_at: 1680054476,
-      expires_in: 21600,
-      refresh_token: 'xyz',
-      access_token: 'abc',
-      athlete: {
-        id: 101,
-        username: null,
-        resource_state: 2,
-        firstname: 'Craig',
-        lastname: 'Mulligan',
-        bio: null,
-        city: '',
-        state: '',
-        country: null,
-        sex: null,
-        premium: false,
-        summit: false,
-        created_at: '2022-03-30T16:36:16Z',
-        updated_at: '2023-03-28T17:43:08Z',
-        badge_type_id: 0,
-        weight: 84.0008,
-        profile_medium:
-          'https://lh3.googleusercontent.com/a/AGNmyxafxyza4C7yewDLpgLWrmXW-Rmrds543HpKSrA_=s96-c',
-        profile:
-          'https://lh3.googleusercontent.com/a/AGNmyxafxyza4C7yewDLpgLWrmXW-Rmrds543HpKSrA_=s96-c',
-        friend: null,
-        follower: null,
-      },
+    authorize: jest.fn().mockResolvedValue(dummyToken),
+    refreshToken: jest.fn().mockResolvedValue({
+      token_type,
+      expires_at,
+      expires_in,
+      refresh_token,
+      access_token,
     }),
   };
 });
