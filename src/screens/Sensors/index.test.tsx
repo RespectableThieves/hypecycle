@@ -25,7 +25,7 @@ beforeEach(async () => {
     tree = renderer.create(<App />);
   });
 
-  renderer.act(() => {
+  await renderer.act(async () => {
     navigate('Sensors');
   });
 

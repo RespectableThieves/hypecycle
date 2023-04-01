@@ -3,8 +3,15 @@ import {sensorSchema} from './sensorsSchema';
 import {realtimeDataSchema} from './realtimeDataSchema';
 import {rideSchema} from './rideSchema';
 import {rideSummarySchema} from './rideSummarySchema';
+import {historySchema} from './historySchema';
 
 export const schemas = appSchema({
-  version: 2,
-  tables: [sensorSchema, realtimeDataSchema, rideSchema, rideSummarySchema],
+  version: 3,
+  tables: [
+    sensorSchema,
+    realtimeDataSchema,
+    rideSchema,
+    rideSummarySchema,
+    historySchema,
+  ],
 });

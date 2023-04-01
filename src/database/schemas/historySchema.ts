@@ -1,14 +1,10 @@
 import {tableSchema} from '@nozbe/watermelondb';
 
-export const realtimeDataSchema = tableSchema({
-  name: 'realtime_data',
+export const historySchema = tableSchema({
+  name: 'history',
   columns: [
     {
       name: 'distance',
-      type: 'number',
-    },
-    {
-      name: 'elapsed_time',
       type: 'number',
     },
     {
@@ -60,26 +56,6 @@ export const realtimeDataSchema = tableSchema({
       name: 'cadence',
       type: 'number',
       isOptional: true,
-    },
-    {
-      name: 'is_bluetooth',
-      type: 'boolean',
-    },
-    {
-      name: 'is_wifi',
-      type: 'boolean',
-    },
-    {
-      name: 'is_power',
-      type: 'boolean',
-    },
-    {
-      name: 'is_heart_rate',
-      type: 'boolean',
-    },
-    {
-      name: 'is_cadence',
-      type: 'boolean',
     },
     {
       name: 'created_at',
