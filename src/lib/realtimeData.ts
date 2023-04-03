@@ -1,6 +1,7 @@
 import {LocationObject} from 'expo-location';
 import {REALTIME_DATA_ID} from '../constants';
-import {db, RealtimeDataModel} from '../database';
+import {Subscription} from 'rxjs';
+import {db, HistoryModel, RealtimeDataModel, RideModel} from '../database';
 import {accumulateDistance} from './distance';
 
 export async function getOrCreateRealtimeRecord(): Promise<RealtimeDataModel> {
@@ -44,8 +45,9 @@ export async function onLocation(
   console.log('New location', location);
 
   const realtimeData = await getOrCreateRealtimeRecord();
-  // TODO: only accumulate distance when there is an active ride.
-  const distance = accumulateDistance(realtimeData, location);
+  const distance = realtimeData.ride?.id
+    ? accumulateDistance(realtimeData, location)
+    : 0;
   console.log('accumulated distance: ', distance);
   const {speed, latitude, longitude, heading, altitude} = location.coords;
 
@@ -62,3 +64,92 @@ export async function onLocation(
     });
   });
 }
+
+export async function onSnapshotEvent() {
+  // this is responsible snapshotting realtime_data to the history table.
+  const {
+    speed,
+    latitude,
+    longitude,
+    heading,
+    altitude,
+    distance,
+    heartRate,
+    instantPower,
+    threeSecPower,
+    tenSecPower,
+    cadence,
+    ride,
+  } = await getOrCreateRealtimeRecord();
+  console.log('snapshoting realtime data');
+
+  return db.write(function historySnapshot() {
+    return db.get<HistoryModel>('history').create(history => {
+      history.ride!.id = ride?.id;
+      history.speed = speed;
+      history.latitude = latitude;
+      history.longitude = longitude;
+      history.heading = heading;
+      history.altitude = altitude;
+      history.distance = distance;
+      history.heartRate = heartRate;
+      history.instantPower = instantPower;
+      history.threeSecPower = threeSecPower;
+      history.tenSecPower = tenSecPower;
+      history.cadence = cadence;
+    });
+  });
+}
+
+export function snapshotService(callback: (r: RealtimeDataModel) => {}) {
+  let timer: NodeJS.Timer | null;
+  let observeable: Subscription;
+
+  const start = async (interval: number) => {
+    const record = await getOrCreateRealtimeRecord();
+    const subscription = record.ride!.observe();
+    console.log('snapshot service: starting');
+
+    if (record.ride?.id) {
+      // inprogress journey on boot
+      console.log('snapshot service: resuming');
+      timer = setInterval(() => callback(record), interval);
+    }
+
+    observeable = subscription.subscribe((ride: RideModel | null) => {
+      if (ride?.id) {
+        // ride started.
+        if (!timer) {
+          console.log('snapshot service: resuming');
+          callback(record);
+          timer = setInterval(() => callback(record), interval);
+        }
+      } else {
+        if (timer) {
+          // ride finished
+          console.log('snapshot service: pausing');
+          callback(record);
+          clearInterval(timer);
+          timer = null;
+        }
+      }
+    });
+  };
+
+  const stop = () => {
+    console.log('snapshot service: stopping');
+    if (observeable) {
+      observeable.unsubscribe();
+    }
+    if (timer) {
+      clearInterval(timer);
+    }
+  };
+
+  return {
+    start,
+    stop,
+  };
+}
+
+export const snapshotWorker = snapshotService(onSnapshotEvent);
