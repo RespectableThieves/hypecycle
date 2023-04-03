@@ -5,6 +5,7 @@ import RealtimeDataModel from './model/realtimeDataModel';
 import RideModel from './model/ride';
 import RideSummaryModel from './model/rideSummary';
 import HistoryModel from './model/historyModel';
+import {Q} from '@nozbe/watermelondb';
 
 export const db = new Database({
   adapter,
@@ -23,4 +24,5 @@ export {
   RideModel,
   RideSummaryModel,
   HistoryModel,
+  Q,
 };

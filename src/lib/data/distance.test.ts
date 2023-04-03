@@ -1,5 +1,5 @@
 // distanceCalculator.test.ts
-import {RealtimeDataModel} from '../database';
+import {RealtimeDataModel} from '../../database';
 import {LocationObject} from 'expo-location';
 import {
   LatLngAlt,

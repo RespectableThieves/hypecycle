@@ -1,5 +1,5 @@
-import {startRide, stopRide} from './ride';
-import {snapshotService} from './realtimeData';
+import {startRide, stopRide} from '../ride';
+import {snapshotService} from './realtime';
 
 describe('ride service', () => {
   it('should start and watch for ride/start/stop events', async () => {

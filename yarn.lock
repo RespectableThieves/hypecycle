@@ -6527,7 +6527,7 @@ lodash.throttle@^4.1.1:
   resolved "https://registry.npmjs.org/lodash.throttle/-/lodash.throttle-4.1.1.tgz"
   integrity sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==
 
-lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.19, lodash@^4.17.21, lodash@^4.17.4:
+lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17.21, lodash@^4.17.4:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -9122,6 +9122,13 @@ tar@^6.0.2, tar@^6.0.5:
     minizlib "^2.1.1"
     mkdirp "^1.0.3"
     yallist "^4.0.0"
+
+tcx-builder@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/tcx-builder/-/tcx-builder-1.1.1.tgz#e311af96e0d927e6d2df1595a342d139ca52e1e9"
+  integrity sha512-4N+o30LeYaxxf7u1xK9DLxvgX6AKfjF4s2oNmspSryX0EpYmbgQVxqUm0Tzvt93FayrLyqVbUYD3p8eYjvTk5g==
+  dependencies:
+    lodash "^4.17.15"
 
 temp-dir@^1.0.0:
   version "1.0.0"

@@ -1,5 +1,5 @@
 import {stopRide, startRide} from './ride';
-import {getOrCreateRealtimeRecord} from './realtimeData';
+import {getOrCreateRealtimeRecord} from './data';
 
 describe('ride and realtime db interactions', () => {
   it('should write to realtime_data.ride_id on stop start', async () => {
