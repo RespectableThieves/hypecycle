@@ -1,8 +1,7 @@
 import * as React from 'react';
 import {FAB, Portal} from 'react-native-paper';
-import {db, RideModel} from '../../database';
+import {db, Q, RideModel} from '../../database';
 import withObservables from '@nozbe/with-observables';
-import {Q} from '@nozbe/watermelondb';
 import {unpauseRide, pauseRide, stopRide, startRide} from '../../lib/ride';
 
 type Props = {

@@ -1,7 +1,7 @@
 import {LocationObject} from 'expo-location';
-import {REALTIME_DATA_ID} from '../constants';
+import {REALTIME_DATA_ID} from '../../constants';
 import {Subscription} from 'rxjs';
-import {db, HistoryModel, RealtimeDataModel, RideModel} from '../database';
+import {db, HistoryModel, RealtimeDataModel, RideModel} from '../../database';
 import {accumulateDistance} from './distance';
 
 export async function getOrCreateRealtimeRecord(): Promise<RealtimeDataModel> {
@@ -33,6 +33,23 @@ export async function updateRealTimeRecord(record: RealtimeDataModel) {
       record.instantPower = randomInt();
       record.heartRate = randomInt();
       record.cadence = randomInt();
+
+      return record;
+    });
+  });
+}
+
+// used for tests
+export async function updateRealTimeRecordRandom(record: RealtimeDataModel) {
+  return db.write(async () => {
+    return record.update(() => {
+      record.instantPower = randomInt();
+      record.heartRate = randomInt();
+      record.cadence = randomInt();
+      record.distance = randomInt();
+      record.latitude = randomInt();
+      record.longitude = randomInt();
+      record.altitude = randomInt();
 
       return record;
     });

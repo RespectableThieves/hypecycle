@@ -35,6 +35,7 @@
     "react-native-screens": "^3.20.0",
     "react-native-vector-icons": "^9.2.0",
     "styled-components": "^5.3.6",
+    "tcx-builder": "^1.1.1",
     "uri-scheme": "^1.1.0"
   },
   "devDependencies": {

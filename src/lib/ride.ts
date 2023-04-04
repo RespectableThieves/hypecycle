@@ -1,5 +1,5 @@
 import {db, RideModel} from '../database';
-import {getOrCreateRealtimeRecord} from './realtimeData';
+import {getOrCreateRealtimeRecord} from './data';
 
 export async function startRide(): Promise<RideModel> {
   // TODO stop any current rides.

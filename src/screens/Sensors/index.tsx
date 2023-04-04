@@ -1,9 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react';
 import {FlatList} from 'react-native';
 import {Container, Empty} from './styles';
-import {db} from '../../database';
-import SensorModel from '../../database/model/sensorModel';
-import {Q} from '@nozbe/watermelondb';
+import {db, Q, SensorModel} from '../../database';
 import {Button, Text} from 'react-native-paper';
 import {getAllSensors} from '../../lib/sensor';
 import {Sensor} from '../../components/Sensor';

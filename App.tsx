@@ -13,7 +13,7 @@ import {
   updateRealTimeRecord,
   onLocation,
   snapshotWorker,
-} from './src/lib/realtimeData';
+} from './src/lib/data';
 import Loading from './src/components/Loading';
 import {
   ble,
