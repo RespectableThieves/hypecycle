@@ -1,14 +1,14 @@
-import {generateTCX} from './history';
-import {RideAggregate} from './aggregates';
+import { generateTCX } from './history';
+import { getRideAggregates, RideAggregate } from './aggregates';
 import {
   updateRealTimeRecord,
   onLocation,
   snapshotWorker,
   getOrCreateRealtimeRecord,
 } from './realtime';
-import {metersToKilometers} from './distance';
+import { metersToKilometers } from './distance';
 
-export type {RideAggregate};
+export type { RideAggregate };
 
 export {
   generateTCX,
@@ -17,4 +17,5 @@ export {
   onLocation,
   snapshotWorker,
   metersToKilometers,
+  getRideAggregates
 };

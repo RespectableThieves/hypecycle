@@ -1,10 +1,10 @@
-import {db, Q, HistoryModel, RideModel} from '../../../database';
+import { db, Q, HistoryModel, RideModel } from '../../../database';
 
 const avg =
   (length: number) =>
-  (acc = 0, value = 0) => {
-    return acc + value / length;
-  };
+    (acc = 0, value = 0) => {
+      return acc + value / length;
+    };
 
 // we mock getRideAggregates because the test LokiJS adapter can't run raw queries :/
 // See: Diagnostic error: [Loki] Q.unsafeSqlQuery are not supported with LokiJSAdapter
@@ -21,6 +21,9 @@ export async function getRideAggregates(ride: RideModel): Promise<any> {
     .map(r => r.altitude)
     .filter(r => r != null) as number[];
 
+
+  const end = ride.endedAt || records[records.length - 1].createdAt
+
   return {
     avg_speed: speeds.map(avg(speeds.length), 0),
     avg_power: 0,
@@ -31,5 +34,7 @@ export async function getRideAggregates(ride: RideModel): Promise<any> {
     max_altitude: Math.max(...altitudes),
     max_hr: 0,
     min_hr: 0,
+    distance: records[records.length - 1].distance,
+    elapsed_time: (end - ride.startedAt) / 1000
   };
 }

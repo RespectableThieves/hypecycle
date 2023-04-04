@@ -1,6 +1,6 @@
-import {Model, Relation} from '@nozbe/watermelondb';
-import {field} from '@nozbe/watermelondb/decorators';
-import {immutableRelation} from '@nozbe/watermelondb/decorators';
+import { Model, Relation } from '@nozbe/watermelondb';
+import { field, readonly, date } from '@nozbe/watermelondb/decorators';
+import { immutableRelation } from '@nozbe/watermelondb/decorators';
 import Ride from './ride';
 
 export default class RideSummaryModal extends Model {
@@ -16,6 +16,7 @@ export default class RideSummaryModal extends Model {
   @field('max_cadence') maxCadence!: number;
   @field('max_altitude') maxAltitude!: number;
   @field('max_hr') maxHr!: number;
+  @field('avg_hr') avgHr!: number;
   @field('min_hr') minHr!: number;
   @field('accumulated_accent') accumulatedAccent!: number;
   @field('accumulated_decent') accumulatedDecent!: boolean;
@@ -24,4 +25,6 @@ export default class RideSummaryModal extends Model {
   // so we can create links.
   @field('strava_id') stravaID!: string | null;
   @immutableRelation('ride', 'ride_id') ride!: Relation<Ride>;
+  @readonly @date('created_at') createdAt!: number
+  @readonly @date('updated_at') updatedAt!: number
 }

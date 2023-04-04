@@ -1,4 +1,4 @@
-import {db, Q, RideModel} from '../../database';
+import { db, Q, RideModel } from '../../database';
 
 export type RideAggregate = {
   avg_speed: number;
@@ -11,13 +11,15 @@ export type RideAggregate = {
   max_altitude: number;
   max_hr: number;
   min_hr: number;
+  distance: number;
+  elapsed_time: number;
 };
 
 export async function getRideAggregates(
   ride: RideModel,
 ): Promise<RideAggregate> {
   // TODO: figure out how to test this func.
-  const rawData: RideAggregate[] = await db
+  const rawData = await db
     .get('history')
     .query(
       Q.unsafeSqlQuery(
@@ -32,11 +34,18 @@ export async function getRideAggregates(
         max(heart_rate) as max_hr,        
         min(heart_rate) as min_hr,
         avg(heart_rate) as avg_hr,
-        avg(cadence) as cadence_avg from history where ride_id = ?`,
+        avg(cadence) as cadence_avg,
+        last_value(distance) as distance 
+        last_value(createdAt) as last_created_at
+        from history where ride_id = ?`,
         [ride.id],
       ),
     )
     .unsafeFetchRaw();
 
-  return rawData[0];
+  const end = ride.endedAt || rawData[0].last_created_at
+  return {
+    ...rawData[0],
+    elapsed_time: (end - ride.startedAt) / 1000
+  };
 }

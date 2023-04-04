@@ -1,4 +1,4 @@
-import { BACKEND } from '../../constants';
+import { BACKEND, STRAVA_BACKEND } from '../../constants';
 import { RideModel } from '../../database';
 
 export type Athlete = {
@@ -78,9 +78,41 @@ export async function refreshToken(
   return getToken<RefreshToken>('refresh', { refreshToken: t });
 }
 
-export async function upload(ride: RideModel, fileURI: string) {
+
+type StravaUpload = {
+  id_str: string
+  activity_id: number
+  external_id: string
+  id: number
+  error: string | null
+  status: string
+}
+
+export async function upload(t: Token, ride: RideModel, fileURI: string): Promise<StravaUpload> {
   const name = 'hypecycle test ride'
   const formData = new FormData();
   formData.append('file', { uri: fileURI, name, type: 'application/vnd.garmin.tcx+xml' });
   formData.append('external_id', ride.id);
+
+  const res = await fetch(`${STRAVA_BACKEND}/uploads`, {
+    body: formData,
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      "Content-Type": "multipart/form-data",
+      "Authorization": `Bearer ${t.access_token}`
+    },
+  });
+
+  if (!res.ok) {
+    throw Error(`Failed to upload file to strava ${fileURI}`)
+  }
+
+  const data = await res.json()
+
+  if (data.error) {
+    throw new Error(data.error)
+  }
+
+  return data
 }

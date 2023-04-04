@@ -1,4 +1,4 @@
-import {tableSchema} from '@nozbe/watermelondb';
+import { tableSchema } from '@nozbe/watermelondb';
 
 export const rideSummarySchema = tableSchema({
   name: 'ride_summary',
@@ -48,6 +48,10 @@ export const rideSummarySchema = tableSchema({
       type: 'number',
     },
     {
+      name: 'avg_hr',
+      type: 'number',
+    },
+    {
       name: 'accumulated_accent',
       type: 'number',
     },
@@ -68,5 +72,13 @@ export const rideSummarySchema = tableSchema({
       type: 'string',
       isOptional: true,
     },
+    {
+      name: 'created_at',
+      type: 'number'
+    },
+    {
+      name: 'updated_at',
+      type: 'number'
+    }
   ],
 });

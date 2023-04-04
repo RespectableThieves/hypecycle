@@ -1,5 +1,6 @@
-import {db, RideModel, RideSummaryModel} from '../database';
-import {getOrCreateRealtimeRecord, RideAggregate} from './data';
+import { db, RideModel, RideSummaryModel } from '../database';
+import { getOrCreateRealtimeRecord, getRideAggregates } from './data';
+import * as FileSystem from 'expo-file-system';
 
 export async function startRide(): Promise<RideModel> {
   // TODO stop any current rides.
@@ -59,18 +60,24 @@ export function unpauseRide(ride: RideModel): Promise<RideModel> {
   });
 }
 
-// export function saveRideSummary(ride: RideModel, aggregates: RideAggregate, fileURI: string, distance: distance) {
-//   // saves ride summary to the db.
-//   return db.write(async () => {
-//     const rideSummary = await db.write(async () => {
-//       return db.get<RideSummaryModel>('ride_summary').create(r => {
-//         r.fileURI = fileURI;
-//         r.maxHr = aggregates.max_hr
-//         r.minHr = aggregates.min_hr
+export async function saveRideSummary(ride: RideModel) {
+  const aggregates = await getRideAggregates(ride);
 
-//       });
-//     });
-
-//   });
-
-// }
+  // saves ride summary to the db.
+  return db.write(() => {
+    return db.get<RideSummaryModel>('ride_summary').create(r => {
+      r.ride.set(ride)
+      r.fileURI = `${FileSystem.documentDirectory}/${ride.id}`;
+      r.maxHr = aggregates.max_hr
+      r.minHr = aggregates.min_hr
+      r.avgPower = aggregates.avg_power
+      r.maxPower = aggregates.max_power
+      r.avgSpeed = aggregates.avg_speed
+      r.maxSpeed = aggregates.max_speed
+      r.avgCadence = aggregates.avg_cadence
+      r.maxCadence = aggregates.max_cadence
+      r.distance = aggregates.distance
+      r.elapsedTime = aggregates.elapsed_time
+    });
+  });
+}
