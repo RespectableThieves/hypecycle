@@ -15,7 +15,7 @@ jest.mock('react-native-reanimated', () => {
 
   // The mock for `call` immediately calls the callback which is incorrect
   // So we override it with a no-op
-  Reanimated.default.call = () => { };
+  Reanimated.default.call = () => {};
 
   return Reanimated;
 });
@@ -25,7 +25,7 @@ jest.mock('expo-auth-session', () => {
   let res: any = null;
 
   const promptAsync = () => {
-    res = { type: 'success', params: { code: '123' } };
+    res = {type: 'success', params: {code: '123'}};
     return Promise.resolve();
   };
 
@@ -72,23 +72,23 @@ jest.mock('./src/lib/strava/api', () => {
     },
   };
 
-  const { token_type, expires_at, expires_in, refresh_token, access_token } =
+  const {token_type, expires_at, expires_in, refresh_token, access_token} =
     dummyToken;
 
-  const uploads: any = []
+  const uploads: any = [];
 
   // @ts-ignore
   const uploader = (_token, ride, _fileURI) => {
     const payload = {
       external_id: ride.id,
-      activity_id: uploads.length,
-      id: uploads.length,
+      activity_id: uploads.length + 1,
+      id: uploads.length + 1,
       error: null,
-      status: 'complete'
-    }
-    uploads.push(payload)
-    return Promise.resolve(payload)
-  }
+      status: 'complete',
+    };
+    uploads.push(payload);
+    return Promise.resolve(payload);
+  };
 
   return {
     // ensure we don't call the API in
@@ -102,7 +102,7 @@ jest.mock('./src/lib/strava/api', () => {
       refresh_token,
       access_token,
     }),
-    upload: jest.fn(uploader)
+    upload: jest.fn(uploader),
   };
 });
 
@@ -118,10 +118,10 @@ jest.mock('expo-location', () => {
     _emitLocation: (loc: any) => {
       return Promise.all([_callbacks.map(cb => cb(loc))]);
     },
-    watchPositionAsync: jest.fn(function(_opts, cb) {
+    watchPositionAsync: jest.fn(function (_opts, cb) {
       _callbacks.push(cb);
 
-      return Promise.resolve({ remove: jest.fn() });
+      return Promise.resolve({remove: jest.fn()});
       // jest.fn().mockResolvedValue()
     }),
   };

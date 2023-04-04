@@ -1,9 +1,9 @@
-import { Model, Relation } from '@nozbe/watermelondb';
-import { field, readonly, date } from '@nozbe/watermelondb/decorators';
-import { immutableRelation } from '@nozbe/watermelondb/decorators';
+import {Model, Relation} from '@nozbe/watermelondb';
+import {field, readonly, date, writer} from '@nozbe/watermelondb/decorators';
+import {immutableRelation} from '@nozbe/watermelondb/decorators';
 import Ride from './ride';
 
-export default class RideSummaryModal extends Model {
+export default class RideSummaryModel extends Model {
   static table = 'ride_summary';
 
   @field('distance') distance!: number;
@@ -23,8 +23,14 @@ export default class RideSummaryModal extends Model {
   @field('file_uri') fileURI!: string;
   // once we upload to strava we store the activity ID
   // so we can create links.
-  @field('strava_id') stravaID!: string | null;
+  @field('strava_id') stravaId!: number | null;
   @immutableRelation('ride', 'ride_id') ride!: Relation<Ride>;
-  @readonly @date('created_at') createdAt!: number
-  @readonly @date('updated_at') updatedAt!: number
+  @readonly @date('created_at') createdAt!: number;
+  @readonly @date('updated_at') updatedAt!: number;
+
+  @writer async setStravaId(stravaId: number) {
+    await this.update(summary => {
+      summary.stravaId = stravaId;
+    });
+  }
 }

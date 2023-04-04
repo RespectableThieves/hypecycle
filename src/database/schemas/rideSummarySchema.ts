@@ -1,4 +1,4 @@
-import { tableSchema } from '@nozbe/watermelondb';
+import {tableSchema} from '@nozbe/watermelondb';
 
 export const rideSummarySchema = tableSchema({
   name: 'ride_summary',
@@ -21,6 +21,10 @@ export const rideSummarySchema = tableSchema({
     },
     {
       name: 'avg_cadence',
+      type: 'number',
+    },
+    {
+      name: 'avg_hr',
       type: 'number',
     },
     {
@@ -69,16 +73,16 @@ export const rideSummarySchema = tableSchema({
     },
     {
       name: 'strava_id',
-      type: 'string',
+      type: 'number',
       isOptional: true,
     },
     {
       name: 'created_at',
-      type: 'number'
+      type: 'number',
     },
     {
       name: 'updated_at',
-      type: 'number'
-    }
+      type: 'number',
+    },
   ],
 });

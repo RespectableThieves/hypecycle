@@ -1,14 +1,13 @@
-import { startRide, stopRide, saveRideSummary } from '../ride';
+import {startRide, stopRide, saveRideSummary} from '../ride';
 import {
   updateRealTimeRecordRandom,
   getOrCreateRealtimeRecord,
   onSnapshotEvent,
 } from './realtime';
-import { generateTCX, saveTCX } from './history';
-import { TrainingCenterDatabase } from 'tcx-builder';
-import * as strava from '../strava';
+import {generateTCX} from './history';
+import {TrainingCenterDatabase} from 'tcx-builder';
 
-it('generate a tcx from ride history and upload to strava', async () => {
+it('generate a tcx from ride summary', async () => {
   const snapshotCount = 5;
   const realtime = await getOrCreateRealtimeRecord();
   const ride = await startRide();
@@ -18,7 +17,6 @@ it('generate a tcx from ride history and upload to strava', async () => {
     await onSnapshotEvent();
     await updateRealTimeRecordRandom(realtime);
   }
-
   await stopRide(ride);
   const rideSummary = await saveRideSummary(ride);
   const tcx = await generateTCX(rideSummary);
@@ -27,8 +25,4 @@ it('generate a tcx from ride history and upload to strava', async () => {
   expect(tcx.Activities?.Activity![0].Laps[0].Track?.TrackPoints.length).toBe(
     snapshotCount,
   );
-  const fileURI = await saveTCX(rideSummary.fileURI, tcx);
-  const token = await strava.loadToken()
-  const upload = await strava.upload(token!, ride, fileURI);
-  expect(upload.external_id).toBe(ride.id)
 });

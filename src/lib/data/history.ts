@@ -1,4 +1,4 @@
-import { db, Q, HistoryModel, RideSummaryModel, RideModel } from '../../database';
+import {db, Q, HistoryModel, RideSummaryModel, RideModel} from '../../database';
 import {
   TrainingCenterDatabase,
   Activity,
@@ -27,14 +27,14 @@ export async function generateTCX(rideSummary: RideSummaryModel) {
         time: new Date(record.createdAt),
         ...(record.latitude &&
           record.longitude && {
-          position: new Position(record.latitude, record.longitude),
-        }),
-        ...(record.altitude && { altitudeMeters: record.altitude }),
+            position: new Position(record.latitude, record.longitude),
+          }),
+        ...(record.altitude && {altitudeMeters: record.altitude}),
         distanceMeters: record.distance,
         ...(record.heartRate && {
           heartRateBpm: new HeartRateBpm(record.heartRate),
         }),
-        ...(record.cadence && { cadence: record.cadence }),
+        ...(record.cadence && {cadence: record.cadence}),
         sensorState: 'Present',
         ...(record.speed && {
           extensions: new TrackPointExtensions({
@@ -51,9 +51,9 @@ export async function generateTCX(rideSummary: RideSummaryModel) {
     TriggerMethod: 'Manual',
     DistanceMeters: records[records.length - 1]?.distance || 0,
     TotalTimeSeconds: rideSummary.elapsedTime,
-    Track: new Track({ trackPoints }),
-    ...(rideSummary.maxSpeed && { MaximumSpeed: rideSummary.maxSpeed }),
-    ...(rideSummary.avgCadence && { Cadence: rideSummary.avgCadence }),
+    Track: new Track({trackPoints}),
+    ...(rideSummary.maxSpeed && {MaximumSpeed: rideSummary.maxSpeed}),
+    ...(rideSummary.avgCadence && {Cadence: rideSummary.avgCadence}),
     ...(rideSummary.avgHr && {
       AverageHeartRateBpm: new HeartRateInBeatsPerMinute({
         value: rideSummary.avgHr,
@@ -71,14 +71,17 @@ export async function generateTCX(rideSummary: RideSummaryModel) {
     Laps: [myLap],
     Notes: `Hypecycle test ride - ${rideSummary.ride.id}`,
   });
-  const activityList = new ActivityList({ activity: [tcxActivity] });
+  const activityList = new ActivityList({activity: [tcxActivity]});
 
-  const tcxObj = new TrainingCenterDatabase({ activities: activityList });
+  const tcxObj = new TrainingCenterDatabase({activities: activityList});
 
   return tcxObj;
 }
 
-export async function saveTCX(uri: string, tcx: TrainingCenterDatabase): Promise<string> {
+export async function saveTCX(
+  uri: string,
+  tcx: TrainingCenterDatabase,
+): Promise<string> {
   const xml = tcx.toXml();
   await FileSystem.writeAsStringAsync(uri, xml);
   return uri;

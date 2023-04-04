@@ -1,8 +1,14 @@
 import * as React from 'react';
-import {FAB, Portal} from 'react-native-paper';
+import {FAB, Snackbar, Portal} from 'react-native-paper';
 import {db, Q, RideModel} from '../../database';
 import withObservables from '@nozbe/with-observables';
-import {unpauseRide, pauseRide, stopRide, startRide} from '../../lib/ride';
+import {
+  unpauseRide,
+  pauseRide,
+  stopRide,
+  startRide,
+  onRideEnd,
+} from '../../lib/ride';
 
 type Props = {
   activeRides: RideModel[];
@@ -16,8 +22,10 @@ const RideFab = ({activeRides = []}: Props) => {
   // will only ever be one.
   const [activeRide] = activeRides;
   const [state, setState] = React.useState({open: false});
+  const [message, setMessage] = React.useState('');
 
   const onStateChange = ({open}: State) => setState({open});
+  const onDismissSnackBar = () => setMessage('');
 
   const {open} = state;
 
@@ -30,6 +38,12 @@ const RideFab = ({activeRides = []}: Props) => {
       onPress: async () => {
         console.log('ride stop');
         await stopRide(activeRide);
+        try {
+          await onRideEnd(activeRide);
+          setMessage('Successfully uploaded ride');
+        } catch (err) {
+          setMessage('error');
+        }
       },
     });
 
@@ -75,6 +89,9 @@ const RideFab = ({activeRides = []}: Props) => {
         actions={actions}
         onStateChange={onStateChange}
       />
+      <Snackbar visible={!!message} onDismiss={onDismissSnackBar}>
+        {message}
+      </Snackbar>
     </Portal>
   );
 };

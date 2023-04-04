@@ -1,6 +1,6 @@
-import { SECURE_STORE_CURRENT_USER_KEY } from '../../constants';
+import {SECURE_STORE_CURRENT_USER_KEY} from '../../constants';
 import * as SecureStore from 'expo-secure-store';
-import { authorize, refreshToken, Athlete, Token, upload } from './api';
+import {authorize, refreshToken, Athlete, Token, upload} from './api';
 
 // Note loadToken can't be in the same
 // module as .refresh because then mocking doesn't
@@ -37,7 +37,8 @@ async function loadToken(): Promise<Token | null> {
     }
 
     console.log(
-      `strava token is still valid for ${token.expires_at + fiveMinutes - now
+      `strava token is still valid for ${
+        token.expires_at + fiveMinutes - now
       } seconds`,
     );
 
@@ -58,7 +59,6 @@ async function deleteToken() {
   await SecureStore.deleteItemAsync(SECURE_STORE_CURRENT_USER_KEY);
 }
 
+export {authorize, refreshToken, loadToken, saveToken, deleteToken, upload};
 
-export { authorize, refreshToken, loadToken, saveToken, deleteToken, upload };
-
-export type { Athlete, Token };
+export type {Athlete, Token};

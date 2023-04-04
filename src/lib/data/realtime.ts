@@ -1,8 +1,8 @@
-import { LocationObject } from 'expo-location';
-import { REALTIME_DATA_ID } from '../../constants';
-import { Subscription } from 'rxjs';
-import { db, HistoryModel, RealtimeDataModel, RideModel } from '../../database';
-import { accumulateDistance } from './distance';
+import {LocationObject} from 'expo-location';
+import {REALTIME_DATA_ID} from '../../constants';
+import {Subscription} from 'rxjs';
+import {db, HistoryModel, RealtimeDataModel, RideModel} from '../../database';
+import {accumulateDistance} from './distance';
 
 export async function getOrCreateRealtimeRecord(): Promise<RealtimeDataModel> {
   const collection = db.get<RealtimeDataModel>('realtime_data');
@@ -66,7 +66,7 @@ export async function onLocation(
     ? accumulateDistance(realtimeData, location)
     : 0;
   console.log('accumulated distance: ', distance);
-  const { speed, latitude, longitude, heading, altitude } = location.coords;
+  const {speed, latitude, longitude, heading, altitude} = location.coords;
 
   return db.write(async () => {
     return realtimeData.update(record => {
@@ -170,3 +170,29 @@ export function snapshotService(callback: (r: RealtimeDataModel) => {}) {
 }
 
 export const snapshotWorker = snapshotService(onSnapshotEvent);
+
+export function simulateRealtimeDataService() {
+  // simulates random data for realtime data
+  let timer: NodeJS.Timer | null;
+
+  const start = async (interval: number) => {
+    const realtimeRecord = await getOrCreateRealtimeRecord();
+    timer = setInterval(async () => {
+      await updateRealTimeRecordRandom(realtimeRecord);
+      console.log('randomly updated realtime data');
+    }, interval);
+  };
+
+  const stop = () => {
+    if (timer) {
+      clearInterval(timer);
+    }
+  };
+
+  return {
+    start,
+    stop,
+  };
+}
+
+export const simulateRealtimeDataWorker = simulateRealtimeDataService();

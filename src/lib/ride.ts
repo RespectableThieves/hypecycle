@@ -1,6 +1,20 @@
-import { db, RideModel, RideSummaryModel } from '../database';
-import { getOrCreateRealtimeRecord, getRideAggregates } from './data';
+import {db, RideModel, RideSummaryModel, Q} from '../database';
+import {
+  getOrCreateRealtimeRecord,
+  getRideAggregates,
+  generateTCX,
+  saveTCX,
+} from './data';
 import * as FileSystem from 'expo-file-system';
+import * as strava from './strava';
+
+export class StravaNotConnected extends Error {
+  constructor(message: string) {
+    super(message);
+    // Not required, but makes uncaught error messages nicer.
+    this.name = 'StravaNotConnected';
+  }
+}
 
 export async function startRide(): Promise<RideModel> {
   // TODO stop any current rides.
@@ -66,18 +80,47 @@ export async function saveRideSummary(ride: RideModel) {
   // saves ride summary to the db.
   return db.write(() => {
     return db.get<RideSummaryModel>('ride_summary').create(r => {
-      r.ride.set(ride)
-      r.fileURI = `${FileSystem.documentDirectory}/${ride.id}`;
-      r.maxHr = aggregates.max_hr
-      r.minHr = aggregates.min_hr
-      r.avgPower = aggregates.avg_power
-      r.maxPower = aggregates.max_power
-      r.avgSpeed = aggregates.avg_speed
-      r.maxSpeed = aggregates.max_speed
-      r.avgCadence = aggregates.avg_cadence
-      r.maxCadence = aggregates.max_cadence
-      r.distance = aggregates.distance
-      r.elapsedTime = aggregates.elapsed_time
+      r.ride.set(ride);
+      r.fileURI = `${FileSystem.documentDirectory}${ride.id}.tcx`;
+      r.maxHr = aggregates.max_hr;
+      r.minHr = aggregates.min_hr;
+      r.avgSpeed = aggregates.avg_speed;
+      r.maxSpeed = aggregates.max_speed;
+      r.avgCadence = aggregates.avg_cadence;
+      r.maxCadence = aggregates.max_cadence;
+      r.distance = aggregates.distance;
+      r.elapsedTime = aggregates.elapsed_time;
     });
   });
+}
+
+export async function getRideSummary(rideId: RideModel['id']) {
+  const [rideSummary] = await db
+    .get<RideSummaryModel>('ride_summary')
+    .query(Q.where('ride_id', rideId), Q.take(1))
+    .fetch();
+  return rideSummary;
+}
+
+export async function onRideEnd(ride: RideModel) {
+  // on ride end.
+  // first save ride summary.
+  const summary = await saveRideSummary(ride);
+  // then generate tcx file
+  const tcx = await generateTCX(summary);
+  // save the tcx file to disk
+  const fileURI = await saveTCX(summary.fileURI, tcx);
+  // load a fresh strava token
+  const token = await strava.loadToken();
+
+  if (!token) {
+    // need to alert user.
+    throw new StravaNotConnected(
+      'Not uploading - not authenticated with strava.',
+    );
+  }
+  // upload to strava.
+  const upload = await strava.upload(token!, ride, fileURI);
+  // mark as uploaded.
+  await summary.setStravaId(upload.id);
 }
