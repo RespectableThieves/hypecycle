@@ -8,6 +8,7 @@ jest.mock('expo-font');
 jest.mock('expo-asset');
 jest.mock('expo-secure-store');
 jest.mock('expo-linking');
+jest.mock('expo-file-system');
 
 jest.mock('react-native-reanimated', () => {
   const Reanimated = require('react-native-reanimated/mock');
