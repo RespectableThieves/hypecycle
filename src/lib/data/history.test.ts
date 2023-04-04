@@ -7,7 +7,7 @@ import {
 import {generateTCX} from './history';
 import {TrainingCenterDatabase} from 'tcx-builder';
 
-it('generate a tcx with from ride history', async () => {
+it('generate a tcx from ride history', async () => {
   const snapshotCount = 5;
   const realtime = await getOrCreateRealtimeRecord();
   const ride = await startRide();

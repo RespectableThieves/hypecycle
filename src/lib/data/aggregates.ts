@@ -29,7 +29,9 @@ export async function getRideAggregates(
         max(power) as max_power,
         max(cadence) as max_cadence,
         max(altitude) as max_altitude,
-        
+        max(heart_rate) as max_hr,        
+        min(heart_rate) as min_hr,
+        avg(heart_rate) as avg_hr,
         avg(cadence) as cadence_avg from history where ride_id = ?`,
         [ride.id],
       ),

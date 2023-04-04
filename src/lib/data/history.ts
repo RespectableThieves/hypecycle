@@ -37,7 +37,6 @@ export async function generateTCX(ride: RideModel) {
             position: new Position(record.latitude, record.longitude),
           }),
         ...(record.altitude && {altitudeMeters: record.altitude}),
-        // not sure if they want distance between points or total
         distanceMeters: record.distance,
         ...(record.heartRate && {
           heartRateBpm: new HeartRateBpm(record.heartRate),
@@ -56,7 +55,7 @@ export async function generateTCX(ride: RideModel) {
   const myLap: ActivityLap = new ActivityLap(new Date(ride.startedAt), {
     Calories: 0,
     Intensity: 'Active',
-    TriggerMethod: 'Distance',
+    TriggerMethod: 'Manual',
     DistanceMeters: records[records.length - 1]?.distance || 0,
     TotalTimeSeconds: (ride.endedAt! - ride.startedAt) / 1000,
     Track: new Track({trackPoints}),
