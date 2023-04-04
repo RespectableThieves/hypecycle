@@ -59,5 +59,14 @@ export const rideSummarySchema = tableSchema({
       name: 'ride_id',
       type: 'string',
     },
+    {
+      name: 'file_uri',
+      type: 'string',
+    },
+    {
+      name: 'strava_id',
+      type: 'string',
+      isOptional: true,
+    },
   ],
 });

@@ -12,6 +12,7 @@ import {
   HeartRateInBeatsPerMinute,
 } from 'tcx-builder';
 import {getRideAggregates} from './aggregates';
+import * as FileSystem from 'expo-file-system';
 
 export async function getRideHistory(ride: RideModel) {
   return db.get<HistoryModel>('history').query(Q.where('ride_id', ride.id));
@@ -76,11 +77,20 @@ export async function generateTCX(ride: RideModel) {
   const tcxActivity = new Activity('Biking', {
     Id: new Date(ride.startedAt),
     Laps: [myLap],
-    Notes: 'Hypecycle test ride',
+    Notes: `Hypecycle test ride - ${ride.id}`,
   });
   const activityList = new ActivityList({activity: [tcxActivity]});
 
   const tcxObj = new TrainingCenterDatabase({activities: activityList});
 
   return tcxObj;
+}
+
+export async function saveTCX(tcx: TrainingCenterDatabase): Promise<string> {
+  const xml = tcx.toXml();
+  const id = tcx.Activities?.Activity![0].Id;
+  const uri = `${FileSystem.documentDirectory}/${id}`;
+
+  await FileSystem.writeAsStringAsync(uri, xml);
+  return uri;
 }

@@ -19,6 +19,9 @@ export default class RideSummaryModal extends Model {
   @field('min_hr') minHr!: number;
   @field('accumulated_accent') accumulatedAccent!: number;
   @field('accumulated_decent') accumulatedDecent!: boolean;
-
+  @field('file_uri') fileURI!: string;
+  // once we upload to strava we store the activity ID
+  // so we can create links.
+  @field('strava_id') stravaID!: string | null;
   @immutableRelation('ride', 'ride_id') ride!: Relation<Ride>;
 }

@@ -1,4 +1,5 @@
 import {generateTCX} from './history';
+import {RideAggregate} from './aggregates';
 import {
   updateRealTimeRecord,
   onLocation,
@@ -6,6 +7,8 @@ import {
   getOrCreateRealtimeRecord,
 } from './realtime';
 import {metersToKilometers} from './distance';
+
+export type {RideAggregate};
 
 export {
   generateTCX,

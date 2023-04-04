@@ -4,8 +4,9 @@ import {
   getOrCreateRealtimeRecord,
   onSnapshotEvent,
 } from './realtime';
-import {generateTCX} from './history';
+import {generateTCX, saveTCX} from './history';
 import {TrainingCenterDatabase} from 'tcx-builder';
+import * as strava from '../strava';
 
 it('generate a tcx from ride history', async () => {
   const snapshotCount = 5;
@@ -20,6 +21,8 @@ it('generate a tcx from ride history', async () => {
 
   await stopRide(ride);
   const tcx = await generateTCX(ride);
+  const fileURI = await saveTCX(tcx);
+  const upload = await strava.upload(tcx);
 
   expect(tcx).toBeInstanceOf(TrainingCenterDatabase);
   expect(tcx.Activities?.Activity![0].Laps[0].Track?.TrackPoints.length).toBe(

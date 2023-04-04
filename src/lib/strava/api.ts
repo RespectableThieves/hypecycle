@@ -1,4 +1,5 @@
-import {BACKEND} from '../../constants';
+import { BACKEND } from '../../constants';
+import { RideModel } from '../../database';
 
 export type Athlete = {
   id: number;
@@ -43,7 +44,7 @@ export type RefreshToken = {
 
 async function getToken<T>(
   type: 'auth' | 'refresh',
-  params: {code: string} | {refreshToken: Token['refresh_token']},
+  params: { code: string } | { refreshToken: Token['refresh_token'] },
 ): Promise<T> {
   const res = await fetch(`${BACKEND}/${type}`, {
     body: JSON.stringify(params),
@@ -66,13 +67,20 @@ async function getToken<T>(
   return data;
 }
 
-export async function authorize({code}: {code: string}): Promise<Token> {
-  return getToken<Token>('auth', {code});
+export async function authorize({ code }: { code: string }): Promise<Token> {
+  return getToken<Token>('auth', { code });
 }
 
 export async function refreshToken(
   t: Token['refresh_token'],
 ): Promise<RefreshToken> {
   // fresh will
-  return getToken<RefreshToken>('refresh', {refreshToken: t});
+  return getToken<RefreshToken>('refresh', { refreshToken: t });
+}
+
+export async function upload(ride: RideModel, fileURI: string) {
+  const name = 'hypecycle test ride'
+  const formData = new FormData();
+  formData.append('file', { uri: fileURI, name, type: 'application/vnd.garmin.tcx+xml' });
+  formData.append('external_id', ride.id);
 }

@@ -1,11 +1,11 @@
-import {db, RideModel} from '../database';
-import {getOrCreateRealtimeRecord} from './data';
+import {db, RideModel, RideSummaryModel} from '../database';
+import {getOrCreateRealtimeRecord, RideAggregate} from './data';
 
 export async function startRide(): Promise<RideModel> {
   // TODO stop any current rides.
   const ride = await db.write(async () => {
     return db.get<RideModel>('ride').create(r => {
-      r.startedAt = new Date().getUTCMilliseconds();
+      r.startedAt = Date.now();
       return r;
     });
   });
@@ -24,7 +24,7 @@ export async function startRide(): Promise<RideModel> {
 export async function stopRide(ride: RideModel): Promise<RideModel> {
   const stoppedRide = await db.write(async () => {
     return ride.update(() => {
-      ride.endedAt = new Date().getUTCMilliseconds();
+      ride.endedAt = Date.now();
       ride.isPaused = false;
       return ride;
     });
@@ -58,3 +58,19 @@ export function unpauseRide(ride: RideModel): Promise<RideModel> {
     });
   });
 }
+
+// export function saveRideSummary(ride: RideModel, aggregates: RideAggregate, fileURI: string, distance: distance) {
+//   // saves ride summary to the db.
+//   return db.write(async () => {
+//     const rideSummary = await db.write(async () => {
+//       return db.get<RideSummaryModel>('ride_summary').create(r => {
+//         r.fileURI = fileURI;
+//         r.maxHr = aggregates.max_hr
+//         r.minHr = aggregates.min_hr
+
+//       });
+//     });
+
+//   });
+
+// }
