@@ -1,4 +1,4 @@
-import { Text } from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import styled from 'styled-components/native';
 
 type Props = {
@@ -6,13 +6,13 @@ type Props = {
 };
 
 export const CenteredView = styled.View`
-  align-items: center;  
+  align-items: center;
   border-radius: 5px;
 `;
 
 export const OuterView = styled.View<Props>`
   background-color: #454545 
-  height: ${({ widgetHeight }) => widgetHeight}px;
+  height: ${({widgetHeight}) => widgetHeight}px;
   margin-bottom: 3px;
   border-radius: 8px;
 `;

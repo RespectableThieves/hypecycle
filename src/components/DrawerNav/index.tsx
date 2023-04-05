@@ -64,7 +64,7 @@ function DrawerNav() {
       screenOptions={{headerTintColor: '#FFFFFF'}}
       useLegacyImplementation
       initialRouteName="Active Ride"
-      drawerContent={props => <DrawerContent {...props} />}>
+      drawerContent={DrawerContent}>
       <Drawer.Screen
         name="Active Ride"
         component={ActiveRideView}
