@@ -82,14 +82,16 @@ export async function saveRideSummary(ride: RideModel) {
     return db.get<RideSummaryModel>('ride_summary').create(r => {
       r.ride.set(ride);
       r.fileURI = `${FileSystem.documentDirectory}${ride.id}.tcx`;
-      r.maxHr = aggregates.max_hr;
-      r.minHr = aggregates.min_hr;
-      r.avgSpeed = aggregates.avg_speed;
-      r.maxSpeed = aggregates.max_speed;
-      r.avgCadence = aggregates.avg_cadence;
-      r.maxCadence = aggregates.max_cadence;
+      r.maxHr = aggregates.maxHr;
+      r.minHr = aggregates.minHr;
+      r.avgSpeed = aggregates.avgSpeed;
+      r.maxSpeed = aggregates.maxSpeed;
+      r.avgCadence = aggregates.avgCadence;
+      r.maxCadence = aggregates.maxCadence;
       r.distance = aggregates.distance;
-      r.elapsedTime = aggregates.elapsed_time;
+      r.avgPower = aggregates.avgPower;
+      r.maxPower = aggregates.maxPower;
+      r.elapsedTime = aggregates.elapsedTime;
     });
   });
 }
