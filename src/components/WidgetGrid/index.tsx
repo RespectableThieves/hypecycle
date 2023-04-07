@@ -1,4 +1,5 @@
 import React from 'react';
+import {StyleSheet} from 'react-native';
 import {Container, Row, Col} from 'react-native-flex-grid';
 import withObservables from '@nozbe/with-observables';
 import {SimpleMetric} from '../SimpleMetric';
@@ -7,7 +8,6 @@ import {db, RealtimeDataModel} from '../../database';
 import {metersToKilometers} from '../../lib/data';
 
 const GUTTER = 1;
-
 type Widget = {
   title: string;
   data: number;
@@ -30,7 +30,7 @@ function rounded(data: number | null) {
 function WidgetGrid({realtimeData}: Props) {
   return (
     <Container fluid noPadding>
-      <Row gx={GUTTER}>
+      <Row gx={GUTTER} style={styles.row}>
         <Col gx={GUTTER}>
           <SimpleMetric
             title={'Power '}
@@ -60,7 +60,7 @@ function WidgetGrid({realtimeData}: Props) {
           />
         </Col>
       </Row>
-      <Row gx={GUTTER}>
+      <Row gx={GUTTER} style={styles.row}>
         <Col gx={GUTTER}>
           <SimpleMetric
             title={'Speed '}
@@ -76,7 +76,7 @@ function WidgetGrid({realtimeData}: Props) {
           />
         </Col>
       </Row>
-      <Row gx={GUTTER}>
+      <Row gx={GUTTER} style={styles.row}>
         <Col gx={GUTTER}>
           <SimpleMetric
             title={'Elevation '}
@@ -106,3 +106,9 @@ const enhance = withObservables([], () => ({
 }));
 
 export default enhance(WidgetGrid);
+
+const styles = StyleSheet.create({
+  row: {
+    marginBottom: 5,
+  },
+});

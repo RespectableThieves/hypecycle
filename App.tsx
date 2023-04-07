@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
 import {
-  MD3LightTheme as DefaultTheme,
+  MD3DarkTheme as DefaultTheme,
   Provider as PaperProvider,
 } from 'react-native-paper';
 import {StatusBar} from 'expo-status-bar';
@@ -22,7 +22,7 @@ import {
 } from './src/lib/sensor';
 import useLocation from './src/hooks/useLocation';
 import {Alert} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, DarkTheme} from '@react-navigation/native';
 import {navigationRef} from './src/lib/navigation';
 import {StravaProvider} from './src/lib/StravaContext';
 import * as strava from './src/lib/strava';
@@ -98,7 +98,7 @@ function App() {
       <PaperProvider theme={DefaultTheme}>
         <StatusBar hidden />
         <StravaProvider stravaToken={stravaToken}>
-          <NavigationContainer ref={navigationRef}>
+          <NavigationContainer theme={DarkTheme} ref={navigationRef}>
             <DrawerNav />
           </NavigationContainer>
         </StravaProvider>
