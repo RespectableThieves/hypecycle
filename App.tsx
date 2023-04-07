@@ -27,6 +27,7 @@ import {navigationRef} from './src/lib/navigation';
 import {StravaProvider} from './src/lib/StravaContext';
 import * as strava from './src/lib/strava';
 import {isDevice} from 'expo-device';
+import {useKeepAwake} from 'expo-keep-awake';
 
 const handleError = (error: Error) => {
   console.log('Got error: ', error);
@@ -38,6 +39,8 @@ function App() {
   const [hasBooted, setHasBooted] = useState(false);
   // Set shouldTrack based on if we want GPS location trackin on or not
   const shouldTrack = true;
+  // keep the screen awake so our services can run.
+  useKeepAwake();
 
   const [locationError] = useLocation(shouldTrack, onLocation);
   const [stravaToken, setStravaToken] = useState<strava.Token | null>(null);
