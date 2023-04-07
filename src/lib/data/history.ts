@@ -59,7 +59,7 @@ export async function generateTCX(rideSummary: RideSummaryModel) {
         value: rideSummary.avgHr,
       }),
     }),
-    ...(rideSummary.avgHr && {
+    ...(rideSummary.maxHr && {
       MaximumHeartRateBpm: new HeartRateInBeatsPerMinute({
         value: rideSummary.maxHr,
       }),
