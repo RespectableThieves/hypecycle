@@ -25,7 +25,7 @@ type Props = {
 };
 
 function rounded(data: number | null | undefined) {
-  if (data === null || data == undefined) {
+  if (data === null || data === undefined) {
     return data;
   }
 
@@ -37,15 +37,13 @@ function WidgetGrid({realtimeData}: Props) {
 
   useSetInterval(
     async () => {
-      // Your custom logic here
       if (realtimeData.ride) {
         const ride = await realtimeData.ride?.fetch();
         const result = await getRideAggregates(ride);
         setAggregates(result);
       }
     },
-    10000,
-    [realtimeData.ride?.id],
+    realtimeData.ride?.id ? 10000 : null,
   );
 
   return (

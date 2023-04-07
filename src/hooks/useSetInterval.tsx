@@ -3,8 +3,7 @@ import {useEffect, useRef} from 'react';
 
 export default function useInterval(
   callback: () => Promise<void>,
-  delay: number,
-  deps: any[],
+  delay: number | null,
 ) {
   const savedCallback = useRef<() => Promise<void>>();
 
@@ -23,5 +22,5 @@ export default function useInterval(
       let id = setInterval(tick, delay);
       return () => clearInterval(id);
     }
-  }, [delay, ...deps]);
+  }, [delay]);
 }
