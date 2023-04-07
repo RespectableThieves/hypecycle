@@ -1,42 +1,54 @@
 import {db, Q, RideModel} from '../../database';
 
 export type RideAggregate = {
-  avg_speed: number;
-  avg_power: number;
-  avg_cadence: number;
-  avg_hr: number;
-  max_speed: number;
-  max_power: number;
-  max_cadence: number;
-  max_altitude: number;
-  max_hr: number;
-  min_hr: number;
+  avgSpeed: number;
+  avgCadence: number;
+  avgHr: number;
+  maxSpeed: number;
+  maxCadence: number;
+  maxAltitude: number;
+  maxHr: number;
+  minHr: number;
+  distance: number;
+  lastCreatedAt: number;
+  elapsedTime: number;
+  maxPower: number;
+  avgPower: number;
 };
 
 export async function getRideAggregates(
   ride: RideModel,
 ): Promise<RideAggregate> {
   // TODO: figure out how to test this func.
-  const rawData: RideAggregate[] = await db
+  const rawData: Omit<RideAggregate, 'elapsedTime'>[] = await db
     .get('history')
     .query(
       Q.unsafeSqlQuery(
-        `select
-        avg(speed) as avg_speed,
-        avg(power) as avg_power,
-        avg(cadence) as avg_cadence,
-        max(speed) as max_speed,
-        max(power) as max_power,
-        max(cadence) as max_cadence,
-        max(altitude) as max_altitude,
-        max(heart_rate) as max_hr,        
-        min(heart_rate) as min_hr,
-        avg(heart_rate) as avg_hr,
-        avg(cadence) as cadence_avg from history where ride_id = ?`,
+        `SELECT
+        AVG(speed) AS avgSpeed,
+        AVG(cadence) AS avgCadence,
+        MAX(speed) AS maxSpeed,
+        MAX(cadence) AS maxCadence,
+        MAX(altitude) AS maxAltitude,
+        MAX(heart_rate) AS maxHr,        
+        MIN(heart_rate) AS minHr,
+        AVG(heart_rate) AS avgHr,
+        AVG(cadence) AS cadenceAvg,
+        AVG(instant_power) AS avgPower,
+        MAX(instant_power) AS maxPower,
+        (SELECT distance FROM history WHERE ride_id = ? ORDER BY created_at DESC LIMIT 1) AS distance,
+        (SELECT created_at FROM history WHERE ride_id = ? ORDER BY created_at DESC LIMIT 1) AS lastCreatedAt
+    FROM history
+    WHERE ride_id = ?
+    `,
         [ride.id],
       ),
     )
     .unsafeFetchRaw();
 
-  return rawData[0];
+  const end = ride.endedAt || rawData[0].lastCreatedAt;
+  return {
+    ...rawData[0],
+    elapsedTime: (end - ride.startedAt) / 1000,
+  };
 }

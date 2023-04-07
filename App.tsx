@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
 import {
-  MD3LightTheme as DefaultTheme,
+  MD3DarkTheme as DefaultTheme,
   Provider as PaperProvider,
 } from 'react-native-paper';
 import {StatusBar} from 'expo-status-bar';
@@ -9,10 +9,9 @@ import {DrawerNav} from './src/components/DrawerNav';
 import {useEffect, useState} from 'react';
 import globalData from './src/lib/GlobalContext';
 import {
-  getOrCreateRealtimeRecord,
-  updateRealTimeRecord,
   onLocation,
   snapshotWorker,
+  simulateRealtimeDataWorker,
 } from './src/lib/data';
 import Loading from './src/components/Loading';
 import {
@@ -23,12 +22,11 @@ import {
 } from './src/lib/sensor';
 import useLocation from './src/hooks/useLocation';
 import {Alert} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, DarkTheme} from '@react-navigation/native';
 import {navigationRef} from './src/lib/navigation';
 import {StravaProvider} from './src/lib/StravaContext';
 import * as strava from './src/lib/strava';
-
-const UPDATE_INTERVAL = 3;
+import {isDevice} from 'expo-device';
 
 const handleError = (error: Error) => {
   console.log('Got error: ', error);
@@ -45,19 +43,16 @@ function App() {
   const [stravaToken, setStravaToken] = useState<strava.Token | null>(null);
 
   useEffect(() => {
-    let timer: NodeJS.Timer;
-
     if (locationError) {
       Alert.alert('Error getting location');
     }
     const startServicesAndTasks = async () => {
-      console.log('ble', ble.checkState());
-      const realtimeRecord = await getOrCreateRealtimeRecord();
+      console.log('ble', await ble.checkState());
 
-      timer = setInterval(async () => {
-        await updateRealTimeRecord(realtimeRecord);
-        console.log('updated realtime data');
-      }, 1000 * UPDATE_INTERVAL);
+      if (!isDevice) {
+        // this only runs in the emulator
+        await simulateRealtimeDataWorker.start(3000);
+      }
 
       await snapshotWorker.start(5000);
 
@@ -81,7 +76,7 @@ function App() {
     startServicesAndTasks(); // run it
 
     return () => {
-      clearInterval(timer);
+      simulateRealtimeDataWorker.stop();
       snapshotWorker.stop();
       // this now gets called when the component unmounts
     };
@@ -103,7 +98,7 @@ function App() {
       <PaperProvider theme={DefaultTheme}>
         <StatusBar hidden />
         <StravaProvider stravaToken={stravaToken}>
-          <NavigationContainer ref={navigationRef}>
+          <NavigationContainer theme={DarkTheme} ref={navigationRef}>
             <DrawerNav />
           </NavigationContainer>
         </StravaProvider>

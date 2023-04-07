@@ -6,8 +6,7 @@ type Props = {
 };
 
 export const CenteredView = styled.View`
-  background-color: #454545
-  align-items: center;  
+  align-items: center;
   border-radius: 5px;
 `;
 

@@ -170,3 +170,29 @@ export function snapshotService(callback: (r: RealtimeDataModel) => {}) {
 }
 
 export const snapshotWorker = snapshotService(onSnapshotEvent);
+
+export function simulateRealtimeDataService() {
+  // simulates random data for realtime data
+  let timer: NodeJS.Timer | null;
+
+  const start = async (interval: number) => {
+    const realtimeRecord = await getOrCreateRealtimeRecord();
+    timer = setInterval(async () => {
+      await updateRealTimeRecordRandom(realtimeRecord);
+      console.log('randomly updated realtime data');
+    }, interval);
+  };
+
+  const stop = () => {
+    if (timer) {
+      clearInterval(timer);
+    }
+  };
+
+  return {
+    start,
+    stop,
+  };
+}
+
+export const simulateRealtimeDataWorker = simulateRealtimeDataService();

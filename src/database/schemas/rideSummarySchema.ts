@@ -24,6 +24,10 @@ export const rideSummarySchema = tableSchema({
       type: 'number',
     },
     {
+      name: 'avg_hr',
+      type: 'number',
+    },
+    {
       name: 'max_speed',
       type: 'number',
     },
@@ -48,6 +52,10 @@ export const rideSummarySchema = tableSchema({
       type: 'number',
     },
     {
+      name: 'avg_hr',
+      type: 'number',
+    },
+    {
       name: 'accumulated_accent',
       type: 'number',
     },
@@ -58,6 +66,23 @@ export const rideSummarySchema = tableSchema({
     {
       name: 'ride_id',
       type: 'string',
+    },
+    {
+      name: 'file_uri',
+      type: 'string',
+    },
+    {
+      name: 'strava_id',
+      type: 'number',
+      isOptional: true,
+    },
+    {
+      name: 'created_at',
+      type: 'number',
+    },
+    {
+      name: 'updated_at',
+      type: 'number',
     },
   ],
 });

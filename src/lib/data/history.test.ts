@@ -1,4 +1,4 @@
-import {startRide, stopRide} from '../ride';
+import {startRide, stopRide, saveRideSummary} from '../ride';
 import {
   updateRealTimeRecordRandom,
   getOrCreateRealtimeRecord,
@@ -7,7 +7,7 @@ import {
 import {generateTCX} from './history';
 import {TrainingCenterDatabase} from 'tcx-builder';
 
-it('generate a tcx from ride history', async () => {
+it('generate a tcx from ride summary', async () => {
   const snapshotCount = 5;
   const realtime = await getOrCreateRealtimeRecord();
   const ride = await startRide();
@@ -17,9 +17,9 @@ it('generate a tcx from ride history', async () => {
     await onSnapshotEvent();
     await updateRealTimeRecordRandom(realtime);
   }
-
   await stopRide(ride);
-  const tcx = await generateTCX(ride);
+  const rideSummary = await saveRideSummary(ride);
+  const tcx = await generateTCX(rideSummary);
 
   expect(tcx).toBeInstanceOf(TrainingCenterDatabase);
   expect(tcx.Activities?.Activity![0].Laps[0].Track?.TrackPoints.length).toBe(

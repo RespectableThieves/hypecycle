@@ -1,6 +1,6 @@
 import {SECURE_STORE_CURRENT_USER_KEY} from '../../constants';
 import * as SecureStore from 'expo-secure-store';
-import {authorize, refreshToken, Athlete, Token} from './api';
+import {authorize, refreshToken, Athlete, Token, upload} from './api';
 
 // Note loadToken can't be in the same
 // module as .refresh because then mocking doesn't
@@ -59,6 +59,6 @@ async function deleteToken() {
   await SecureStore.deleteItemAsync(SECURE_STORE_CURRENT_USER_KEY);
 }
 
-export {authorize, refreshToken, loadToken, saveToken, deleteToken};
+export {authorize, refreshToken, loadToken, saveToken, deleteToken, upload};
 
 export type {Athlete, Token};

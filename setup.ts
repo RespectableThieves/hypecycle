@@ -8,6 +8,7 @@ jest.mock('expo-font');
 jest.mock('expo-asset');
 jest.mock('expo-secure-store');
 jest.mock('expo-linking');
+jest.mock('expo-file-system');
 
 jest.mock('react-native-reanimated', () => {
   const Reanimated = require('react-native-reanimated/mock');
@@ -74,9 +75,25 @@ jest.mock('./src/lib/strava/api', () => {
   const {token_type, expires_at, expires_in, refresh_token, access_token} =
     dummyToken;
 
+  const uploads: any = [];
+
+  // @ts-ignore
+  const uploader = (_token, ride, _fileURI) => {
+    const payload = {
+      external_id: ride.id,
+      activity_id: uploads.length + 1,
+      id: uploads.length + 1,
+      error: null,
+      status: 'complete',
+    };
+    uploads.push(payload);
+    return Promise.resolve(payload);
+  };
+
   return {
     // ensure we don't call the API in
     // tests accidentally
+    uploads,
     authorize: jest.fn().mockResolvedValue(dummyToken),
     refreshToken: jest.fn().mockResolvedValue({
       token_type,
@@ -85,6 +102,7 @@ jest.mock('./src/lib/strava/api', () => {
       refresh_token,
       access_token,
     }),
+    upload: jest.fn(uploader),
   };
 });
 

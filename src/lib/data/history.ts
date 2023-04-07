@@ -1,4 +1,4 @@
-import {db, Q, HistoryModel, RideModel} from '../../database';
+import {db, Q, HistoryModel, RideSummaryModel, RideModel} from '../../database';
 import {
   TrainingCenterDatabase,
   Activity,
@@ -11,21 +11,14 @@ import {
   ActivityList,
   HeartRateInBeatsPerMinute,
 } from 'tcx-builder';
-import {getRideAggregates} from './aggregates';
+import * as FileSystem from 'expo-file-system';
 
-export async function getRideHistory(ride: RideModel) {
-  return db.get<HistoryModel>('history').query(Q.where('ride_id', ride.id));
+export async function getRideHistory(rideId: RideModel['id']) {
+  return db.get<HistoryModel>('history').query(Q.where('ride_id', rideId));
 }
 
-export async function generateTCX(ride: RideModel) {
-  if (!ride.endedAt) {
-    throw new Error(
-      `Ride ${ride.id} is not complete - can't generate tcx file.`,
-    );
-  }
-
-  const records = await getRideHistory(ride);
-  const aggregates = await getRideAggregates(ride);
+export async function generateTCX(rideSummary: RideSummaryModel) {
+  const records = await getRideHistory(rideSummary.ride.id);
 
   const trackPoints: TrackPoint[] = [];
   for (const record of records) {
@@ -52,35 +45,44 @@ export async function generateTCX(ride: RideModel) {
     );
   }
 
-  const myLap: ActivityLap = new ActivityLap(new Date(ride.startedAt), {
+  const myLap: ActivityLap = new ActivityLap(new Date(rideSummary.createdAt), {
     Calories: 0,
     Intensity: 'Active',
     TriggerMethod: 'Manual',
     DistanceMeters: records[records.length - 1]?.distance || 0,
-    TotalTimeSeconds: (ride.endedAt! - ride.startedAt) / 1000,
+    TotalTimeSeconds: rideSummary.elapsedTime,
     Track: new Track({trackPoints}),
-    ...(aggregates.max_speed && {MaximumSpeed: aggregates.max_speed}),
-    ...(aggregates.avg_cadence && {Cadence: aggregates.avg_cadence}),
-    ...(aggregates.avg_hr && {
+    ...(rideSummary.maxSpeed && {MaximumSpeed: rideSummary.maxSpeed}),
+    ...(rideSummary.avgCadence && {Cadence: rideSummary.avgCadence}),
+    ...(rideSummary.avgHr && {
       AverageHeartRateBpm: new HeartRateInBeatsPerMinute({
-        value: aggregates.avg_hr,
+        value: rideSummary.avgHr,
       }),
     }),
-    ...(aggregates.max_hr && {
+    ...(rideSummary.maxHr && {
       MaximumHeartRateBpm: new HeartRateInBeatsPerMinute({
-        value: aggregates.max_hr,
+        value: rideSummary.maxHr,
       }),
     }),
   });
 
   const tcxActivity = new Activity('Biking', {
-    Id: new Date(ride.startedAt),
+    Id: new Date(rideSummary.createdAt),
     Laps: [myLap],
-    Notes: 'Hypecycle test ride',
+    Notes: `Hypecycle test ride - ${rideSummary.ride.id}`,
   });
   const activityList = new ActivityList({activity: [tcxActivity]});
 
   const tcxObj = new TrainingCenterDatabase({activities: activityList});
 
   return tcxObj;
+}
+
+export async function saveTCX(
+  uri: string,
+  tcx: TrainingCenterDatabase,
+): Promise<string> {
+  const xml = tcx.toXml();
+  await FileSystem.writeAsStringAsync(uri, xml);
+  return uri;
 }
