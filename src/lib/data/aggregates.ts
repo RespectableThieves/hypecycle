@@ -19,7 +19,6 @@ export type RideAggregate = {
 export async function getRideAggregates(
   ride: RideModel,
 ): Promise<RideAggregate> {
-  // TODO: figure out how to test this func.
   const rawData: Omit<RideAggregate, 'elapsedTime'>[] = await db
     .get('history')
     .query(
@@ -41,7 +40,7 @@ export async function getRideAggregates(
     FROM history
     WHERE ride_id = ?
     `,
-        [ride.id],
+        [ride.id, ride.id, ride.id],
       ),
     )
     .unsafeFetchRaw();
