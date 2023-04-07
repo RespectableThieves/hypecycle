@@ -31,21 +31,27 @@ const RideFab = ({activeRides = []}: Props) => {
 
   const actions = [];
   if (activeRide) {
-    // ride in progress
-    actions.push({
-      icon: 'stop',
-      label: 'End ride',
-      onPress: async () => {
-        console.log('ride stop');
-        await stopRide(activeRide);
-        try {
-          await onRideEnd(activeRide);
-          setMessage('Successfully uploaded ride');
-        } catch (err) {
-          setMessage('error');
+      // ride in progress
+  actions.push({
+    icon: 'stop',
+    label: 'End ride',
+    onPress: async () => {
+      console.log('ride stop');
+      await stopRide(activeRide);
+      try {
+        await onRideEnd(activeRide);
+        setMessage('Successfully uploaded ride');
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          console.log(err.message)
+          setMessage(err.message);
+        } else {
+          console.log('An unexpected error occurred:', err);
+          setMessage('An unexpected error occurred');
         }
-      },
-    });
+      }
+    },
+  });
 
     // is ride paused
     if (activeRide.isPaused) {
