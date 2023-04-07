@@ -1,8 +1,13 @@
 import 'react-native-gesture-handler/jestSetup';
-// Note: test renderer must be required after react-native.
-jest.useFakeTimers();
-jest.mock('./src/database/adapter');
-jest.mock('./src/lib/data/aggregates');
+
+jest.mock(
+  '@nozbe/watermelondb/adapters/sqlite/makeDispatcher/index.native.js',
+  () => {
+    return jest.requireActual(
+      '@nozbe/watermelondb/adapters/sqlite/makeDispatcher/index.js',
+    );
+  },
+);
 jest.mock('react-native-cycling-sensors');
 jest.mock('expo-font');
 jest.mock('expo-asset');

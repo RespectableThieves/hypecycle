@@ -100,7 +100,7 @@ export async function onSnapshotEvent() {
   } = await getOrCreateRealtimeRecord();
   console.log('snapshoting realtime data');
 
-  return db.write(function historySnapshot() {
+  await db.write(function historySnapshot() {
     return db.get<HistoryModel>('history').create(history => {
       history.ride!.id = ride?.id;
       history.speed = speed;
@@ -118,7 +118,9 @@ export async function onSnapshotEvent() {
   });
 }
 
-export function snapshotService(callback: (r: RealtimeDataModel) => {}) {
+export function snapshotService(
+  callback: (r: RealtimeDataModel) => Promise<void>,
+) {
   let timer: NodeJS.Timer | null;
   let observeable: Subscription;
 
@@ -130,22 +132,27 @@ export function snapshotService(callback: (r: RealtimeDataModel) => {}) {
     if (record.ride?.id) {
       // inprogress journey on boot
       console.log('snapshot service: resuming');
-      timer = setInterval(() => callback(record), interval);
+
+      timer = setInterval(async () => {
+        await callback(record);
+      }, interval);
     }
 
-    observeable = subscription.subscribe((ride: RideModel | null) => {
+    observeable = subscription.subscribe(async (ride: RideModel | null) => {
       if (ride?.id) {
         // ride started.
         if (!timer) {
           console.log('snapshot service: resuming');
-          callback(record);
-          timer = setInterval(() => callback(record), interval);
+          await callback(record);
+          timer = setInterval(async () => {
+            await callback(record);
+          }, interval);
         }
       } else {
         if (timer) {
           // ride finished
           console.log('snapshot service: pausing');
-          callback(record);
+          await callback(record);
           clearInterval(timer);
           timer = null;
         }
