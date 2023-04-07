@@ -41,8 +41,14 @@ const RideFab = ({activeRides = []}: Props) => {
         try {
           await onRideEnd(activeRide);
           setMessage('Successfully uploaded ride');
-        } catch (err) {
-          setMessage('error');
+        } catch (err: unknown) {
+          if (err instanceof Error) {
+            console.log(err.message);
+            setMessage(err.message);
+          } else {
+            console.log('An unexpected error occurred:', err);
+            setMessage('An unexpected error occurred');
+          }
         }
       },
     });
