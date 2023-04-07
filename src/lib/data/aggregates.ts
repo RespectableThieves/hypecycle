@@ -24,21 +24,23 @@ export async function getRideAggregates(
     .get('history')
     .query(
       Q.unsafeSqlQuery(
-        `select
-        avg(speed) as avgSpeed,
-        avg(cadence) as avgCadence,
-        max(speed) as maxSpeed,
-        max(cadence) as maxCadence,
-        max(altitude) as maxAltitude,
-        max(heart_rate) as maxHr,        
-        min(heart_rate) as minHr,
-        avg(heart_rate) as avgHr,
-        avg(cadence) as cadenceAvg,
-        avg(instant_power) as avgPower,
-        max(instant_power) as maxPower,
-        last_value(distance) OVER (ORDER BY created_at) as distance,
-        last_value(created_at) OVER (ORDER BY created_at) as lastCreatedAt
-        from history where ride_id = ?`,
+        `SELECT
+        AVG(speed) AS avgSpeed,
+        AVG(cadence) AS avgCadence,
+        MAX(speed) AS maxSpeed,
+        MAX(cadence) AS maxCadence,
+        MAX(altitude) AS maxAltitude,
+        MAX(heart_rate) AS maxHr,        
+        MIN(heart_rate) AS minHr,
+        AVG(heart_rate) AS avgHr,
+        AVG(cadence) AS cadenceAvg,
+        AVG(instant_power) AS avgPower,
+        MAX(instant_power) AS maxPower,
+        (SELECT distance FROM history WHERE ride_id = ? ORDER BY created_at DESC LIMIT 1) AS distance,
+        (SELECT created_at FROM history WHERE ride_id = ? ORDER BY created_at DESC LIMIT 1) AS lastCreatedAt
+    FROM history
+    WHERE ride_id = ?
+    `,
         [ride.id],
       ),
     )
