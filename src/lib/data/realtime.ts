@@ -1,8 +1,8 @@
-import {LocationObject} from 'expo-location';
-import {REALTIME_DATA_ID} from '../../constants';
-import {Subscription} from 'rxjs';
-import {db, HistoryModel, RealtimeDataModel, RideModel} from '../../database';
-import {accumulateDistance} from './distance';
+import { LocationObject } from 'expo-location';
+import { REALTIME_DATA_ID } from '../../constants';
+import { Subscription } from 'rxjs';
+import { db, HistoryModel, RealtimeDataModel, RideModel } from '../../database';
+import { accumulateDistance } from './distance';
 
 export async function getOrCreateRealtimeRecord(): Promise<RealtimeDataModel> {
   const collection = db.get<RealtimeDataModel>('realtime_data');
@@ -50,6 +50,8 @@ export async function updateRealTimeRecordRandom(record: RealtimeDataModel) {
       record.latitude = randomInt();
       record.longitude = randomInt();
       record.altitude = randomInt();
+      record.speed = randomInt();
+      record.instantPower = randomInt();
 
       return record;
     });
@@ -66,7 +68,7 @@ export async function onLocation(
     ? accumulateDistance(realtimeData, location)
     : 0;
   console.log('accumulated distance: ', distance);
-  const {speed, latitude, longitude, heading, altitude} = location.coords;
+  const { speed, latitude, longitude, heading, altitude } = location.coords;
 
   return db.write(async () => {
     return realtimeData.update(record => {
@@ -98,7 +100,7 @@ export async function onSnapshotEvent() {
     cadence,
     ride,
   } = await getOrCreateRealtimeRecord();
-  console.log('snapshoting realtime data');
+  console.log('snapshoting realtime data', ride?.id);
 
   await db.write(function historySnapshot() {
     return db.get<HistoryModel>('history').create(history => {

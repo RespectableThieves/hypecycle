@@ -1,4 +1,4 @@
-import {db, Q, RideModel} from '../../database';
+import { db, Q, RideModel } from '../../database';
 
 export type RideAggregate = {
   avgSpeed: number;
@@ -37,15 +37,18 @@ export async function getRideAggregates(
         MAX(instant_power) AS maxPower,
         (SELECT distance FROM history WHERE ride_id = ? ORDER BY created_at DESC LIMIT 1) AS distance,
         (SELECT created_at FROM history WHERE ride_id = ? ORDER BY created_at DESC LIMIT 1) AS lastCreatedAt
-    FROM history
-    WHERE ride_id = ?
+
+        FROM history
+        WHERE ride_id = ?
     `,
         [ride.id, ride.id, ride.id],
       ),
     )
     .unsafeFetchRaw();
 
-  const end = ride.endedAt || rawData[0].lastCreatedAt;
+  console.log(ride.id, rawData)
+
+  const end = ride.endedAt || rawData[0].lastCreatedAt || ride.startedAt;
   return {
     ...rawData[0],
     elapsedTime: (end - ride.startedAt) / 1000,
