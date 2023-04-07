@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { Container, Row, Col } from 'react-native-flex-grid';
+import React, {useState} from 'react';
+import {StyleSheet} from 'react-native';
+import {Container, Row, Col} from 'react-native-flex-grid';
 import withObservables from '@nozbe/with-observables';
-import { SimpleMetric } from '../SimpleMetric';
-import { REALTIME_DATA_ID } from '../../constants';
-import { db, RealtimeDataModel } from '../../database';
-import { getRideAggregates, metersToKilometers, RideAggregate } from '../../lib/data';
-import useSetInterval from '../../hooks/useSetInterval'
+import {SimpleMetric} from '../SimpleMetric';
+import {REALTIME_DATA_ID} from '../../constants';
+import {db, RealtimeDataModel} from '../../database';
+import {
+  getRideAggregates,
+  metersToKilometers,
+  RideAggregate,
+} from '../../lib/data';
+import useSetInterval from '../../hooks/useSetInterval';
 
 const GUTTER = 1;
 type Widget = {
@@ -28,17 +32,21 @@ function rounded(data: number | null | undefined) {
   return parseFloat(data.toFixed(2));
 }
 
-function WidgetGrid({ realtimeData }: Props) {
-  const [aggregates, setAggregates] = useState<RideAggregate>()
+function WidgetGrid({realtimeData}: Props) {
+  const [aggregates, setAggregates] = useState<RideAggregate>();
 
-  useSetInterval(async () => {
-    // Your custom logic here
-    if (realtimeData.ride) {
-      const ride = await realtimeData.ride?.fetch()
-      const result = await getRideAggregates(ride)
-      setAggregates(result)
-    }
-  }, 10000, [realtimeData.ride?.id]);
+  useSetInterval(
+    async () => {
+      // Your custom logic here
+      if (realtimeData.ride) {
+        const ride = await realtimeData.ride?.fetch();
+        const result = await getRideAggregates(ride);
+        setAggregates(result);
+      }
+    },
+    10000,
+    [realtimeData.ride?.id],
+  );
 
   return (
     <Container fluid noPadding>

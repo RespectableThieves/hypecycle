@@ -1,4 +1,4 @@
-import { db, Q, RideModel } from '../../database';
+import {db, Q, RideModel} from '../../database';
 
 export type RideAggregate = {
   avgSpeed: number;
@@ -46,7 +46,7 @@ export async function getRideAggregates(
     )
     .unsafeFetchRaw();
 
-  console.log(ride.id, rawData)
+  console.log(ride.id, rawData);
 
   const end = ride.endedAt || rawData[0].lastCreatedAt || ride.startedAt;
   return {

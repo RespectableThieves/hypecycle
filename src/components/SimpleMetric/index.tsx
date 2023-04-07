@@ -1,9 +1,9 @@
 import React from 'react';
-import { CenteredView, DataText, Title } from './styles';
-import { Dimensions, StyleSheet } from 'react-native';
-import { useHeaderHeight } from '@react-navigation/elements';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Surface } from 'react-native-paper';
+import {CenteredView, DataText, Title} from './styles';
+import {Dimensions, StyleSheet} from 'react-native';
+import {useHeaderHeight} from '@react-navigation/elements';
+import {MaterialCommunityIcons} from '@expo/vector-icons';
+import {Surface} from 'react-native-paper';
 
 type Props = {
   title: string;
@@ -11,14 +11,14 @@ type Props = {
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
 };
 
-export function SimpleMetric({ title, data, icon }: Props) {
+export function SimpleMetric({title, data, icon}: Props) {
   const headerHeight = useHeaderHeight();
   const windowHeight = Dimensions.get('window').height;
 
   return (
     <Surface
       elevation={1}
-      style={styles({ height: (windowHeight - headerHeight + 6) / 3 }).surface}>
+      style={styles({height: (windowHeight - headerHeight + 6) / 3}).surface}>
       <Title>
         {title}
         <MaterialCommunityIcons name={icon} />
@@ -31,7 +31,7 @@ export function SimpleMetric({ title, data, icon }: Props) {
   );
 }
 
-const styles = ({ height }: { height: number }) =>
+const styles = ({height}: {height: number}) =>
   StyleSheet.create({
     surface: {
       borderRadius: 5,

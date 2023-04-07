@@ -1,12 +1,12 @@
 import 'react-native-gesture-handler';
-import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
+import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
 import {
   MD3DarkTheme as DefaultTheme,
   Provider as PaperProvider,
 } from 'react-native-paper';
-import { StatusBar } from 'expo-status-bar';
-import { DrawerNav } from './src/components/DrawerNav';
-import { useEffect, useState } from 'react';
+import {StatusBar} from 'expo-status-bar';
+import {DrawerNav} from './src/components/DrawerNav';
+import {useEffect, useState} from 'react';
 import globalData from './src/lib/GlobalContext';
 import {
   onLocation,
@@ -21,13 +21,13 @@ import {
   cadenceMeter,
 } from './src/lib/sensor';
 import useLocation from './src/hooks/useLocation';
-import { Alert } from 'react-native';
-import { NavigationContainer, DarkTheme } from '@react-navigation/native';
-import { navigationRef } from './src/lib/navigation';
-import { StravaProvider } from './src/lib/StravaContext';
+import {Alert} from 'react-native';
+import {NavigationContainer, DarkTheme} from '@react-navigation/native';
+import {navigationRef} from './src/lib/navigation';
+import {StravaProvider} from './src/lib/StravaContext';
 import * as strava from './src/lib/strava';
-import { isDevice } from 'expo-device';
-import { useKeepAwake } from 'expo-keep-awake';
+import {isDevice} from 'expo-device';
+import {useKeepAwake} from 'expo-keep-awake';
 
 const handleError = (error: Error) => {
   console.log('Got error: ', error);
