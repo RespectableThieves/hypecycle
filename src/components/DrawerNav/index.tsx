@@ -49,9 +49,7 @@ const DrawerContent = (props: any) => {
 
 const HeaderRight = () => (
   // Add a placeholder button without the `onPress` to avoid flicker
-  <Button
-    icon="plus-thick"
-    mode="contained">
+  <Button icon="plus-thick" mode="contained">
     Add
   </Button>
 );

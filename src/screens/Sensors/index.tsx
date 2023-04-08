@@ -24,10 +24,7 @@ const HeaderRight =
   ({showModal}: {showModal: () => void}) =>
   () =>
     (
-      <Button
-        icon="plus-thick"
-        mode="contained"
-        onPress={showModal}>
+      <Button icon="plus-thick" mode="contained" onPress={showModal}>
         Add
       </Button>
     );
