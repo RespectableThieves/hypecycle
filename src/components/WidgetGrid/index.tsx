@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {Container, Row, Col} from 'react-native-flex-grid';
 import withObservables from '@nozbe/with-observables';
@@ -45,6 +45,12 @@ function WidgetGrid({realtimeData}: Props) {
     },
     realtimeData.ride?.id ? 10000 : null,
   );
+
+  useEffect(() => {
+    if (!realtimeData.ride?.id) {
+      setAggregates(undefined);
+    }
+  }, [realtimeData.ride?.id]);
 
   return (
     <Container fluid noPadding>
