@@ -72,7 +72,7 @@ export async function onLocation(
 
   return db.write(async () => {
     return realtimeData.update(record => {
-      record.speed = speed;
+      record.speed = speed ? speed * 3.6 : 0; // Convert m/s to km/h as thats more useful.
       record.latitude = latitude;
       record.longitude = longitude;
       record.heading = heading;
