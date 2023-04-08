@@ -50,6 +50,8 @@ export async function updateRealTimeRecordRandom(record: RealtimeDataModel) {
       record.latitude = randomInt();
       record.longitude = randomInt();
       record.altitude = randomInt();
+      record.speed = randomInt();
+      record.instantPower = randomInt();
 
       return record;
     });
@@ -98,7 +100,7 @@ export async function onSnapshotEvent() {
     cadence,
     ride,
   } = await getOrCreateRealtimeRecord();
-  console.log('snapshoting realtime data');
+  console.log('snapshoting realtime data', ride?.id);
 
   await db.write(function historySnapshot() {
     return db.get<HistoryModel>('history').create(history => {
