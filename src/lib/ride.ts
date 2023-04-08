@@ -120,9 +120,10 @@ export async function onRideEnd(ride: RideModel) {
     throw new StravaNotConnected(
       'Not uploading - not authenticated with strava.',
     );
+  } else {
+    // upload to strava.
+    const upload = await strava.upload(token!, ride, fileURI);
+    // mark as uploaded.
+    await summary.setStravaId(upload.id);
   }
-  // upload to strava.
-  const upload = await strava.upload(token!, ride, fileURI);
-  // mark as uploaded.
-  await summary.setStravaId(upload.id);
 }
