@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
-import {Portal, Button, Text} from 'react-native-paper';
-import {Alert, FlatList, Modal} from 'react-native';
+import {Portal, Button, Text, Modal} from 'react-native-paper';
+import {Alert, FlatList} from 'react-native';
 import {Empty, GroupedButtons} from './styles';
 import {Sensor, SensorProps} from '../Sensor';
 import globalData from '../../lib/GlobalContext';
@@ -33,7 +33,7 @@ export function SensorDiscoveryModal(props: Props) {
 
   const [scanning, setScanning] = useState(false);
   const [discovered, setDiscovered] = useState([]);
-  const containerStyle = {backgroundColor: 'white', padding: 20};
+  const modalContainerStyle = {backgroundColor: 'black', padding: 20};
 
   const discoverSensors = async () => {
     setDiscovered([]); //Clear the list each time we run a scan
@@ -107,8 +107,7 @@ export function SensorDiscoveryModal(props: Props) {
       <Modal
         visible={props.visible}
         onDismiss={props.onDismiss}
-        onShow={discoverSensors}
-        style={containerStyle}>
+        style={modalContainerStyle}>
         <FlatList<SensorProps>
           data={discovered}
           keyExtractor={item => item?.id}
