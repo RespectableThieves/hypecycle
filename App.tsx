@@ -29,6 +29,7 @@ import {StravaProvider} from './src/lib/StravaContext';
 import * as strava from './src/lib/strava';
 import {isDevice} from 'expo-device';
 import {useKeepAwake} from 'expo-keep-awake';
+import { bleSensorService, onHeartRateSensorEvent } from './src/lib/data/bluetooth';
 
 const handleError = (error: Error) => {
   console.log('Got error: ', error);
@@ -64,16 +65,15 @@ function App() {
       await snapshotWorker.start(5000);
 
       // Create our global ble object
-      ble
-        .requestPermissions()
-        .then(() => {
-          console.log('Ble permissions requested');
-        })
-        .then(() => {
-          ble.start().catch((err: Error) => handleError(err));
-        })
-        .catch((err: Error) => handleError(err));
-
+      try {
+        await ble.requestPermissions()
+        await ble.start()
+        let hrService = bleSensorService(ble, 'HeartRate', onHeartRateSensorEvent)
+        await hrService.start()
+      } catch (err) {
+        
+      }
+      
       const token = await strava.loadToken();
       setStravaToken(token);
 

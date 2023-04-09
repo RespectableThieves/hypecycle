@@ -45,6 +45,10 @@ class DummySensor {
   getDiscoveredSensors() {
     return Promise.resolve(this.sensorsDiscovered);
   }
+
+  subscribe(cb: () => Promise<void>) {
+    this.discoveryStopCallback = cb;
+  }
 }
 
 const BleSensors = DummySensor;
