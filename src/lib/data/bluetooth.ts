@@ -57,7 +57,7 @@ export function bleSensorService( ble: any,
         let sensor = findFirstSensorOfType(sensors, 'HeartRate')
 
         if (sensor == undefined) {
-            throw new Error('No heart rate sensor')
+            throw new Error(`No ${sensorType} sensor found`)
         }
         console.log(sensor?.address)
 
@@ -69,7 +69,7 @@ export function bleSensorService( ble: any,
   
     const stop = () => {
       console.log(`${sensorType} service: stopping`);
-      bleSensor.stop()
+      bleSensor.disconnect()
 
     };
   
