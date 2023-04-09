@@ -1,12 +1,14 @@
 import {SensorProps} from '../src/components/Sensor';
 
 class DummySensor {
+  _callbacks: any[];
   discoveryStopCallback: () => Promise<void>;
   sensorsDiscovered: SensorProps[];
 
   constructor() {
     this.discoveryStopCallback = () => Promise.resolve();
     this.sensorsDiscovered = [];
+    this._callbacks = [];
   }
 
   connect() {
@@ -46,8 +48,19 @@ class DummySensor {
     return Promise.resolve(this.sensorsDiscovered);
   }
 
-  subscribe(cb: () => Promise<void>) {
-    this.discoveryStopCallback = cb;
+  subscribe(_opts: any, cb: any) {
+    this._callbacks.push(cb);
+    return Promise.resolve({remove: jest.fn()});
+  }
+
+  _emitBleData(data: any) {
+    console.log('emitter called with: ', data);
+    this._callbacks.forEach(cb => cb(data));
+    return Promise.resolve();
+  }
+
+  clearAll() {
+    this._callbacks = [];
   }
 }
 

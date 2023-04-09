@@ -29,11 +29,7 @@ import {StravaProvider} from './src/lib/StravaContext';
 import * as strava from './src/lib/strava';
 import {isDevice} from 'expo-device';
 import {useKeepAwake} from 'expo-keep-awake';
-import { bleSensorService, hrService, onHeartRateSensorEvent } from './src/lib/data/bluetooth';
-
-const handleError = (error: Error) => {
-  console.log('Got error: ', error);
-};
+import {hrService} from './src/lib/data/bluetooth';
 
 function App() {
   // hasBooted is a flag for all required vars
@@ -62,17 +58,15 @@ function App() {
         await simulateRealtimeDataWorker.start(3000);
       }
 
-      await snapshotWorker.start(5000);
+      await snapshotWorker.start(1000);
 
       // Create our global ble object
       try {
-        await ble.requestPermissions()
-        await ble.start()
-        await hrService.start()
-      } catch (err) {
-        
-      }
-      
+        await ble.requestPermissions();
+        await ble.start();
+        await hrService.start();
+      } catch (err) {}
+
       const token = await strava.loadToken();
       setStravaToken(token);
 
