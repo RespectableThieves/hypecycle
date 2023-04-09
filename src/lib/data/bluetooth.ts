@@ -34,6 +34,7 @@ function findFirstSensorOfType(sensors: Sensor[], sensorType: string): Sensor | 
   }
 
 export async function onHeartRateSensorEvent(data: any) : Promise<RealtimeDataModel>{
+    console.log(data.bpm);
     // When we get new HR data write it to realtime table
     let record = await getOrCreateRealtimeRecord();
     return db.write(async () => {
@@ -69,7 +70,7 @@ export function bleSensorService( ble: any,
   
     const stop = () => {
       console.log(`${sensorType} service: stopping`);
-      bleSensor.disconnect()
+      bleSensor?.disconnect()
 
     };
   
