@@ -1,5 +1,5 @@
 import { RealtimeDataModel, db } from "../../database";
-import { cadenceMeter, getAllSensors, heartRateMonitor, powerMeter } from "../sensor";
+import { ble, cadenceMeter, getAllSensors, heartRateMonitor, powerMeter } from "../sensor";
 import { getOrCreateRealtimeRecord } from "./realtime";
 
 type Sensor = {
@@ -33,10 +33,8 @@ function findFirstSensorOfType(sensors: Sensor[], sensorType: string): Sensor | 
     return sensors.find((sensor) => sensor.sensorType.includes(sensorType));
   }
 
-export async function onHeartRateSensorEvent(data: any){
-    console.log('Heart rate event fired...')
-    console.log('Heart: ', data);
-      // this is responsible snapshotting realtime_data to the history table.
+export async function onHeartRateSensorEvent(data: any) : Promise<RealtimeDataModel>{
+    // When we get new HR data write it to realtime table
     let record = await getOrCreateRealtimeRecord();
     return db.write(async () => {
         return record.update(() => {
@@ -48,12 +46,12 @@ export async function onHeartRateSensorEvent(data: any){
   
 export function bleSensorService( ble: any,
     sensorType: string,
-    callback: (r: RealtimeDataModel) => Promise<void>
+    callback: (r: RealtimeDataModel) => Promise<RealtimeDataModel>
   ) {
-  
+    let bleSensor: any = null; 
     const start = async () => {
         console.log(`Starting ${sensorType} service worker.`)
-        let bleSensor = getSensorFromType(sensorType)
+        bleSensor = getSensorFromType(sensorType)
         
         let sensors = await getAllSensors();
         let sensor = findFirstSensorOfType(sensors, 'HeartRate')
@@ -71,6 +69,7 @@ export function bleSensorService( ble: any,
   
     const stop = () => {
       console.log(`${sensorType} service: stopping`);
+      bleSensor.stop()
 
     };
   
@@ -79,4 +78,6 @@ export function bleSensorService( ble: any,
       stop,
     };
   }
+
+export const hrService = bleSensorService(ble, 'HeartRate', onHeartRateSensorEvent)
   

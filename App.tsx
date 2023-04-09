@@ -29,7 +29,7 @@ import {StravaProvider} from './src/lib/StravaContext';
 import * as strava from './src/lib/strava';
 import {isDevice} from 'expo-device';
 import {useKeepAwake} from 'expo-keep-awake';
-import { bleSensorService, onHeartRateSensorEvent } from './src/lib/data/bluetooth';
+import { bleSensorService, hrService, onHeartRateSensorEvent } from './src/lib/data/bluetooth';
 
 const handleError = (error: Error) => {
   console.log('Got error: ', error);
@@ -68,7 +68,6 @@ function App() {
       try {
         await ble.requestPermissions()
         await ble.start()
-        let hrService = bleSensorService(ble, 'HeartRate', onHeartRateSensorEvent)
         await hrService.start()
       } catch (err) {
         
@@ -85,6 +84,7 @@ function App() {
     return () => {
       simulateRealtimeDataWorker.stop();
       snapshotWorker.stop();
+      hrService.stop();
       // this now gets called when the component unmounts
     };
   }, [locationError]);
