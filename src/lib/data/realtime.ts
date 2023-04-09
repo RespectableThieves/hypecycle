@@ -72,7 +72,7 @@ export async function onLocation(
 
   return db.write(async () => {
     return realtimeData.update(record => {
-      record.speed = speed;
+      record.speed = speed ? speed * 3.6 : 0; // Convert m/s to km/h as thats more useful.
       record.latitude = latitude;
       record.longitude = longitude;
       record.heading = heading;
@@ -100,24 +100,27 @@ export async function onSnapshotEvent() {
     cadence,
     ride,
   } = await getOrCreateRealtimeRecord();
-  console.log('snapshoting realtime data', ride?.id);
 
-  await db.write(function historySnapshot() {
-    return db.get<HistoryModel>('history').create(history => {
-      history.ride!.id = ride?.id;
-      history.speed = speed;
-      history.latitude = latitude;
-      history.longitude = longitude;
-      history.heading = heading;
-      history.altitude = altitude;
-      history.distance = distance;
-      history.heartRate = heartRate;
-      history.instantPower = instantPower;
-      history.threeSecPower = threeSecPower;
-      history.tenSecPower = tenSecPower;
-      history.cadence = cadence;
+  if (ride?.id) {
+    console.log('snapshoting realtime data', ride?.id);
+
+    await db.write(function historySnapshot() {
+      return db.get<HistoryModel>('history').create(history => {
+        history.ride!.id = ride?.id;
+        history.speed = speed;
+        history.latitude = latitude;
+        history.longitude = longitude;
+        history.heading = heading;
+        history.altitude = altitude;
+        history.distance = distance;
+        history.heartRate = heartRate;
+        history.instantPower = instantPower;
+        history.threeSecPower = threeSecPower;
+        history.tenSecPower = tenSecPower;
+        history.cadence = cadence;
+      });
     });
-  });
+  }
 }
 
 export function snapshotService(
