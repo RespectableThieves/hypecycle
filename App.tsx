@@ -12,6 +12,7 @@ import {
   onLocation,
   snapshotWorker,
   simulateRealtimeDataWorker,
+  getOrCreateRealtimeRecord,
 } from './src/lib/data';
 import Loading from './src/components/Loading';
 import {
@@ -51,6 +52,9 @@ function App() {
     }
     const startServicesAndTasks = async () => {
       console.log('ble', await ble.checkState());
+      // Ensure that the realtime row is setup
+      // before we run any async services.
+      await getOrCreateRealtimeRecord();
 
       if (!isDevice) {
         // this only runs in the emulator
