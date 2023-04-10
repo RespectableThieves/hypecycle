@@ -67,6 +67,12 @@ function App() {
 
       await snapshotWorker.start(1000);
 
+      const token = await strava.loadToken();
+      setStravaToken(token);
+
+      setHasBooted(true);
+
+      // Start our bluetooth services
       try {
         await hrService.start();
       } catch (err) {
@@ -79,10 +85,7 @@ function App() {
         console.log(err);
       }
 
-      const token = await strava.loadToken();
-      setStravaToken(token);
-
-      setHasBooted(true);
+      console.log("UseEffects ended.")
     };
 
     startServicesAndTasks(); // run it
