@@ -39,6 +39,7 @@ export async function generateTCX(rideSummary: RideSummaryModel) {
         ...(record.speed && {
           extensions: new TrackPointExtensions({
             Speed: record.speed,
+            Watts: record.instantPower || 0,
           }),
         }),
       }),
