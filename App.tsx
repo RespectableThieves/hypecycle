@@ -44,10 +44,17 @@ function App() {
   const [stravaToken, setStravaToken] = useState<strava.Token | null>(null);
 
   useEffect(() => {
-    if (locationError) {
-      Alert.alert('Error getting location');
-    }
     const startServicesAndTasks = async () => {
+      // Create our global ble object
+      try {
+        await ble.requestPermissions();
+        await ble.start();
+      } catch (err) {
+        console.log(err);
+      }
+      if (locationError) {
+        Alert.alert('Error getting location');
+      }
       console.log('ble', await ble.checkState());
       // Ensure that the realtime row is setup
       // before we run any async services.
@@ -60,24 +67,16 @@ function App() {
 
       await snapshotWorker.start(1000);
 
-      // Create our global ble object
       try {
-        await ble.requestPermissions();
-        await ble.start();
+        await hrService.start();
       } catch (err) {
         console.log(err);
       }
 
       try {
-        await hrService.start();
-      } catch (err) {
-        console.log(err)
-      }
-
-      try {
         await powerService.start();
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
 
       const token = await strava.loadToken();

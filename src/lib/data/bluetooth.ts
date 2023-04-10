@@ -1,4 +1,4 @@
-import { Sensor } from '../../components/Sensor';
+import {Sensor} from '../../components/Sensor';
 import {RealtimeDataModel, SensorModel, db} from '../../database';
 import {
   cadenceMeter,
@@ -48,6 +48,10 @@ export async function onHeartRateSensorEvent(
 ): Promise<RealtimeDataModel> {
   // When we get new Power data write it to realtime table
   let record = await getOrCreateRealtimeRecord();
+  if (record.heartRate === data.bpm) {
+    // Only write to realtime table if we have a difference in value
+    return record;
+  }
   return db.write(async () => {
     return record.update(() => {
       record.heartRate = data.bpm;
@@ -61,6 +65,10 @@ export async function onPowerSensorEvent(
 ): Promise<RealtimeDataModel> {
   // When we get new HR data write it to realtime table
   let record = await getOrCreateRealtimeRecord();
+  if (record.instantPower === data.instantaneous_power) {
+    // Only write to realtime table if we have a difference in value
+    return record;
+  }
   return db.write(async () => {
     return record.update(() => {
       record.instantPower = data.instantaneous_power;
@@ -69,8 +77,15 @@ export async function onPowerSensorEvent(
   });
 }
 
-async function connectToSensor(sensor: Sensor | undefined, bleSensor: { address: any; connect: () => any; subscribe: (arg0: any) => void; }, sensorType: string, callback: { (r: RealtimeDataModel): Promise<RealtimeDataModel>; (r: RealtimeDataModel): Promise<RealtimeDataModel>; }) {
-
+async function connectToSensor(
+  sensor: Sensor | undefined,
+  bleSensor: {address: any; connect: () => any; subscribe: (arg0: any) => void},
+  sensorType: string,
+  callback: {
+    (r: RealtimeDataModel): Promise<RealtimeDataModel>;
+    (r: RealtimeDataModel): Promise<RealtimeDataModel>;
+  },
+) {
   bleSensor = getSensorFromType(sensorType);
   if (sensor === undefined) {
     throw new Error(`No ${sensorType} sensor found`);
@@ -82,12 +97,11 @@ async function connectToSensor(sensor: Sensor | undefined, bleSensor: { address:
     await bleSensor.connect();
     // Start subscription on our sensor
     bleSensor.subscribe(callback);
-    console.log("after subscribe call.........")
+    console.log('after subscribe call.........');
   } catch (error) {
-    console.log("catch in connectToSensor was called")
+    console.log('catch in connectToSensor was called');
     throw error;
   }
-
 }
 
 export function bleSensorService(
@@ -99,8 +113,7 @@ export function bleSensorService(
 
   const start = async () => {
     console.log(`Starting ${sensorType} service worker.`);
-    
-    
+
     let sensors = await getAllSensors();
     let sensor = findFirstSensorOfType(sensors, sensorType);
 
@@ -110,26 +123,25 @@ export function bleSensorService(
     observeable = subscription?.subscribe({
       next: async (obsSensors: SensorModel[] | null) => {
         if (obsSensors && obsSensors.length > 0) {
-          sensor = obsSensors.pop()
-          console.log('observed new sensor: ', sensor)
+          sensor = obsSensors.pop();
+          console.log('observed new sensor: ', sensor);
           try {
-            await connectToSensor(sensor, bleSensor, sensorType, callback)
+            await connectToSensor(sensor, bleSensor, sensorType, callback);
           } catch (error) {
             console.error(`Error connecting to ${sensorType} sensor:`, error);
           }
         }
       },
-      error: (error) => {
+      error: error => {
         console.error(`Error in ${sensorType} sensor subscription:`, error);
       },
     });
 
     try {
-      await connectToSensor(sensor, bleSensor, sensorType, callback)
+      await connectToSensor(sensor, bleSensor, sensorType, callback);
     } catch (error) {
       throw error;
     }
-  
   };
 
   const stop = () => {
