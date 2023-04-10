@@ -67,7 +67,7 @@ function App() {
         await hrService.start();
         await powerService.start();
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
 
       const token = await strava.loadToken();

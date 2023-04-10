@@ -44,7 +44,6 @@ function findFirstSensorOfType(
 export async function onHeartRateSensorEvent(
   data: any,
 ): Promise<RealtimeDataModel> {
-  console.log(data.bpm);
   // When we get new Power data write it to realtime table
   let record = await getOrCreateRealtimeRecord();
   return db.write(async () => {
@@ -58,7 +57,6 @@ export async function onHeartRateSensorEvent(
 export async function onPowerSensorEvent(
   data: any,
 ): Promise<RealtimeDataModel> {
-  console.log(data.instantaneous_power);
   // When we get new HR data write it to realtime table
   let record = await getOrCreateRealtimeRecord();
   return db.write(async () => {
@@ -88,7 +86,7 @@ export function bleSensorService(
     try {
       // Try connect to our BLE sensor
       bleSensor.address = sensor.address;
-      await bleSensor.connect();   
+      await bleSensor.connect();
     } catch (error) {
       throw error;
     }
@@ -109,4 +107,7 @@ export function bleSensorService(
 }
 
 export const hrService = bleSensorService('HeartRate', onHeartRateSensorEvent);
-export const powerService = bleSensorService('CyclingPower', onPowerSensorEvent);
+export const powerService = bleSensorService(
+  'CyclingPower',
+  onPowerSensorEvent,
+);
