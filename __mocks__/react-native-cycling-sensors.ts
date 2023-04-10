@@ -53,6 +53,10 @@ class DummySensor {
     return Promise.resolve({remove: jest.fn()});
   }
 
+  unsubscribe() {
+    return true;
+  }
+
   _emitBleData(data: any) {
     console.log('emitter called with: ', data);
     this._callbacks.forEach(cb => cb(data));

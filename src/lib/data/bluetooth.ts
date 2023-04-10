@@ -45,11 +45,25 @@ export async function onHeartRateSensorEvent(
   data: any,
 ): Promise<RealtimeDataModel> {
   console.log(data.bpm);
-  // When we get new HR data write it to realtime table
+  // When we get new Power data write it to realtime table
   let record = await getOrCreateRealtimeRecord();
   return db.write(async () => {
     return record.update(() => {
       record.heartRate = data.bpm;
+      return record;
+    });
+  });
+}
+
+export async function onPowerSensorEvent(
+  data: any,
+): Promise<RealtimeDataModel> {
+  console.log(data.instantaneous_power);
+  // When we get new HR data write it to realtime table
+  let record = await getOrCreateRealtimeRecord();
+  return db.write(async () => {
+    return record.update(() => {
+      record.instantPower = data.instantaneous_power;
       return record;
     });
   });
@@ -65,23 +79,26 @@ export function bleSensorService(
     bleSensor = getSensorFromType(sensorType);
 
     let sensors = await getAllSensors();
-    let sensor = findFirstSensorOfType(sensors, 'HeartRate');
+    let sensor = findFirstSensorOfType(sensors, sensorType);
 
     if (sensor === undefined) {
       throw new Error(`No ${sensorType} sensor found`);
     }
 
     try {
+      // Try connect to our BLE sensor
       bleSensor.address = sensor.address;
-      await bleSensor.connect();
-      bleSensor.subscribe(callback);
+      await bleSensor.connect();   
     } catch (error) {
       throw error;
     }
+    // Start subscription on our sensor
+    bleSensor.subscribe(callback);
   };
 
   const stop = () => {
     console.log(`${sensorType} service: stopping`);
+    bleSensor?.unsubscribe();
     bleSensor?.disconnect();
   };
 
@@ -92,3 +109,4 @@ export function bleSensorService(
 }
 
 export const hrService = bleSensorService('HeartRate', onHeartRateSensorEvent);
+export const powerService = bleSensorService('CyclingPower', onPowerSensorEvent);

@@ -29,7 +29,7 @@ import {StravaProvider} from './src/lib/StravaContext';
 import * as strava from './src/lib/strava';
 import {isDevice} from 'expo-device';
 import {useKeepAwake} from 'expo-keep-awake';
-import {hrService} from './src/lib/data/bluetooth';
+import {hrService, powerService} from './src/lib/data/bluetooth';
 
 function App() {
   // hasBooted is a flag for all required vars
@@ -65,7 +65,10 @@ function App() {
         await ble.requestPermissions();
         await ble.start();
         await hrService.start();
-      } catch (err) {}
+        await powerService.start();
+      } catch (err) {
+        console.log(err)
+      }
 
       const token = await strava.loadToken();
       setStravaToken(token);
@@ -79,6 +82,7 @@ function App() {
       simulateRealtimeDataWorker.stop();
       snapshotWorker.stop();
       hrService.stop();
+      powerService.stop();
       // this now gets called when the component unmounts
     };
   }, [locationError]);
