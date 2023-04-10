@@ -1,4 +1,5 @@
-import {RealtimeDataModel, db} from '../../database';
+import { Sensor } from '../../components/Sensor';
+import {RealtimeDataModel, SensorModel, db} from '../../database';
 import {
   cadenceMeter,
   getAllSensors,
@@ -6,6 +7,7 @@ import {
   powerMeter,
 } from '../sensor';
 import {getOrCreateRealtimeRecord} from './realtime';
+import {Subscription} from 'rxjs';
 
 type Sensor = {
   id: string;
@@ -67,37 +69,74 @@ export async function onPowerSensorEvent(
   });
 }
 
+async function connectToSensor(sensor: Sensor | undefined, bleSensor: { address: any; connect: () => any; subscribe: (arg0: any) => void; }, sensorType: string, callback: { (r: RealtimeDataModel): Promise<RealtimeDataModel>; (r: RealtimeDataModel): Promise<RealtimeDataModel>; }) {
+
+  bleSensor = getSensorFromType(sensorType);
+  if (sensor === undefined) {
+    throw new Error(`No ${sensorType} sensor found`);
+  }
+
+  try {
+    // Try connect to our BLE sensor
+    bleSensor.address = sensor.address;
+    await bleSensor.connect();
+    // Start subscription on our sensor
+    bleSensor.subscribe(callback);
+    console.log("after subscribe call.........")
+  } catch (error) {
+    console.log("catch in connectToSensor was called")
+    throw error;
+  }
+
+}
+
 export function bleSensorService(
   sensorType: string,
   callback: (r: RealtimeDataModel) => Promise<RealtimeDataModel>,
 ) {
   let bleSensor: any = null;
+  let observeable: Subscription;
+
   const start = async () => {
     console.log(`Starting ${sensorType} service worker.`);
-    bleSensor = getSensorFromType(sensorType);
-
+    
+    
     let sensors = await getAllSensors();
     let sensor = findFirstSensorOfType(sensors, sensorType);
 
-    if (sensor === undefined) {
-      throw new Error(`No ${sensorType} sensor found`);
-    }
+    const subscription = db.get<SensorModel>('sensor')?.query().observe();
+
+    // Setup subscription for sensors added after start
+    observeable = subscription?.subscribe({
+      next: async (obsSensors: SensorModel[] | null) => {
+        if (obsSensors && obsSensors.length > 0) {
+          sensor = obsSensors.pop()
+          console.log('observed new sensor: ', sensor)
+          try {
+            await connectToSensor(sensor, bleSensor, sensorType, callback)
+          } catch (error) {
+            console.error(`Error connecting to ${sensorType} sensor:`, error);
+          }
+        }
+      },
+      error: (error) => {
+        console.error(`Error in ${sensorType} sensor subscription:`, error);
+      },
+    });
 
     try {
-      // Try connect to our BLE sensor
-      bleSensor.address = sensor.address;
-      await bleSensor.connect();
+      await connectToSensor(sensor, bleSensor, sensorType, callback)
     } catch (error) {
       throw error;
     }
-    // Start subscription on our sensor
-    bleSensor.subscribe(callback);
+  
   };
 
   const stop = () => {
     console.log(`${sensorType} service: stopping`);
     bleSensor?.unsubscribe();
     bleSensor?.disconnect();
+    observeable?.unsubscribe();
   };
 
   return {
