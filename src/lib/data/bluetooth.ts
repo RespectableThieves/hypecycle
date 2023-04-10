@@ -64,6 +64,7 @@ export async function onPowerSensorEvent(
   data: any,
 ): Promise<RealtimeDataModel> {
   // When we get new HR data write it to realtime table
+  console.log(data);
   let record = await getOrCreateRealtimeRecord();
   if (record.instantPower === data.instantaneous_power) {
     // Only write to realtime table if we have a difference in value
@@ -95,13 +96,14 @@ async function connectToSensor(
     // Try connect to our BLE sensor
     bleSensor.address = sensor.address;
     await bleSensor.connect();
-    // Start subscription on our sensor
-    bleSensor.subscribe(callback);
-    console.log('after subscribe call.........');
+
   } catch (error) {
     console.log('catch in connectToSensor was called');
     throw error;
   }
+  // Start subscription on our sensor
+  bleSensor.subscribe(callback);
+  
 }
 
 export function bleSensorService(
@@ -128,12 +130,12 @@ export function bleSensorService(
           try {
             await connectToSensor(sensor, bleSensor, sensorType, callback);
           } catch (error) {
-            console.error(`Error connecting to ${sensorType} sensor:`, error);
+            console.log(`Error connecting to ${sensorType} sensor:`, error);
           }
         }
       },
       error: error => {
-        console.error(`Error in ${sensorType} sensor subscription:`, error);
+        console.log(`Error in ${sensorType} sensor subscription:`, error);
       },
     });
 
