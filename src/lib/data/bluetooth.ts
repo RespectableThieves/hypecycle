@@ -1,24 +1,11 @@
-import {Sensor} from '../../components/Sensor';
 import {RealtimeDataModel, SensorModel, db} from '../../database';
-import {
-  cadenceMeter,
-  getAllSensors,
-  heartRateMonitor,
-  powerMeter,
-} from '../sensor';
+import {cadenceMeter, heartRateMonitor, powerMeter} from '../sensor';
 import {getOrCreateRealtimeRecord} from './realtime';
 import {Subscription} from 'rxjs';
 
-type Sensor = {
-  id: string;
-  name: string;
-  is_primary: boolean;
-  sensorType: string[];
-  type: string;
-  address: string;
-};
+type SensorType = 'HeartRate' | 'CyclingPower' | 'CyclingSpeedAndCadence';
 
-function getSensorFromType(sensorType: string) {
+function getSensorFromType(sensorType: SensorType) {
   switch (sensorType) {
     case 'HeartRate':
       return heartRateMonitor;
@@ -37,9 +24,9 @@ function getSensorFromType(sensorType: string) {
 
 // Find first sensor of specific type in DB. Can't query it because table is JSON :/
 function findFirstSensorOfType(
-  sensors: Sensor[],
-  sensorType: string,
-): Sensor | undefined {
+  sensors: SensorModel[],
+  sensorType: SensorType,
+): SensorModel | undefined {
   return sensors.find(sensor => sensor.sensorType.includes(sensorType));
 }
 
@@ -79,56 +66,52 @@ export async function onPowerSensorEvent(
 }
 
 async function connectToSensor(
-  sensor: Sensor | undefined,
-  bleSensor: any,
+  sensorModel: SensorModel,
+  sensor: any,
   sensorType: string,
   callback: {
     (r: RealtimeDataModel): Promise<RealtimeDataModel>;
     (r: RealtimeDataModel): Promise<RealtimeDataModel>;
   },
 ) {
-  bleSensor = getSensorFromType(sensorType);
-  if (sensor === undefined) {
+  if (sensorModel === undefined) {
     throw new Error(`No ${sensorType} sensor found`);
   }
 
   try {
     // Try connect to our BLE sensor
-    bleSensor.address = sensor.address;
-    await bleSensor.connect();
+    sensor.address = sensorModel.address;
+    await sensor.connect();
   } catch (error) {
     console.log('catch in connectToSensor was called');
-    await bleSensor.disconnect().catch((err: any) => console.log(err));
+    await sensor.disconnect().catch((err: any) => console.log(err));
     throw error;
   }
   // Start subscription on our sensor
-  bleSensor.subscribe(callback);
+  sensor.subscribe(callback);
 }
 
 export function bleSensorService(
-  sensorType: string,
+  sensorType: SensorType,
   callback: (r: RealtimeDataModel) => Promise<RealtimeDataModel>,
 ) {
-  let bleSensor: any = null;
+  // TODO get types for react-native-cylcing-sensors
   let sensor: any = null;
   let observeable: Subscription;
 
   const start = async () => {
     console.log(`Starting ${sensorType} service worker.`);
-
-    let sensors = await getAllSensors();
-    sensor = findFirstSensorOfType(sensors, sensorType);
-
+    sensor = getSensorFromType(sensorType);
     const subscription = db.get<SensorModel>('sensor')?.query().observe();
 
     // Setup subscription for sensors added after start
     observeable = subscription?.subscribe({
-      next: async (obsSensors: SensorModel[] | null) => {
-        if (obsSensors && obsSensors.length > 0) {
-          sensor = obsSensors.pop();
-          console.log('observed new sensor: ', sensor);
+      next: async (obsSensors: SensorModel[]) => {
+        const sensorModel = findFirstSensorOfType(obsSensors, sensorType);
+        if (!sensorModel) {
+          console.log('observed new sensor: ', sensorModel);
           try {
-            await connectToSensor(sensor, bleSensor, sensorType, callback);
+            await connectToSensor(sensorModel, sensor, sensorType, callback);
           } catch (error) {
             console.log(`Error connecting to ${sensorType} sensor:`, error);
           }
@@ -138,12 +121,6 @@ export function bleSensorService(
         console.log(`Error in ${sensorType} sensor subscription:`, error);
       },
     });
-
-    // try {
-    //   await connectToSensor(sensor, bleSensor, sensorType, callback);
-    // } catch (error) {
-    //   throw error;
-    // }
   };
 
   const stop = () => {

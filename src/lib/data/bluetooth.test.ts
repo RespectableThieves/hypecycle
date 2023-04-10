@@ -1,6 +1,6 @@
 import {createSensor} from '../sensor';
 import {bleSensorService} from './bluetooth';
-import {ble, heartRateMonitor} from '../sensor';
+import {heartRateMonitor} from '../sensor';
 
 type Sensor = {
   id: string;
@@ -41,7 +41,7 @@ describe('bluetooth sensor service', () => {
     hrService.stop();
   });
 
-  it.only('should connect to a second HR sensor in DB after starting', async () => {
+  it('should connect to a second HR sensor in DB after starting', async () => {
     // Create a test sensor in DB
     const newSensor: Sensor = {
       id: '1234',
