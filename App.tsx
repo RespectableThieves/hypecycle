@@ -85,7 +85,7 @@ function App() {
         console.log(err);
       }
 
-      console.log("UseEffects ended.")
+      console.log('UseEffects ended.');
     };
 
     startServicesAndTasks(); // run it

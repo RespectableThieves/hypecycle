@@ -96,7 +96,6 @@ async function connectToSensor(
     // Try connect to our BLE sensor
     bleSensor.address = sensor.address;
     await bleSensor.connect();
-
   } catch (error) {
     console.log('catch in connectToSensor was called');
     await bleSensor.disconnect().catch((err: any) => console.log(err));
@@ -104,7 +103,6 @@ async function connectToSensor(
   }
   // Start subscription on our sensor
   bleSensor.subscribe(callback);
-
 }
 
 export function bleSensorService(
@@ -141,11 +139,11 @@ export function bleSensorService(
       },
     });
 
-    try {
-      await connectToSensor(sensor, bleSensor, sensorType, callback);
-    } catch (error) {
-      throw error;
-    }
+    // try {
+    //   await connectToSensor(sensor, bleSensor, sensorType, callback);
+    // } catch (error) {
+    //   throw error;
+    // }
   };
 
   const stop = () => {
