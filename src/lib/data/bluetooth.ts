@@ -108,7 +108,7 @@ export function bleSensorService(
     observeable = subscription?.subscribe({
       next: async (obsSensors: SensorModel[]) => {
         const sensorModel = findFirstSensorOfType(obsSensors, sensorType);
-        if (!sensorModel) {
+        if (sensorModel) {
           console.log('observed new sensor: ', sensorModel);
           try {
             await connectToSensor(sensorModel, sensor, sensorType, callback);

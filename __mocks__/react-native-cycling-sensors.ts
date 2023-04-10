@@ -50,7 +50,6 @@ class DummySensor {
 
   subscribe(cb: any) {
     this._callbacks.push(cb);
-    console.log(this._callbacks);
     return Promise.resolve({remove: jest.fn()});
   }
 
@@ -60,13 +59,12 @@ class DummySensor {
   }
 
   _emitBleData(data: any) {
-    console.log('emitter called with: ', data, this._callbacks);
+    console.log('emitter called with: ', data);
     this._callbacks.forEach(cb => cb(data));
     return Promise.resolve();
   }
 
   clearAll() {
-    console.log('clearing');
     this._callbacks = [];
   }
 }
