@@ -109,7 +109,11 @@ function WidgetGrid({realtimeData}: Props) {
           />
         </Col>
         <Col gx={GUTTER}>
-          <SimpleMetric title={'Max Power '} data={rounded(aggregates?.maxPower)} icon={'lightning-bolt'} />
+          <SimpleMetric
+            title={'Max Power '}
+            data={rounded(aggregates?.maxPower)}
+            icon={'lightning-bolt'}
+          />
         </Col>
         <Col gx={GUTTER}>
           <SimpleMetric
