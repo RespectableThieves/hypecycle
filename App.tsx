@@ -64,10 +64,20 @@ function App() {
       try {
         await ble.requestPermissions();
         await ble.start();
-        await hrService.start();
-        await powerService.start();
       } catch (err) {
         console.log(err);
+      }
+
+      try {
+        await hrService.start();
+      } catch (err) {
+        console.log(err)
+      }
+
+      try {
+        await powerService.start();
+      } catch (err) {
+        console.log(err)
       }
 
       const token = await strava.loadToken();

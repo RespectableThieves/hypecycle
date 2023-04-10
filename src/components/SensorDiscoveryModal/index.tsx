@@ -28,8 +28,6 @@ const handleError = (err: Error) => {
 
 export function SensorDiscoveryModal(props: Props) {
   const ble = useContext(globalData).ble;
-  const pm = useContext(globalData).powerMeter;
-  const hrm = useContext(globalData).heartRateMonitor;
 
   const [scanning, setScanning] = useState(false);
   const [discovered, setDiscovered] = useState([]);
@@ -71,29 +69,24 @@ export function SensorDiscoveryModal(props: Props) {
   };
 
   async function handlePair(item: any) {
+    // TODO: handle cadence meter too
     if (item.sensorType.includes('CyclingPower')) {
-      console.log('Pairing Power Meter...');
-      pm.address = item.id;
+      console.log('Adding Power Meter...');
       try {
-        await pm.connect();
-        console.log('Power Connection successful: ', item.id);
         // Write sensor to sensor table.
         await createSensor(item.name, item.id, item.sensorType);
-        Alert.alert('Powermeter connected!');
+        Alert.alert(`Powermeter: ${item.name} added!`);
       } catch (error) {
         if (error instanceof Error) {
           handleError(error);
         }
       }
     } else if (item.sensorType.includes('HeartRate')) {
-      console.log('Pairing Heart Rate');
-      hrm.address = item.id;
+      console.log('Adding Heart Rate');
       try {
-        await hrm.connect();
-        console.log('HR Connection successful: ', item.id);
         // Write sensor to sensor table.
         await createSensor(item.name, item.id, item.sensorType);
-        Alert.alert('Heart Rate connected!');
+        Alert.alert(`Heart Rate ${item.name} added!`);
       } catch (error) {
         if (error instanceof Error) {
           handleError(error);
