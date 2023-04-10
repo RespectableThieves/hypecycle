@@ -80,7 +80,7 @@ export async function onPowerSensorEvent(
 
 async function connectToSensor(
   sensor: Sensor | undefined,
-  bleSensor: {address: any; connect: () => any; subscribe: (arg0: any) => void},
+  bleSensor: any,
   sensorType: string,
   callback: {
     (r: RealtimeDataModel): Promise<RealtimeDataModel>;
@@ -99,11 +99,12 @@ async function connectToSensor(
 
   } catch (error) {
     console.log('catch in connectToSensor was called');
+    await bleSensor.disconnect().catch((err: any) => console.log(err));
     throw error;
   }
   // Start subscription on our sensor
   bleSensor.subscribe(callback);
-  
+
 }
 
 export function bleSensorService(
@@ -111,13 +112,14 @@ export function bleSensorService(
   callback: (r: RealtimeDataModel) => Promise<RealtimeDataModel>,
 ) {
   let bleSensor: any = null;
+  let sensor: any = null;
   let observeable: Subscription;
 
   const start = async () => {
     console.log(`Starting ${sensorType} service worker.`);
 
     let sensors = await getAllSensors();
-    let sensor = findFirstSensorOfType(sensors, sensorType);
+    sensor = findFirstSensorOfType(sensors, sensorType);
 
     const subscription = db.get<SensorModel>('sensor')?.query().observe();
 
@@ -148,8 +150,8 @@ export function bleSensorService(
 
   const stop = () => {
     console.log(`${sensorType} service: stopping`);
-    bleSensor?.unsubscribe();
-    bleSensor?.disconnect();
+    sensor?.unsubscribe();
+    sensor?.disconnect();
     observeable?.unsubscribe();
   };
 
