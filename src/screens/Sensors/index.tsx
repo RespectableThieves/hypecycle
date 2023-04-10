@@ -10,7 +10,6 @@ import globalData from '../../lib/GlobalContext';
 import {DrawerNavProps} from '../../components/DrawerNav';
 
 const _listEmptyComponent = () => {
-  console.log('Empty list');
   return (
     <Empty>
       <Text variant="titleMedium">
@@ -52,7 +51,7 @@ export default function Sensors({navigation}: DrawerNavProps) {
       setRefreshing(false);
       const numberOfBluetoothSensors = await db
         .get('sensors')
-        .query(Q.where('type', 'bluetooth'))
+        ?.query(Q.where('type', 'bluetooth'))
         .fetchCount();
       console.log('ble sensors = ', numberOfBluetoothSensors);
     } catch (error) {
