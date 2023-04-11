@@ -97,12 +97,7 @@ export function bleSensorService(
     // get the first sensor of sensorType
     const subscription = db
       .get<SensorModel>('sensor')
-      ?.query(
-        Q.unsafeSqlQuery(
-          "select * from sensor where EXISTS (SELECT 1 FROM json_each(sensor_type) WHERE value = ?) and _status is not 'deleted' order by created_at DESC limit 1",
-          [sensorType],
-        ),
-      )
+      ?.query(Q.where('sensor_type', Q.like(`%${sensorType}%`)))
       .observe();
 
     // Setup subscription for sensors added after start
