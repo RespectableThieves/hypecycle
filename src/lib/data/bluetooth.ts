@@ -1,4 +1,4 @@
-import {RealtimeDataModel, SensorModel, db} from '../../database';
+import {RealtimeDataModel, SensorModel, db, Q} from '../../database';
 import {cadenceMeter, heartRateMonitor, powerMeter} from '../sensor';
 import {getOrCreateRealtimeRecord} from './realtime';
 import {Subscription} from 'rxjs';
@@ -20,14 +20,6 @@ function getSensorFromType(sensorType: SensorType) {
       console.log('Unknown sensor type');
       throw new Error('Unknown sensor type');
   }
-}
-
-// Find first sensor of specific type in DB. Can't query it because table is JSON :/
-function findFirstSensorOfType(
-  sensors: SensorModel[],
-  sensorType: SensorType,
-): SensorModel | undefined {
-  return sensors.find(sensor => sensor.sensorType.includes(sensorType));
 }
 
 export async function onHeartRateSensorEvent(
@@ -102,12 +94,23 @@ export function bleSensorService(
   const start = async () => {
     console.log(`Starting ${sensorType} service worker.`);
     sensor = getSensorFromType(sensorType);
-    const subscription = db.get<SensorModel>('sensor')?.query().observe();
+    // get the first sensor of sensorType
+    const subscription = db
+      .get<SensorModel>('sensor')
+      ?.query(
+        Q.unsafeSqlQuery(
+          "select * from sensor where EXISTS (SELECT 1 FROM json_each(sensor_type) WHERE value = ?) and _status is not 'deleted' order by created_at DESC limit 1",
+          [sensorType],
+        ),
+      )
+      .observe();
 
     // Setup subscription for sensors added after start
     observeable = subscription?.subscribe({
       next: async (obsSensors: SensorModel[]) => {
-        const sensorModel = findFirstSensorOfType(obsSensors, sensorType);
+        //const sensorModel = findFirstSensorOfType(obsSensors, sensorType);
+        const [sensorModel] = obsSensors;
+
         if (sensorModel) {
           console.log('observed new sensor: ', sensorModel);
           try {

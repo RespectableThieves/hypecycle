@@ -20,7 +20,7 @@ export const sensorSchema = tableSchema({
       type: 'string',
     },
     {
-      name: 'sensorType',
+      name: 'sensor_type',
       type: 'string',
     },
     {

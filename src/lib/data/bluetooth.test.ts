@@ -73,6 +73,15 @@ describe('bluetooth sensor service', () => {
   it('should throw an error when there is no HeartRate sensor', async () => {
     const mockCallback = jest.fn();
     const hrService = bleSensorService('HeartRate', mockCallback);
+    const newSensor: Sensor = {
+      id: '1234',
+      name: 'Test Cycling Power',
+      is_primary: true,
+      sensorType: ['Cycling Power'],
+      type: 'bluetooth',
+      address: '00:00:00:00',
+    };
+    await createSensor(newSensor.name, newSensor.address, newSensor.sensorType);
 
     try {
       await hrService.start();
