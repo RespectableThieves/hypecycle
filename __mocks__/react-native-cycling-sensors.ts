@@ -48,12 +48,13 @@ class DummySensor {
     return Promise.resolve(this.sensorsDiscovered);
   }
 
-  subscribe(_opts: any, cb: any) {
+  subscribe(cb: any) {
     this._callbacks.push(cb);
     return Promise.resolve({remove: jest.fn()});
   }
 
   unsubscribe() {
+    // TODO should we clear callback here?
     return true;
   }
 

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import {FlatList} from 'react-native';
 import {Container, Empty} from './styles';
 import {db, Q, SensorModel} from '../../database';
@@ -6,7 +6,6 @@ import {Button, Text} from 'react-native-paper';
 import {getAllSensors, heartRateMonitor, powerMeter} from '../../lib/sensor';
 import {Sensor} from '../../components/Sensor';
 import {SensorDiscoveryModal} from '../../components/SensorDiscoveryModal';
-import globalData from '../../lib/GlobalContext';
 import {DrawerNavProps} from '../../components/DrawerNav';
 
 const _listEmptyComponent = () => {
@@ -29,7 +28,6 @@ const HeaderRight =
     );
 
 export default function Sensors({navigation}: DrawerNavProps) {
-  const ble = useContext(globalData).ble;
   const [sensors, setSensors] = useState<SensorModel[]>([]);
   const [visible, setVisible] = useState(false);
   const [isRefreshing, setRefreshing] = useState(false);
@@ -63,12 +61,12 @@ export default function Sensors({navigation}: DrawerNavProps) {
     // Remove the selected sensor and refetch data.
     try {
       await item.deleteSensor();
-      if (item.sensorType.includes('HeartRate')){
+      if (item.sensorType.includes('HeartRate')) {
         await heartRateMonitor.disconnect().catch((err: Error) => {
           console.log(err);
         });
       }
-      if (item.sensorType.includes('CyclingPower')){
+      if (item.sensorType.includes('CyclingPower')) {
         await powerMeter.disconnect().catch((err: Error) => {
           console.log(err);
         });
