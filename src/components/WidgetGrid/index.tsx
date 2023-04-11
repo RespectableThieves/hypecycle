@@ -4,13 +4,14 @@ import {Container, Row, Col} from 'react-native-flex-grid';
 import withObservables from '@nozbe/with-observables';
 import {SimpleMetric} from '../SimpleMetric';
 import {REALTIME_DATA_ID} from '../../constants';
-import {db, RealtimeDataModel} from '../../database';
+import {db, RealtimeDataModel, RideModel} from '../../database';
 import {
   getRideAggregates,
   metersToKilometers,
   RideAggregate,
 } from '../../lib/data';
 import useSetInterval from '../../hooks/useSetInterval';
+import ElapsedTime from '../ElapsedTime';
 
 const GUTTER = 1;
 type Widget = {
@@ -34,11 +35,13 @@ function rounded(data: number | null | undefined) {
 
 function WidgetGrid({realtimeData}: Props) {
   const [aggregates, setAggregates] = useState<RideAggregate>();
+  const [ride, setRide] = useState<RideModel>();
+
+  console.log(ride?.startedAt);
 
   useSetInterval(
     async () => {
-      if (realtimeData.ride) {
-        const ride = await realtimeData.ride?.fetch();
+      if (ride) {
         const result = await getRideAggregates(ride);
         setAggregates(result);
       }
@@ -47,10 +50,17 @@ function WidgetGrid({realtimeData}: Props) {
   );
 
   useEffect(() => {
+    const fetchRide = async () => {
+      const r = await realtimeData.ride?.fetch();
+      setRide(r);
+    };
     if (!realtimeData.ride?.id) {
       setAggregates(undefined);
+      setRide(undefined);
+    } else {
+      fetchRide();
     }
-  }, [realtimeData.ride?.id]);
+  }, [realtimeData.ride, realtimeData.ride?.id]);
 
   return (
     <Container fluid noPadding>
@@ -109,7 +119,7 @@ function WidgetGrid({realtimeData}: Props) {
           />
         </Col>
         <Col gx={GUTTER}>
-          <SimpleMetric title={'NP '} data={201} icon={'lightning-bolt'} />
+          <ElapsedTime startedAt={ride?.startedAt} />
         </Col>
         <Col gx={GUTTER}>
           <SimpleMetric

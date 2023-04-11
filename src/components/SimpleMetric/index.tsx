@@ -7,7 +7,7 @@ import {Surface} from 'react-native-paper';
 
 type Props = {
   title: string;
-  data: number | null | undefined;
+  data: number | null | undefined | string;
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
 };
 
