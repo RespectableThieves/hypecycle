@@ -35,11 +35,12 @@ export async function generateTCX(rideSummary: RideSummaryModel) {
           heartRateBpm: new HeartRateBpm(record.heartRate),
         }),
         ...(record.cadence && {cadence: record.cadence}),
+        ...(record.cadence && {runcadence: record.cadence}),
+        ...(record.instantPower && {watts: record.instantPower}),
         sensorState: 'Present',
-        ...(record.speed && {
-          extensions: new TrackPointExtensions({
-            Speed: record.speed,
-          }),
+        extensions: new TrackPointExtensions({
+          ...(record.speed && {Speed: record.speed}),
+          ...(record.instantPower && {Watts: record.instantPower}),
         }),
       }),
     );
