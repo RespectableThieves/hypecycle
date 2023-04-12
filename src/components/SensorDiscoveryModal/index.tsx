@@ -44,7 +44,7 @@ export function SensorDiscoveryModal(props: Props) {
         sensorList.map(async function (val: SensorProps, _index: number) {
           const existsAlready = await db
             .get('sensor')
-            ?.query(Q.where('address', val.id))
+            .query(Q.where('address', val.id))
             .fetchCount();
           if (!existsAlready) {
             console.log('val = ', val);
