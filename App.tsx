@@ -29,6 +29,15 @@ import {StravaProvider} from './src/lib/StravaContext';
 import * as strava from './src/lib/strava';
 import {isDevice} from 'expo-device';
 import {useKeepAwake} from 'expo-keep-awake';
+import * as Sentry from 'sentry-expo';
+
+Sentry.init({
+  dsn: 'https://ecb57b595dcd4aa9bd4c4c56d015381f@o478080.ingest.sentry.io/4504984718934016',
+  // only enable on device in development.
+  // don't want emulator errors
+  enableInExpoDevelopment: isDevice,
+  debug: true, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
+});
 
 const handleError = (error: Error) => {
   console.log('Got error: ', error);
@@ -114,4 +123,4 @@ function App() {
   );
 }
 
-export default gestureHandlerRootHOC(App);
+export default Sentry.Native.wrap(gestureHandlerRootHOC(App));
