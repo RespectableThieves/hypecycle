@@ -40,10 +40,6 @@ Sentry.init({
   debug: true, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
 });
 
-const handleError = (error: Error) => {
-  console.log('Got error: ', error);
-};
-
 function App() {
   // hasBooted is a flag for all required vars
   // needed before mounting app.
