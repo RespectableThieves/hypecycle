@@ -10,6 +10,7 @@ import {
   simulateRealtimeDataWorker,
 } from './realtime';
 import {metersToKilometers} from './distance';
+import {hrService, powerService} from './bluetooth';
 
 export type {RideAggregate};
 
@@ -25,4 +26,6 @@ export {
   onSnapshotEvent,
   updateRealTimeRecordRandom,
   simulateRealtimeDataWorker,
+  hrService,
+  powerService,
 };

@@ -8502,7 +8502,12 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
-react-native-ble-manager@^8.7.0, react-native-ble-manager@^8.8.0:
+react-native-ble-manager@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-ble-manager/-/react-native-ble-manager-10.0.0.tgz#b21a2e37c69a064a4c73396c7bce71474ad55048"
+  integrity sha512-vSFBzTJ6JfRXW5Hdmxtc4ioUah0lXnnYBzghx59CSCFmmMnMJM/lQ253AMi5tXfqB3LgaZyHvoAzpiqpUkRTXA==
+
+react-native-ble-manager@^8.7.0:
   version "8.8.0"
   resolved "https://registry.yarnpkg.com/react-native-ble-manager/-/react-native-ble-manager-8.8.0.tgz#fc3d565e61f972aba68474ac68e1e605d6993f9e"
   integrity sha512-8rB3IJuoV7yv3ymHKD/Y9JHpV9pJeLWw9UbmszvYPMDOzSlfsO+mE2xCd8J4vpfmDYKFlT6hsMGAkPV5aPzDag==
@@ -8518,8 +8523,8 @@ react-native-codegen@^0.71.5:
     nullthrows "^1.1.1"
 
 "react-native-cycling-sensors@https://github.com/shaunmulligan/react-native-cycling-sensors":
-  version "0.3.0"
-  resolved "https://github.com/shaunmulligan/react-native-cycling-sensors#c2e836e5cb43fab73f6df6c38302ee9242411917"
+  version "0.5.0"
+  resolved "https://github.com/shaunmulligan/react-native-cycling-sensors#3a3256558675379ec3d13b70d6995e779ead7d5a"
   dependencies:
     eventemitter3 "^5.0.0"
     react-native-ble-manager "^8.7.0"

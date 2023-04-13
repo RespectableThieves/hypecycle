@@ -31,7 +31,7 @@
     "expo-updates": "~0.16.4",
     "react": "18.2.0",
     "react-native": "0.71.3",
-    "react-native-ble-manager": "^8.8.0",
+    "react-native-ble-manager": "^10.0.0",
     "react-native-cycling-sensors": "https://github.com/shaunmulligan/react-native-cycling-sensors",
     "react-native-flex-grid": "^1.0.0",
     "react-native-gesture-handler": "^2.9.0",

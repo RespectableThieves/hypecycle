@@ -13,6 +13,8 @@ import {
   snapshotWorker,
   simulateRealtimeDataWorker,
   getOrCreateRealtimeRecord,
+  hrService,
+  powerService,
 } from './src/lib/data';
 import Loading from './src/components/Loading';
 import {
@@ -39,10 +41,6 @@ Sentry.init({
   debug: true, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
 });
 
-const handleError = (error: Error) => {
-  console.log('Got error: ', error);
-};
-
 function App() {
   // hasBooted is a flag for all required vars
   // needed before mounting app.
@@ -56,10 +54,17 @@ function App() {
   const [stravaToken, setStravaToken] = useState<strava.Token | null>(null);
 
   useEffect(() => {
-    if (locationError) {
-      Alert.alert('Error getting location');
-    }
     const startServicesAndTasks = async () => {
+      // Create our global ble object
+      try {
+        await ble.requestPermissions();
+        await ble.start();
+      } catch (err) {
+        console.log(err);
+      }
+      if (locationError) {
+        Alert.alert('Error getting location');
+      }
       console.log('ble', await ble.checkState());
       // Ensure that the realtime row is setup
       // before we run any async services.
@@ -70,23 +75,27 @@ function App() {
         await simulateRealtimeDataWorker.start(3000);
       }
 
-      await snapshotWorker.start(5000);
-
-      // Create our global ble object
-      ble
-        .requestPermissions()
-        .then(() => {
-          console.log('Ble permissions requested');
-        })
-        .then(() => {
-          ble.start().catch((err: Error) => handleError(err));
-        })
-        .catch((err: Error) => handleError(err));
+      await snapshotWorker.start(1000);
 
       const token = await strava.loadToken();
       setStravaToken(token);
 
       setHasBooted(true);
+
+      // Start our bluetooth services
+      try {
+        await hrService.start();
+      } catch (err) {
+        console.log(err);
+      }
+
+      try {
+        await powerService.start();
+      } catch (err) {
+        console.log(err);
+      }
+
+      console.log('App has booted successfully.');
     };
 
     startServicesAndTasks(); // run it
@@ -94,6 +103,8 @@ function App() {
     return () => {
       simulateRealtimeDataWorker.stop();
       snapshotWorker.stop();
+      hrService.stop();
+      powerService.stop();
       // this now gets called when the component unmounts
     };
   }, [locationError]);

@@ -88,9 +88,9 @@ function WidgetGrid({realtimeData}: Props) {
         </Col>
         <Col gx={GUTTER}>
           <SimpleMetric
-            title={'Temp '}
-            data={27}
-            icon={'temperature-celsius'}
+            title={'Avg. Power '}
+            data={rounded(aggregates?.avgPower)}
+            icon={'lightning-bolt'}
           />
         </Col>
       </Row>
