@@ -24,7 +24,7 @@ export default {
     config: {
       googleMaps: {
         apiKey: process.env.GOOGLE_MAP_API_KEY,
-      }
+      },
     },
   },
   web: {
