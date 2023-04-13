@@ -22,7 +22,9 @@ export default {
     },
     package: 'com.craigmulligan.hypecycle',
     config: {
-      googleMaps: process.env.GOOGLE_MAP_API_KEY,
+      googleMaps: {
+        apiKey: process.env.GOOGLE_MAP_API_KEY,
+      }
     },
   },
   web: {
