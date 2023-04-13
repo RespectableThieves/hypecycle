@@ -41,6 +41,17 @@
           ],
           "bluetoothAlwaysPermission": "Allow $(PRODUCT_NAME) to connect to bluetooth devices"
         }
+      ],
+      [
+        "@morrowdigital/watermelondb-expo-plugin",
+        [
+          "expo-build-properties",
+          {
+            "android": {
+              "kotlinVersion": "1.3.50"
+            }
+          }
+        ]
       ]
     ],
     "extra": {
