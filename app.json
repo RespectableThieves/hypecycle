@@ -2,6 +2,7 @@
   "expo": {
     "name": "hypecycle",
     "slug": "hypecycle",
+    "scheme": "hypecycle",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -28,6 +29,7 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      "expo-location",
       "sentry-expo",
       [
         "@config-plugins/react-native-ble-plx",
