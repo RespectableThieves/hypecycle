@@ -50,11 +50,11 @@ export default {
       },
     ],
     [
-      "expo-screen-orientation",
+      'expo-screen-orientation',
       {
-        "initialOrientation": "LANDSCAPE"
-      }
-    ]
+        initialOrientation: 'LANDSCAPE',
+      },
+    ],
   ],
   extra: {
     eas: {
