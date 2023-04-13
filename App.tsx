@@ -13,6 +13,8 @@ import {
   snapshotWorker,
   simulateRealtimeDataWorker,
   getOrCreateRealtimeRecord,
+  hrService,
+  powerService,
 } from './src/lib/data';
 import Loading from './src/components/Loading';
 import {
@@ -29,7 +31,6 @@ import {StravaProvider} from './src/lib/StravaContext';
 import * as strava from './src/lib/strava';
 import {isDevice} from 'expo-device';
 import {useKeepAwake} from 'expo-keep-awake';
-import {hrService, powerService} from './src/lib/data/bluetooth';
 import * as Sentry from 'sentry-expo';
 
 Sentry.init({
