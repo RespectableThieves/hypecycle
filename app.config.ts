@@ -1,4 +1,4 @@
-{
+export default {
   "expo": {
     "name": "hypecycle",
     "slug": "hypecycle",
@@ -23,7 +23,10 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.craigmulligan.hypecycle"
+      "package": "com.craigmulligan.hypecycle",
+      "config": {
+        "googleMaps": process.env.GOOGLE_MAP_API_KEY
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -42,16 +45,14 @@
           "bluetoothAlwaysPermission": "Allow $(PRODUCT_NAME) to connect to bluetooth devices"
         }
       ],
+      "@morrowdigital/watermelondb-expo-plugin",
       [
-        "@morrowdigital/watermelondb-expo-plugin",
-        [
-          "expo-build-properties",
-          {
-            "android": {
-              "kotlinVersion": "1.3.50"
-            }
+        "expo-build-properties",
+        {
+          "android": {
+            "kotlinVersion": "1.6.10"
           }
-        ]
+        }
       ]
     ],
     "extra": {
