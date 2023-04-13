@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {FlatList} from 'react-native';
 import {Container, Empty} from './styles';
-import {db, Q, SensorModel} from '../../database';
+import {SensorModel} from '../../database';
 import {Button, Text} from 'react-native-paper';
 import {getAllSensors, heartRateMonitor, powerMeter} from '../../lib/sensor';
 import {Sensor} from '../../components/Sensor';
@@ -47,11 +47,6 @@ export default function Sensors({navigation}: DrawerNavProps) {
       const allSensor = await getAllSensors();
       setSensors(allSensor);
       setRefreshing(false);
-      const numberOfBluetoothSensors = await db
-        .get('sensors')
-        ?.query(Q.where('type', 'bluetooth'))
-        .fetchCount();
-      console.log('ble sensors = ', numberOfBluetoothSensors);
     } catch (error) {
       console.log(error);
     }
@@ -61,7 +56,9 @@ export default function Sensors({navigation}: DrawerNavProps) {
     // Remove the selected sensor and refetch data.
     try {
       await item.deleteSensor();
+      console.log({item});
       if (item.sensorType.includes('HeartRate')) {
+        console.log('Removing heartRateMonitor');
         await heartRateMonitor.disconnect().catch((err: Error) => {
           console.log(err);
         });

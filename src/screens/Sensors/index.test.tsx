@@ -9,7 +9,12 @@ import App from '../../../App';
 import {navigate} from '../../lib/navigation';
 import Sensors from './';
 import {db, SensorModel} from '../../database';
-import {ble, createSensor, getAllSensors} from '../../lib/sensor';
+import {
+  ble,
+  heartRateMonitor,
+  createSensor,
+  getAllSensors,
+} from '../../lib/sensor';
 import {Sensor} from '../../components/Sensor';
 
 let screen!: ReactTestInstance;
@@ -57,7 +62,7 @@ it('Screen renders correctly when there ARE sensors', async () => {
   expect(sensors.length).toBe(0);
 
   await renderer.act(async () => {
-    const record = await createSensor(sensorName, 'xyz', []);
+    const record = await createSensor(sensorName, '00:00:00:00', ['HeartRate']);
     records.push(record);
     list.props.onRefresh();
   });
@@ -73,7 +78,7 @@ it('Screen allows removing a sensor', async () => {
 
   // add a sensor
   await renderer.act(async () => {
-    const record = await createSensor(sensorName, 'xyz', []);
+    const record = await createSensor(sensorName, 'xyz', ['HeartRate']);
     records.push(record);
     list.props.onRefresh();
   });
@@ -82,11 +87,15 @@ it('Screen allows removing a sensor', async () => {
   const sensor = screen.findByType(Sensor);
   expect(sensor.props.data.name).toBe(sensorName);
 
+  const spy = jest.spyOn(heartRateMonitor, 'disconnect');
+  expect(spy).not.toHaveBeenCalled();
   // remove sensor + refresh
   await renderer.act(async () => {
     await sensor.props.onAction();
     list.props.onRefresh();
   });
+
+  expect(spy).toHaveBeenCalledWith();
 
   // check it's gone
   const sensors = screen.findAllByType(Sensor);
