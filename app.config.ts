@@ -49,6 +49,12 @@ export default {
         },
       },
     ],
+    [
+      "expo-screen-orientation",
+      {
+        "initialOrientation": "LANDSCAPE"
+      }
+    ]
   ],
   extra: {
     eas: {
