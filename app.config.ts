@@ -2,7 +2,7 @@ const projectName = 'hypecycle';
 const appName =
   process.env.APP_VARIANT === 'production'
     ? projectName
-    : `${projectName}-${process.env.APP_VARIANT}`;
+    : `${projectName}.${process.env.APP_VARIANT}`;
 
 export default {
   name: appName,

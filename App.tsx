@@ -33,7 +33,6 @@ import {isDevice} from 'expo-device';
 import {useKeepAwake} from 'expo-keep-awake';
 import * as Sentry from 'sentry-expo';
 import 'react-native-gesture-handler';
-import Location from 'expo-location';
 
 Sentry.init({
   dsn: 'https://ecb57b595dcd4aa9bd4c4c56d015381f@o478080.ingest.sentry.io/4504984718934016',
@@ -59,12 +58,6 @@ function App() {
 
   useEffect(() => {
     const startServicesAndTasks = async () => {
-      // Create our global ble object
-      let {status} = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert('Error getting location');
-      }
-
       try {
         await ble.requestPermissions();
         await ble.start();
