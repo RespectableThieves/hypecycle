@@ -21,7 +21,6 @@ const Settings = () => {
 
   return (
     <Container>
-      <Text>This is a test!!!</Text>
       <Text>Native build version: {Application.nativeBuildVersion}</Text>
       <StravaConnect />
       {athlete && <StravaSettings athlete={athlete} />}

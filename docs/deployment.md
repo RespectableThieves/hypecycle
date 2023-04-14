@@ -19,10 +19,11 @@ Right now we have two profiles.
 1. Branch - a collection of (javascript only) changes - similar to a git branch. 
 2. Channel - a target native build. Any time you run a native build you can set the channel. Updates to that channel will be sent to that build. 
 
-Right now. We are avoiding the use of branches and just using channels. So all we every need is.
+Right now we have a branch `main` connected to channel `preview`. And everytime we merge a PR we run. 
 
 ```
-eas update --channel preview
+eas update --auto
 ```
+Which creates a new update on branch `main` with the latest commit message and then publishes that to clients in `preview` channel.
 
-But this will get run on every push to the `main` branch.
+__note__: There are ways to preview branches in the development build. It kinda works but I had to login to strava on every preview and it was a little annoying to work with. 
