@@ -4,6 +4,7 @@
   },
   "build": {
     "development": {
+      "channel": "development",
       "developmentClient": true,
       "distribution": "internal",
       "env": {
@@ -11,12 +12,14 @@
       }
     },
     "preview": {
+      "channel": "preview",
       "distribution": "internal",
       "env": {
         "APP_VARIANT": "preview"
       }
     },
     "production": {
+      "channel": "production",
       "env": {
         "APP_VARIANT": "production"
       }

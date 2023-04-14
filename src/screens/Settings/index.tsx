@@ -4,6 +4,7 @@ import {Avatar} from 'react-native-paper';
 import Container from '../../components/Container';
 import StravaConnect from '../../components/StravaConnect';
 import {Athlete} from '../../lib/strava';
+import * as Application from 'expo-application';
 
 const StravaSettings = ({athlete}: {athlete: Athlete}) => {
   return (
@@ -20,6 +21,8 @@ const Settings = () => {
 
   return (
     <Container>
+      <Text>{Application.applicationName}</Text>
+      <Text>native build version: {Application.nativeBuildVersion}</Text>
       <StravaConnect />
       {athlete && <StravaSettings athlete={athlete} />}
     </Container>

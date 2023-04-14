@@ -76,4 +76,10 @@ export default {
       },
     ],
   },
+  updates: {
+    url: 'https://u.expo.dev/fd6a3f46-9558-42c7-a0d2-b0b600637c7b',
+  },
+  runtimeVersion: {
+    policy: 'sdkVersion',
+  },
 };
