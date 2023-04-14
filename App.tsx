@@ -1,12 +1,12 @@
 import 'react-native-gesture-handler';
-import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
+import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
 import {
   MD3DarkTheme as DefaultTheme,
   Provider as PaperProvider,
 } from 'react-native-paper';
-import { StatusBar } from 'expo-status-bar';
-import { DrawerNav } from './src/components/DrawerNav';
-import { useEffect, useState } from 'react';
+import {StatusBar} from 'expo-status-bar';
+import {DrawerNav} from './src/components/DrawerNav';
+import {useEffect, useState} from 'react';
 import globalData from './src/lib/GlobalContext';
 import {
   onLocation,
@@ -24,22 +24,24 @@ import {
   cadenceMeter,
 } from './src/lib/sensor';
 import useLocation from './src/hooks/useLocation';
-import { Alert } from 'react-native';
-import { NavigationContainer, DarkTheme } from '@react-navigation/native';
-import { navigationRef } from './src/lib/navigation';
-import { StravaProvider } from './src/lib/StravaContext';
+import {Alert} from 'react-native';
+import {NavigationContainer, DarkTheme} from '@react-navigation/native';
+import {navigationRef} from './src/lib/navigation';
+import {StravaProvider} from './src/lib/StravaContext';
 import * as strava from './src/lib/strava';
-import { isDevice } from 'expo-device';
-import { useKeepAwake } from 'expo-keep-awake';
+import {isDevice} from 'expo-device';
+import {useKeepAwake} from 'expo-keep-awake';
 import * as Sentry from 'sentry-expo';
 import 'react-native-gesture-handler';
-import Location from 'expo-location'
+import Location from 'expo-location';
 
 Sentry.init({
   dsn: 'https://ecb57b595dcd4aa9bd4c4c56d015381f@o478080.ingest.sentry.io/4504984718934016',
   // only enable on device in development.
   // don't want emulator errors
-  enableInExpoDevelopment: process.env.APP_VARIANT === 'preview' || process.env.APP_VARIANT === 'production',
+  enableInExpoDevelopment:
+    process.env.APP_VARIANT === 'preview' ||
+    process.env.APP_VARIANT === 'production',
   debug: true, // If `true`, Sentry will try to print out useful debugging information if something goes wrong with sending the event. Set it to `false` in production
 });
 
@@ -58,7 +60,7 @@ function App() {
   useEffect(() => {
     const startServicesAndTasks = async () => {
       // Create our global ble object
-      let { status } = await Location.requestForegroundPermissionsAsync();
+      let {status} = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         Alert.alert('Error getting location');
       }

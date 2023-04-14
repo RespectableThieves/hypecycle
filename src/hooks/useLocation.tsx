@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import {useState, useEffect, useRef} from 'react';
 import {
   Accuracy,
   LocationCallback,
@@ -13,7 +13,6 @@ const useLocation = (shouldTrack: boolean, callback: LocationCallback) => {
   useEffect(() => {
     const startWatching = async () => {
       try {
-
         const newSubscriber = await watchPositionAsync(
           {
             accuracy: Accuracy.BestForNavigation,

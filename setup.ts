@@ -20,7 +20,7 @@ jest.mock('react-native-reanimated', () => {
 
   // The mock for `call` immediately calls the callback which is incorrect
   // So we override it with a no-op
-  Reanimated.default.call = () => { };
+  Reanimated.default.call = () => {};
 
   return Reanimated;
 });
@@ -30,7 +30,7 @@ jest.mock('expo-auth-session', () => {
   let res: any = null;
 
   const promptAsync = () => {
-    res = { type: 'success', params: { code: '123' } };
+    res = {type: 'success', params: {code: '123'}};
     return Promise.resolve();
   };
 
@@ -77,7 +77,7 @@ jest.mock('./src/lib/strava/api', () => {
     },
   };
 
-  const { token_type, expires_at, expires_in, refresh_token, access_token } =
+  const {token_type, expires_at, expires_in, refresh_token, access_token} =
     dummyToken;
 
   const uploads: any = [];
@@ -124,12 +124,12 @@ jest.mock('expo-location', () => {
       return Promise.all([_callbacks.map(cb => cb(loc))]);
     },
     requestForegroundPermissionsAsync: () => {
-      return Promise.resolve({ status: 'granted' })
+      return Promise.resolve({status: 'granted'});
     },
-    watchPositionAsync: jest.fn(function(_opts, cb) {
+    watchPositionAsync: jest.fn(function (_opts, cb) {
       _callbacks.push(cb);
 
-      return Promise.resolve({ remove: jest.fn() });
+      return Promise.resolve({remove: jest.fn()});
       // jest.fn().mockResolvedValue()
     }),
   };
