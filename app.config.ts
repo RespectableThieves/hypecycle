@@ -3,7 +3,7 @@ export default {
   slug: 'hypecycle',
   scheme: 'hypecycle',
   version: '1.0.0',
-  orientation: 'portrait',
+  orientation: 'landscape',
   icon: './assets/icon.png',
   userInterfaceStyle: 'light',
   splash: {
@@ -14,6 +14,7 @@ export default {
   assetBundlePatterns: ['**/*'],
   ios: {
     supportsTablet: true,
+    requireFullScreen: true,
   },
   android: {
     adaptiveIcon: {
@@ -49,12 +50,6 @@ export default {
         android: {
           kotlinVersion: '1.6.10',
         },
-      },
-    ],
-    [
-      'expo-screen-orientation',
-      {
-        initialOrientation: 'LANDSCAPE',
       },
     ],
   ],
