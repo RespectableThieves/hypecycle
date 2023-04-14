@@ -3,12 +3,12 @@ const appName = process.env.APP_VARIANT === 'production' ? projectName : `${proj
 
 export default {
   name: appName,
-  slug: 'hypecycle',
+  slug: projectName,
   scheme: appName,
   version: '1.0.0',
   orientation: 'landscape',
   icon: './assets/icon.png',
-  userInterfaceStyle: 'light',
+  userInterfaceStyle: 'dark',
   splash: {
     image: './assets/splash.png',
     resizeMode: 'contain',
@@ -43,7 +43,7 @@ export default {
         isBackgroundEnabled: true,
         modes: ['peripheral', 'central'],
         bluetoothAlwaysPermission:
-          'Allow $(PRODUCT_NAME) to connect to bluetooth devices',
+          `Allow $(${projectName}) to connect to bluetooth devices`,
       },
     ],
     '@morrowdigital/watermelondb-expo-plugin',
@@ -61,4 +61,17 @@ export default {
       projectId: 'fd6a3f46-9558-42c7-a0d2-b0b600637c7b',
     },
   },
+  "hooks": {
+    // NOTE: process.env.SENTRY_AUTH_TOKEN needs to be in env 
+    // when running expo publish
+    "postPublish": [
+      {
+        "file": "sentry-expo/upload-sourcemaps",
+        "config": {
+          "organization": "craigmulligan",
+          "project": projectName
+        }
+      }
+    ]
+  }
 };
