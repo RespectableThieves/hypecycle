@@ -1,7 +1,10 @@
+const projectName = 'hypecycle'
+const appName = process.env.APP_VARIANT === 'production' ? projectName : `${projectName}-${process.env.APP_VARIANT}`;
+
 export default {
-  name: 'hypecycle',
+  name: appName,
   slug: 'hypecycle',
-  scheme: 'hypecycle',
+  scheme: appName,
   version: '1.0.0',
   orientation: 'landscape',
   icon: './assets/icon.png',
@@ -21,7 +24,7 @@ export default {
       foregroundImage: './assets/adaptive-icon.png',
       backgroundColor: '#ffffff',
     },
-    package: 'com.craigmulligan.hypecycle',
+    package: `com.craigmulligan.${appName}`,
     config: {
       googleMaps: {
         apiKey: process.env.GOOGLE_MAP_API_KEY,
