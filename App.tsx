@@ -1,12 +1,12 @@
 import 'react-native-gesture-handler';
-import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import {
   MD3DarkTheme as DefaultTheme,
   Provider as PaperProvider,
 } from 'react-native-paper';
-import {StatusBar} from 'expo-status-bar';
-import {DrawerNav} from './src/components/DrawerNav';
-import {useEffect, useState} from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { DrawerNav } from './src/components/DrawerNav';
+import { useEffect, useState } from 'react';
 import globalData from './src/lib/GlobalContext';
 import {
   onLocation,
@@ -24,15 +24,16 @@ import {
   cadenceMeter,
 } from './src/lib/sensor';
 import useLocation from './src/hooks/useLocation';
-import {Alert} from 'react-native';
-import {NavigationContainer, DarkTheme} from '@react-navigation/native';
-import {navigationRef} from './src/lib/navigation';
-import {StravaProvider} from './src/lib/StravaContext';
+import { Alert } from 'react-native';
+import { NavigationContainer, DarkTheme } from '@react-navigation/native';
+import { navigationRef } from './src/lib/navigation';
+import { StravaProvider } from './src/lib/StravaContext';
 import * as strava from './src/lib/strava';
-import {isDevice} from 'expo-device';
-import {useKeepAwake} from 'expo-keep-awake';
+import { isDevice } from 'expo-device';
+import { useKeepAwake } from 'expo-keep-awake';
 import * as Sentry from 'sentry-expo';
 import 'react-native-gesture-handler';
+import Location from 'expo-location'
 
 Sentry.init({
   dsn: 'https://ecb57b595dcd4aa9bd4c4c56d015381f@o478080.ingest.sentry.io/4504984718934016',
@@ -57,6 +58,11 @@ function App() {
   useEffect(() => {
     const startServicesAndTasks = async () => {
       // Create our global ble object
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('Error getting location');
+      }
+
       try {
         await ble.requestPermissions();
         await ble.start();
@@ -66,6 +72,7 @@ function App() {
       if (locationError) {
         Alert.alert('Error getting location');
       }
+
       console.log('ble', await ble.checkState());
       // Ensure that the realtime row is setup
       // before we run any async services.
