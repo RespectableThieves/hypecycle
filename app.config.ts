@@ -25,7 +25,7 @@ export default {
   android: {
     adaptiveIcon: {
       foregroundImage: './assets/adaptive-icon.png',
-      backgroundColor: '#ffffff',
+      backgroundColor: process.env.ICON_COLOR || '#ffffff',
     },
     package: `com.craigmulligan.${appName}`,
     config: {
