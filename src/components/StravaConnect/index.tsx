@@ -18,7 +18,6 @@ const discovery = {
 export default function StravaConnect() {
   // This will render a signin screen if not signed in.
   // otherwise render children.
-  console.log(process.env.APP_VARIANT);
   const {athlete, authorize, logout} = useStrava();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
