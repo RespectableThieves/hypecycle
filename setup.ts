@@ -123,6 +123,9 @@ jest.mock('expo-location', () => {
     _emitLocation: (loc: any) => {
       return Promise.all([_callbacks.map(cb => cb(loc))]);
     },
+    requestForegroundPermissionsAsync: () => {
+      return Promise.resolve({status: 'granted'});
+    },
     watchPositionAsync: jest.fn(function (_opts, cb) {
       _callbacks.push(cb);
 

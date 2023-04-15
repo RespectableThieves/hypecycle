@@ -1,7 +1,0 @@
-{
-  "name": "HypePoc",
-  "displayName": "HypePoc",
-  "plugins": [
-    "sentry-expo"
-  ]
-}

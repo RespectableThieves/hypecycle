@@ -26,7 +26,9 @@ export default function StravaConnect() {
       clientId: STRAVA_CLIENT_ID,
       scopes: ['activity:write'],
       redirectUri: makeRedirectUri({
-        native: 'hypecycle://settings',
+        native: `hypecycle.${
+          process.env.APP_VARIANT ? process.env.APP_VARIANT : 'development'
+        }://settings`,
       }),
     },
     discovery,

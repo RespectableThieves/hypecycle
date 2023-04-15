@@ -19,6 +19,7 @@ describe('ride and realtime db interactions', () => {
 });
 
 describe('onRideEnd', () => {
+  jest.useFakeTimers();
   it('should save rideSummary, save tcx file, upload to strava and update rideSummary.stravaId', async () => {
     const snapshotCount = 5;
     const realtime = await getOrCreateRealtimeRecord();
