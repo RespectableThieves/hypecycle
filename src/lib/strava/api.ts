@@ -1,4 +1,4 @@
-import {BACKEND, STRAVA_BACKEND} from '../../constants';
+import Constants from '../../constants';
 import {RideModel} from '../../database';
 import * as FileSystem from 'expo-file-system';
 
@@ -47,7 +47,7 @@ async function getToken<T>(
   type: 'auth' | 'refresh',
   params: {code: string} | {refreshToken: Token['refresh_token']},
 ): Promise<T> {
-  const res = await fetch(`${BACKEND}/${type}`, {
+  const res = await fetch(`${Constants.backend}/${type}`, {
     body: JSON.stringify(params),
     method: 'POST',
     headers: {
@@ -96,7 +96,7 @@ export async function upload(
   /// example response: {"data": {"body": "{\"id\":9482535552,\"id_str\":\"9482535552\",\"external_id\":\"stripped_health_data_100877106_1680703881.gpx\",\"error\":null,\"status\":\"Your activity is still being processed.\",\"activity_id\":null}", "headers": {"cache-control": "max-age=0, private, must-revalidate", "content-type": "application/json; charset=utf-8", "date": "Wed, 05 Apr 2023 14:11:22 GMT", "etag": "W/\"7a1bad1d9f549f028357850b6d844dd6\"", "referrer-policy": "strict-origin-when-cross-origin", "server": "nginx/1.21.3", "status": "201 Created", "vary": "Origin", "via": "1.1 linkerd, 1.1 linkerd, 1.1 dccf8b56c5bf22bc5b8eac27ffbf7758.cloudfront.net (CloudFront)", "x-amz-cf-id": "vUWkjUVTl1-81EVZLNL8MoHBKCEixkdxwv165NkOIa6E4HtaoAVk_A==", "x-amz-cf-pop": "ATL59-P3", "x-cache": "Miss from cloudfront", "x-content-type-options": "nosniff", "x-download-options": "noopen", "x-frame-options": "DENY", "x-permitted-cross-domain-policies": "none", "x-ratelimit-limit": "200,2000", "x-ratelimit-usage": "2,2", "x-request-id": "7f29f9a3-415e-411d-bf9e-d82ce1237e50", "x-xss-protection": "1; mode=block"}, "status": 201}}
 
   const res = await FileSystem.uploadAsync(
-    STRAVA_BACKEND + '/uploads',
+    Constants.stravaBackend + '/uploads',
     fileURI,
     {
       headers: {

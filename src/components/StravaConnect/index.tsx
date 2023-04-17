@@ -3,7 +3,7 @@ import * as WebBrowser from 'expo-web-browser';
 import {makeRedirectUri, useAuthRequest} from 'expo-auth-session';
 import {Button, Text} from 'react-native-paper';
 import {useStrava} from '../../lib/StravaContext';
-import {STRAVA_CLIENT_ID} from '../../constants';
+import Constants from '../../constants';
 import {View} from 'react-native';
 
 WebBrowser.maybeCompleteAuthSession();
@@ -23,12 +23,10 @@ export default function StravaConnect() {
   const [error, setError] = useState('');
   const [_, response, promptAsync] = useAuthRequest(
     {
-      clientId: STRAVA_CLIENT_ID,
+      clientId: Constants.stravaClientId,
       scopes: ['activity:write'],
       redirectUri: makeRedirectUri({
-        native: `hypecycle.${
-          process.env.APP_VARIANT ? process.env.APP_VARIANT : 'development'
-        }://settings`,
+        native: `${Constants.appName}://settings`,
       }),
     },
     discovery,
