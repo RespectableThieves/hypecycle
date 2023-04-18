@@ -4,7 +4,7 @@ import {
   MD3DarkTheme as DefaultTheme,
   Provider as PaperProvider,
 } from 'react-native-paper';
-import {StatusBar} from 'expo-status-bar';
+import StatusBar from './src/components/DeviceStatus';
 import {DrawerNav} from './src/components/DrawerNav';
 import {useEffect, useState} from 'react';
 import globalData from './src/lib/GlobalContext';
@@ -58,6 +58,7 @@ function App() {
 
   useEffect(() => {
     const startServicesAndTasks = async () => {
+      await getOrCreateRealtimeRecord();
       try {
         await ble.requestPermissions();
         await ble.start();
@@ -71,7 +72,6 @@ function App() {
       console.log('ble', await ble.checkState());
       // Ensure that the realtime row is setup
       // before we run any async services.
-      await getOrCreateRealtimeRecord();
 
       if (!isDevice) {
         // this only runs in the emulator
@@ -126,8 +126,8 @@ function App() {
         cadenceMeter,
       }}>
       <PaperProvider theme={DefaultTheme}>
-        <StatusBar hidden />
         <StravaProvider stravaToken={stravaToken}>
+          <StatusBar />
           <NavigationContainer theme={DarkTheme} ref={navigationRef}>
             <DrawerNav />
           </NavigationContainer>

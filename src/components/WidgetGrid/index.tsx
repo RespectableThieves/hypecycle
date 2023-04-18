@@ -37,8 +37,6 @@ function WidgetGrid({realtimeData}: Props) {
   const [aggregates, setAggregates] = useState<RideAggregate>();
   const [ride, setRide] = useState<RideModel>();
 
-  console.log(ride?.startedAt);
-
   useSetInterval(
     async () => {
       if (ride) {

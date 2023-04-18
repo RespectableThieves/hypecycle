@@ -4,6 +4,24 @@ import {getOrCreateRealtimeRecord} from './realtime';
 import {Subscription} from 'rxjs';
 
 type SensorType = 'HeartRate' | 'CyclingPower' | 'CyclingSpeedAndCadence';
+type StatusField = 'isPower' | 'isHeartRate' | 'isCadence';
+
+function getSensorStatusFieldFromType(sensorType: SensorType): StatusField {
+  switch (sensorType) {
+    case 'HeartRate':
+      return 'isHeartRate';
+
+    case 'CyclingPower':
+      return 'isPower';
+
+    case 'CyclingSpeedAndCadence':
+      return 'isCadence';
+
+    default:
+      console.log('Unknown sensor type');
+      throw new Error('Unknown sensor type');
+  }
+}
 
 function getSensorFromType(sensorType: SensorType) {
   switch (sensorType) {
@@ -57,30 +75,56 @@ export async function onPowerSensorEvent(
   });
 }
 
-async function connectToSensor(
-  sensorModel: SensorModel,
-  sensor: any,
-  sensorType: string,
-  callback: {
-    (r: RealtimeDataModel): Promise<RealtimeDataModel>;
-    (r: RealtimeDataModel): Promise<RealtimeDataModel>;
-  },
-) {
-  if (sensorModel === undefined) {
-    throw new Error(`No ${sensorType} sensor found`);
-  }
+// TODO type react-native-cycling-sensors
+export function sensorStatusService(sensor: any, sensorType: SensorType) {
+  // This will watch a sensor and watch a sensor for x interval
+  // to check it's connection and write that back to statusField.
+  let timer: NodeJS.Timer | null;
+  const statusField = getSensorStatusFieldFromType(sensorType);
 
-  try {
-    // Try connect to our BLE sensor
-    sensor.address = sensorModel.address;
-    await sensor.connect();
-  } catch (error) {
-    console.log('catch in connectToSensor was called');
-    await sensor.disconnect().catch((err: any) => console.log(err));
-    throw error;
-  }
-  // Start subscription on our sensor
-  sensor.subscribe(callback);
+  const start = async (interval: number) => {
+    const record = await getOrCreateRealtimeRecord();
+
+    timer = setInterval(async () => {
+      // TODO I guess we should check in the db
+      // for any connected sensors and only show the
+      console.log(`checking ${sensorType} sensor`);
+      try {
+        // TODO we should upate react-native-cycling-sensors
+        // const isConnected = await sensor.isPeripheralConnected()
+        await db.write(async () => {
+          return record.update(() => {
+            if (record[statusField]) {
+              record[statusField] = sensor.isConnected;
+            }
+            return record;
+          });
+        });
+      } catch (err) {
+        console.error("Couldn't update sensor status");
+      }
+    }, interval);
+  };
+
+  const stop = async () => {
+    const record = await getOrCreateRealtimeRecord();
+
+    console.log(`reseting ${statusField}`);
+    await db.write(async () => {
+      return record.update(() => {
+        record[statusField] = null;
+        return record;
+      });
+    });
+    if (timer) {
+      clearInterval(timer);
+    }
+  };
+
+  return {
+    start,
+    stop,
+  };
 }
 
 export function bleSensorService(
@@ -88,12 +132,12 @@ export function bleSensorService(
   callback: (r: RealtimeDataModel) => Promise<RealtimeDataModel>,
 ) {
   // TODO get types for react-native-cylcing-sensors
-  let sensor: any = null;
+  let sensor = getSensorFromType(sensorType);
   let observeable: Subscription;
+  const sensorStatusWorker = sensorStatusService(sensor, sensorType);
 
   const start = async () => {
     console.log(`Starting ${sensorType} service worker.`);
-    sensor = getSensorFromType(sensorType);
     // get the first sensor of sensorType
     const subscription = db
       .get<SensorModel>('sensor')
@@ -103,16 +147,34 @@ export function bleSensorService(
     // Setup subscription for sensors added after start
     observeable = subscription?.subscribe({
       next: async (obsSensors: SensorModel[]) => {
-        //const sensorModel = findFirstSensorOfType(obsSensors, sensorType);
         const [sensorModel] = obsSensors;
 
         if (sensorModel) {
+          sensorStatusWorker.start(10000);
+          // TODO. We need to ensure only one
+          // of each type is running.
           console.log('observed new sensor: ', sensorModel);
           try {
-            await connectToSensor(sensorModel, sensor, sensorType, callback);
+            try {
+              // Try connect to our BLE sensor
+              sensor.address = sensorModel.address;
+              await sensor.connect();
+              // If we have connected we should start the sensor status service.
+            } catch (error) {
+              console.log('catch in connectToSensor was called');
+              await sensor.disconnect().catch((err: any) => console.log(err));
+              throw error;
+            }
+            // Start subscription on our sensor
+            sensor.subscribe(callback);
           } catch (error) {
             console.log(`Error connecting to ${sensorType} sensor:`, error);
           }
+        } else {
+          // we don't have that sensor type in our db
+          // so we should set the status to null.
+          // to show we aren't tracking it.
+          await sensorStatusWorker.stop();
         }
       },
       error: error => {
@@ -121,11 +183,12 @@ export function bleSensorService(
     });
   };
 
-  const stop = () => {
+  const stop = async () => {
     console.log(`${sensorType} service: stopping`);
     sensor?.unsubscribe();
     sensor?.disconnect();
     observeable?.unsubscribe();
+    await sensorStatusWorker.stop();
   };
 
   return {

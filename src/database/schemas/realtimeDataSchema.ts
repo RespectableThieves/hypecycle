@@ -64,22 +64,27 @@ export const realtimeDataSchema = tableSchema({
     {
       name: 'is_bluetooth',
       type: 'boolean',
+      isOptional: true,
     },
     {
       name: 'is_wifi',
       type: 'boolean',
+      isOptional: true,
     },
     {
       name: 'is_power',
       type: 'boolean',
+      isOptional: true,
     },
     {
       name: 'is_heart_rate',
       type: 'boolean',
+      isOptional: true,
     },
     {
       name: 'is_cadence',
       type: 'boolean',
+      isOptional: true,
     },
     {
       name: 'created_at',

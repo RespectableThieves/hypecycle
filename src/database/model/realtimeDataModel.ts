@@ -17,11 +17,11 @@ export default class RealtimeDataModel extends Model {
   @field('three_sec_power') threeSecPower!: number | null;
   @field('ten_sec_power') tenSecPower!: number | null;
   @field('cadence') cadence!: number | null;
-  @field('is_bluetooth') isBluetooth!: boolean;
-  @field('is_wifi') isWifi!: boolean;
-  @field('is_power') isPower!: boolean;
-  @field('is_heart_rate') isHeartRate!: boolean;
-  @field('is_cadence') isCadence!: boolean;
+  @field('is_bluetooth') isBluetooth!: boolean | null;
+  @field('is_wifi') isWifi!: boolean | null;
+  @field('is_power') isPower!: boolean | null;
+  @field('is_heart_rate') isHeartRate!: boolean | null;
+  @field('is_cadence') isCadence!: boolean | null;
   @date('created_at') createdAt!: number;
   @relation('ride', 'ride_id') ride!: Relation<Ride> | null;
 }
