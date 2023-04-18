@@ -28,18 +28,35 @@ Which creates a new update on branch `main` with the latest commit message and t
 
 __note__: There are ways to preview branches in the development build. It kinda works but I had to login to strava on every preview and it was a little annoying to work with. 
 
+## Platforms:
 
-# Configuration
+Native builds are run on expo's infrastructure while javascript updates (via `eas update`) are run on github actions. We require the following secrets present in each platform.
 
-We have 4 appVariants, `test`, `development`, `preview`, `production`. If you are running an `eas` command you'll want to set the `APP_VARIANT` environment variable. For example: 
+Expo:
+
+- `SENTRY_AUTH_TOKEN` - used to upload sourcemaps
+- `MAPBOX_TOKEN` - requires (secret) Downloads:read to run the native build.
+
+Github:
+
+- `SENTRY_AUTH_TOKEN` - used to upload sourcemaps
+
+- `EXPO_TOKEN` - used to upload js update bundles 
+
+## Configuration
+
 ```
-APP_VARIANT=development yarn eas update --auto
+yarn eas update --auto
 ```
 
-Adding a new Constant.
+### Adding a new Constant.
 
-In `app.config.ts` add a new key to the `Constants` map. Then add the matching environment variable to each `.env.<env>` file. 
+In `app.config.ts` add a new key to the `Constants` map. If it's constant across app variant's you can put it in the `common` map else add it to the `config.<env>`. But for those commands we have the following yarn `scripts`. 
 
-# Secrets
+```
+yarn update:preview
+```
 
-There are currently two secrets which need to be in the native build environment (expo build servers). `SENTRY_AUTH_TOKEN` & `GOOGLE_MAP_API_KEY`
+```
+yarn update:production
+```
