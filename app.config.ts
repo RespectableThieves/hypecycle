@@ -1,15 +1,19 @@
+// NOTE: This file is loaded in both node.js envs
+// and react-native. It must therefore be agnostic to both.
+// process.env is handled by transform-inline-environment-variables
 type AppVariant = 'test' | 'development' | 'preview' | 'production';
 
 export type Settings = {
-  appName: string;
   projectName: string;
+  appName: string;
+  iconColor: string;
+  commitSHA: string;
   appVariant: AppVariant;
   realtimeDataId: string;
   backend: string;
   stravaBackend: string;
   stravaClientId: string;
   secureStoreCurrentUserId: string;
-  iconColor: string;
 };
 
 function ensure(val: string | undefined, key: string) {
@@ -20,11 +24,14 @@ function ensure(val: string | undefined, key: string) {
   return val;
 }
 
+console.log(process.env);
 // NB: because we are using babel transform-inline-environment-variables
 // we need to explicitly call each envar key.
 export const Constants: Settings = {
-  appName: ensure(process.env.APP_NAME, 'APP_NAME'),
   projectName: ensure(process.env.PROJECT_NAME, 'PROJECT_NAME'),
+  appName: ensure(process.env.APP_NAME, 'APP_NAME'),
+  iconColor: ensure(process.env.ICON_COLOR, 'ICON_COLOR'),
+  commitSHA: ensure(process.env.COMMIT_SHA, 'COMMIT_SHA'),
   appVariant: ensure(process.env.APP_VARIANT, 'APP_VARIANT') as AppVariant,
   realtimeDataId: ensure(process.env.REALTIME_DATA_ID, 'REALTIME_DATA_ID'),
   backend: ensure(process.env.BACKEND, 'BACKEND'),
@@ -34,14 +41,13 @@ export const Constants: Settings = {
     process.env.SECURE_STORE_CURRENT_USER_KEY,
     'SECURE_STORE_CURRENT_USER_KEY',
   ),
-  iconColor: ensure(process.env.ICON_COLOR, 'ICON_COLOR'),
 };
 
 export default {
   name: Constants.appName,
   slug: Constants.projectName,
   scheme: Constants.appName,
-  version: '1.0.0',
+  version: Constants.commitSHA,
   orientation: 'landscape',
   icon: './assets/icon.png',
   userInterfaceStyle: 'dark',

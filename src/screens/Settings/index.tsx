@@ -24,6 +24,7 @@ const Settings = () => {
     <Container>
       <Text>Native build version: {Application.nativeBuildVersion}</Text>
       <Text>App variant: {Constants.appVariant}</Text>
+      <Text>Commit Sha: {Constants.commitSHA.slice(0, 6)}</Text>
       <StravaConnect />
       {athlete && <StravaSettings athlete={athlete} />}
     </Container>
