@@ -24,7 +24,6 @@ function ensure(val: string | undefined, key: string) {
   return val;
 }
 
-console.log(process.env);
 // NB: because we are using babel transform-inline-environment-variables
 // we need to explicitly call each envar key.
 export const Constants: Settings = {

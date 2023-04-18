@@ -88,6 +88,7 @@ const RideFab = ({activeRides = []}: Props) => {
   return (
     <Portal>
       <FAB.Group
+        variant={activeRide ? 'tertiary' : 'primary'}
         visible
         open={open}
         testID="ride-fab-group"
