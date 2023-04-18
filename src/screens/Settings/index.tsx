@@ -5,6 +5,7 @@ import Container from '../../components/Container';
 import StravaConnect from '../../components/StravaConnect';
 import {Athlete} from '../../lib/strava';
 import * as Application from 'expo-application';
+import Constants from '../../constants';
 
 const StravaSettings = ({athlete}: {athlete: Athlete}) => {
   return (
@@ -22,6 +23,8 @@ const Settings = () => {
   return (
     <Container>
       <Text>Native build version: {Application.nativeBuildVersion}</Text>
+      <Text>App variant: {Constants.appVariant}</Text>
+      <Text>Commit Sha: {Constants.commitSHA.slice(0, 6)}</Text>
       <StravaConnect />
       {athlete && <StravaSettings athlete={athlete} />}
     </Container>

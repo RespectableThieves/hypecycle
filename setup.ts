@@ -44,6 +44,7 @@ jest.mock('expo-auth-session', () => {
   };
 });
 
+jest.mock('./src/constants');
 jest.mock('./src/lib/strava/api', () => {
   const dummyToken = {
     token_type: 'Bearer',

@@ -1,14 +1,53 @@
-const projectName = 'hypecycle';
-const appName =
-  process.env.APP_VARIANT === 'production'
-    ? projectName
-    : `${projectName}.${process.env.APP_VARIANT}`;
+// NOTE: This file is loaded in both node.js envs
+// and react-native. It must therefore be agnostic to both.
+// process.env is handled by transform-inline-environment-variables
+type AppVariant = 'test' | 'development' | 'preview' | 'production';
+
+export type Settings = {
+  projectName: string;
+  appName: string;
+  iconColor: string;
+  commitSHA: string;
+  appVariant: AppVariant;
+  realtimeDataId: string;
+  backend: string;
+  stravaBackend: string;
+  stravaClientId: string;
+  secureStoreCurrentUserId: string;
+};
+
+function ensure(val: string | undefined, key: string) {
+  if (val === undefined) {
+    throw Error(`envar ${key} is not set`);
+  }
+
+  return val;
+}
+
+console.log(process.env);
+// NB: because we are using babel transform-inline-environment-variables
+// we need to explicitly call each envar key.
+export const Constants: Settings = {
+  projectName: ensure(process.env.PROJECT_NAME, 'PROJECT_NAME'),
+  appName: ensure(process.env.APP_NAME, 'APP_NAME'),
+  iconColor: ensure(process.env.ICON_COLOR, 'ICON_COLOR'),
+  commitSHA: ensure(process.env.COMMIT_SHA, 'COMMIT_SHA'),
+  appVariant: ensure(process.env.APP_VARIANT, 'APP_VARIANT') as AppVariant,
+  realtimeDataId: ensure(process.env.REALTIME_DATA_ID, 'REALTIME_DATA_ID'),
+  backend: ensure(process.env.BACKEND, 'BACKEND'),
+  stravaBackend: ensure(process.env.STRAVA_BACKEND, 'STRAVA_BACKEND'),
+  stravaClientId: ensure(process.env.STRAVA_CLIENT_ID, 'STRAVA_CLIENT_ID'),
+  secureStoreCurrentUserId: ensure(
+    process.env.SECURE_STORE_CURRENT_USER_KEY,
+    'SECURE_STORE_CURRENT_USER_KEY',
+  ),
+};
 
 export default {
-  name: appName,
-  slug: projectName,
-  scheme: appName,
-  version: '1.0.0',
+  name: Constants.appName,
+  slug: Constants.projectName,
+  scheme: Constants.appName,
+  version: Constants.commitSHA,
   orientation: 'landscape',
   icon: './assets/icon.png',
   userInterfaceStyle: 'dark',
@@ -25,9 +64,9 @@ export default {
   android: {
     adaptiveIcon: {
       foregroundImage: './assets/adaptive-icon.png',
-      backgroundColor: process.env.ICON_COLOR || '#ffffff',
+      backgroundColor: Constants.iconColor || '#ffffff',
     },
-    package: `com.craigmulligan.${appName}`,
+    package: `com.craigmulligan.${Constants.appName}`,
     config: {
       googleMaps: {
         apiKey: process.env.GOOGLE_MAP_API_KEY,
@@ -45,7 +84,7 @@ export default {
       {
         isBackgroundEnabled: true,
         modes: ['peripheral', 'central'],
-        bluetoothAlwaysPermission: `Allow $(${projectName}) to connect to bluetooth devices`,
+        bluetoothAlwaysPermission: `Allow $(${Constants.projectName}) to connect to bluetooth devices`,
       },
     ],
     '@morrowdigital/watermelondb-expo-plugin',
@@ -59,6 +98,7 @@ export default {
     ],
   ],
   extra: {
+    ...Constants,
     eas: {
       projectId: 'fd6a3f46-9558-42c7-a0d2-b0b600637c7b',
     },
@@ -71,7 +111,7 @@ export default {
         file: 'sentry-expo/upload-sourcemaps',
         config: {
           organization: 'craigmulligan',
-          project: projectName,
+          project: Constants.projectName,
         },
       },
     ],

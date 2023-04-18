@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 import {Container, Row, Col} from 'react-native-flex-grid';
 import withObservables from '@nozbe/with-observables';
 import {SimpleMetric} from '../SimpleMetric';
-import {REALTIME_DATA_ID} from '../../constants';
+import Constants from '../../constants';
 import {db, RealtimeDataModel, RideModel} from '../../database';
 import {
   getRideAggregates,
@@ -136,7 +136,7 @@ function WidgetGrid({realtimeData}: Props) {
 const enhance = withObservables([], () => ({
   realtimeData: db
     .get<RealtimeDataModel>('realtime_data')
-    .findAndObserve(REALTIME_DATA_ID),
+    .findAndObserve(Constants.realtimeDataId),
 }));
 
 export default enhance(WidgetGrid);

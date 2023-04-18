@@ -1,4 +1,4 @@
-import {SECURE_STORE_CURRENT_USER_KEY} from '../../constants';
+import Constants from '../../constants';
 import * as SecureStore from 'expo-secure-store';
 import {authorize, refreshToken, Athlete, Token, upload} from './api';
 
@@ -7,7 +7,7 @@ import {authorize, refreshToken, Athlete, Token, upload} from './api';
 // work so we've split it into ./api + index
 async function loadToken(): Promise<Token | null> {
   const tokenData = await SecureStore.getItemAsync(
-    SECURE_STORE_CURRENT_USER_KEY,
+    Constants.secureStoreCurrentUserId,
   );
 
   if (tokenData) {
@@ -50,13 +50,13 @@ async function loadToken(): Promise<Token | null> {
 
 async function saveToken(token: Token) {
   await SecureStore.setItemAsync(
-    SECURE_STORE_CURRENT_USER_KEY,
+    Constants.secureStoreCurrentUserId,
     JSON.stringify(token),
   );
 }
 
 async function deleteToken() {
-  await SecureStore.deleteItemAsync(SECURE_STORE_CURRENT_USER_KEY);
+  await SecureStore.deleteItemAsync(Constants.secureStoreCurrentUserId);
 }
 
 export {authorize, refreshToken, loadToken, saveToken, deleteToken, upload};

@@ -3,12 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "lint": "eslint .",
-    "test": "jest --forceExit",
-    "types": "tsc --noEmit"
+    "start": "./with_env development expo start",
+    "test": "./with_env test jest --forceExit",
+    "eas": "./with_env ${APP_VARIANT} eas",
+    "types": "tsc --noEmit",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@config-plugins/react-native-ble-plx": "^6.0.0",
@@ -65,6 +64,7 @@
     "@types/styled-components": "^5.1.26",
     "@types/styled-components-react-native": "^5.2.1",
     "babel-jest": "^29.2.1",
+    "babel-plugin-transform-inline-environment-variables": "^0.4.4",
     "better-sqlite3": "^8.2.0",
     "eslint": "^8.19.0",
     "eslint-plugin-ft-flow": "^2.0.3",
