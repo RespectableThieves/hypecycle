@@ -5,18 +5,11 @@ import {Options, Option, StyledListItem, VerticalDivider} from './styles';
 import {List} from 'react-native-paper';
 import {View} from 'react-native';
 import {SensorServiceIcons} from '../SensorServiceIcons';
-
-export type SensorProps = {
-  id: string;
-  name: string;
-  is_primary: boolean;
-  sensorType: string[];
-  type: string;
-  address: string;
-};
+import {PeripheralSensor} from '../../lib/bleManager';
+import {SensorModel} from '../../database';
 
 type Props = {
-  data: SensorProps;
+  data: PeripheralSensor | SensorModel;
   onAction: () => void;
   actionIcon: keyof typeof MaterialCommunityIcons.glyphMap;
   actionColor: string;
@@ -46,7 +39,7 @@ export function Sensor({data, onAction, actionIcon, actionColor}: Props) {
     <View>
       <StyledListItem
         title={data.name}
-        description={data.address || data.id}
+        description={'address' in data ? data.address : data.id}
         left={Left}
         right={Right({data, onAction, actionIcon, actionColor})}
       />

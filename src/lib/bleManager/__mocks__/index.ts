@@ -1,9 +1,9 @@
-import {SensorProps} from '../src/components/Sensor';
+import {PeripheralSensor} from '../bleSensors';
 
 class DummySensor {
   _callbacks: any[];
   discoveryStopCallback: () => Promise<void>;
-  sensorsDiscovered: SensorProps[];
+  sensorsDiscovered: PeripheralSensor[];
 
   constructor() {
     this.discoveryStopCallback = () => Promise.resolve();
