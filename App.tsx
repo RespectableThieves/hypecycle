@@ -33,6 +33,10 @@ import {isDevice} from 'expo-device';
 import {useKeepAwake} from 'expo-keep-awake';
 import * as Sentry from 'sentry-expo';
 import 'react-native-gesture-handler';
+import Constants from './src/constants';
+import Mapbox from '@rnmapbox/maps';
+
+Mapbox.setAccessToken(Constants.mapboxPublicToken);
 
 Sentry.init({
   dsn: 'https://ecb57b595dcd4aa9bd4c4c56d015381f@o478080.ingest.sentry.io/4504984718934016',

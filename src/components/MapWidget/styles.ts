@@ -1,6 +1,6 @@
 import {Text} from 'react-native-paper';
 import styled from 'styled-components/native';
-import MapView from 'react-native-maps';
+import Mapbox from '@rnmapbox/maps';
 
 type Props = {
   widgetHeight: number;
@@ -28,7 +28,7 @@ export const DataText = styled(Text)`
   color: #f1fffa;
 `;
 
-export const StyledMapView = styled(MapView)`
+export const StyledMapView = styled(Mapbox.MapView)`
   flex: 1;
   height: ${({widgetHeight}: {widgetHeight: number}) => widgetHeight}px;
   border-radius: 8px;

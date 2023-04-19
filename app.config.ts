@@ -2,8 +2,9 @@
 // and react-native. It must therefore be agnostic to both.
 // process.env is handled by transform-inline-environment-variables
 type AppVariant = 'test' | 'development' | 'preview' | 'production';
+const appVariant = (process.env.APP_VARIANT as AppVariant) || 'development';
 
-export type Settings = {
+export type Config = {
   projectName: string;
   appName: string;
   iconColor: string;
@@ -14,33 +15,46 @@ export type Settings = {
   stravaBackend: string;
   stravaClientId: string;
   secureStoreCurrentUserId: string;
+  mapboxPublicToken: string;
 };
 
-function ensure(val: string | undefined, key: string) {
-  if (val === undefined) {
-    throw Error(`envar ${key} is not set`);
-  }
-
-  return val;
-}
-
-// NB: because we are using babel transform-inline-environment-variables
-// we need to explicitly call each envar key.
-export const Constants: Settings = {
-  projectName: ensure(process.env.PROJECT_NAME, 'PROJECT_NAME'),
-  appName: ensure(process.env.APP_NAME, 'APP_NAME'),
-  iconColor: ensure(process.env.ICON_COLOR, 'ICON_COLOR'),
-  commitSHA: ensure(process.env.COMMIT_SHA, 'COMMIT_SHA'),
-  appVariant: ensure(process.env.APP_VARIANT, 'APP_VARIANT') as AppVariant,
-  realtimeDataId: ensure(process.env.REALTIME_DATA_ID, 'REALTIME_DATA_ID'),
-  backend: ensure(process.env.BACKEND, 'BACKEND'),
-  stravaBackend: ensure(process.env.STRAVA_BACKEND, 'STRAVA_BACKEND'),
-  stravaClientId: ensure(process.env.STRAVA_CLIENT_ID, 'STRAVA_CLIENT_ID'),
-  secureStoreCurrentUserId: ensure(
-    process.env.SECURE_STORE_CURRENT_USER_KEY,
-    'SECURE_STORE_CURRENT_USER_KEY',
-  ),
+const common = {
+  appVariant,
+  projectName: 'hypecycle',
+  appName: `hypecycle.${appVariant}`,
+  commitSHA:
+    process.env.GITHUB_SHA ||
+    process.env.EAS_BUILD_GIT_COMMIT_HASH ||
+    'unknown',
+  realtimeDataId: 'realtimedataid',
+  backend: 'https://hypecycle.hey5806.workers.dev',
+  stravaBackend: 'https://www.strava.com/api/v3',
+  stravaClientId: '104727',
+  secureStoreCurrentUserId: 'current-user',
+  mapboxPublicToken:
+    'pk.eyJ1IjoiaG9ib2NoaWxkIiwiYSI6ImNqZTA1aDBleDFtaHYyeG82dnJuZGNzbHIifQ.YhtobTRfkogqAzzWa84wcg',
 };
+
+const configs = {
+  test: {
+    ...common,
+    iconColor: '#FF5722',
+  },
+  development: {
+    ...common,
+    iconColor: '#FF5722',
+  },
+  preview: {
+    ...common,
+    iconColor: '#00D084',
+  },
+  production: {
+    ...common,
+    iconColor: '#000000',
+  },
+};
+
+export const Constants: Config = configs[appVariant];
 
 export default {
   name: Constants.appName,
@@ -66,11 +80,6 @@ export default {
       backgroundColor: Constants.iconColor || '#ffffff',
     },
     package: `com.craigmulligan.${Constants.appName}`,
-    config: {
-      googleMaps: {
-        apiKey: process.env.GOOGLE_MAP_API_KEY,
-      },
-    },
   },
   web: {
     favicon: './assets/favicon.png',
@@ -78,6 +87,14 @@ export default {
   plugins: [
     'expo-location',
     'sentry-expo',
+    [
+      '@rnmapbox/maps',
+      {
+        RNMapboxMapsImpl: 'mapbox',
+        RNMapboxMapsDownloadToken: process.env.MAPBOX_TOKEN,
+        locationWhenInUsePermission: 'Show current location on map.',
+      },
+    ],
     [
       '@config-plugins/react-native-ble-plx',
       {
@@ -103,8 +120,6 @@ export default {
     },
   },
   hooks: {
-    // NOTE: process.env.SENTRY_AUTH_TOKEN needs to be in env
-    // when running expo publish
     postPublish: [
       {
         file: 'sentry-expo/upload-sourcemaps',

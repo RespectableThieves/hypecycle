@@ -6,13 +6,22 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
+      "env": {
+        "APP_VARIANT": "development"
+      }
     },
     "preview": {
       "channel": "preview",
       "distribution": "internal",
+      "env": {
+        "APP_VARIANT": "preview"
+      }
     },
     "production": {
       "channel": "production",
+      "env": {
+        "APP_VARIANT": "production"
+      }
     }
   }
 }
