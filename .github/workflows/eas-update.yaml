@@ -5,8 +5,6 @@ on:
       - main
 jobs:
   update:
-    env:
-      APP_VARIANT: preview
     runs-on: ubuntu-latest
     steps:
       - name: 🏗 Setup repo
@@ -28,4 +26,4 @@ jobs:
         run: yarn install
 
       - name: 🚀 Create update
-        run: yarn eas update --auto --non-interactive
+        run: yarn update:preview 

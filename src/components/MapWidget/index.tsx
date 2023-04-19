@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyledMapView} from './styles';
-import {StyleURL} from '@rnmapbox/maps';
+import Mapbox from '@rnmapbox/maps';
 import {Dimensions} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/elements';
 
@@ -15,8 +15,13 @@ export function MapWidget(_: Props) {
 
   return (
     <StyledMapView
-      styleURL={StyleURL.Dark}
+      logoEnabled={false}
+      scaleBarEnabled={false}
+      styleURL={Mapbox.StyleURL.Dark}
       widgetHeight={windowHeight - headerHeight + 12}
-    />
+      attributionPosition={{bottom: 10, left: 5}}>
+      <Mapbox.UserLocation showsUserHeadingIndicator={true} />
+      <Mapbox.Camera followUserLocation={true} />
+    </StyledMapView>
   );
 }

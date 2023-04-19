@@ -5,7 +5,7 @@
   "scripts": {
     "start": "expo start",
     "test": "APP_VARIANT=test jest --forceExit",
-    "update:preview": "APP_VARIANT=production eas update --auto --non-interactive",
+    "update:preview": "APP_VARIANT=preview eas update --auto --non-interactive",
     "update:production": "APP_VARIANT=production eas update --auto --non-interactive",
     "types": "tsc --noEmit",
     "lint": "eslint ."
