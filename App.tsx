@@ -9,7 +9,6 @@ import {DrawerNav} from './src/components/DrawerNav';
 import {useEffect, useState} from 'react';
 import globalData from './src/lib/GlobalContext';
 import {
-  onLocation,
   snapshotWorker,
   simulateRealtimeDataWorker,
   getOrCreateRealtimeRecord,
@@ -23,7 +22,7 @@ import {
   heartRateMonitor,
   cadenceMeter,
 } from './src/lib/sensor';
-import useLocation from './src/hooks/useLocation';
+import {locationWorker} from './src/lib/location';
 import {Alert} from 'react-native';
 import {NavigationContainer, DarkTheme} from '@react-navigation/native';
 import {navigationRef} from './src/lib/navigation';
@@ -53,11 +52,9 @@ function App() {
   // needed before mounting app.
   const [hasBooted, setHasBooted] = useState(false);
   // Set shouldTrack based on if we want GPS location trackin on or not
-  const shouldTrack = true;
   // keep the screen awake so our services can run.
   useKeepAwake();
 
-  const [locationError] = useLocation(shouldTrack, onLocation);
   const [stravaToken, setStravaToken] = useState<strava.Token | null>(null);
 
   useEffect(() => {
@@ -68,11 +65,17 @@ function App() {
       } catch (err) {
         console.log(err);
       }
-      if (locationError) {
+
+      console.log('ble', await ble.checkState());
+
+      try {
+        // todo we should check settings
+        // before launching if shouldTrack = false
+        await locationWorker.start();
+      } catch (e) {
         Alert.alert('Error getting location');
       }
 
-      console.log('ble', await ble.checkState());
       // Ensure that the realtime row is setup
       // before we run any async services.
       await getOrCreateRealtimeRecord();
@@ -114,7 +117,7 @@ function App() {
       powerService.stop();
       // this now gets called when the component unmounts
     };
-  }, [locationError]);
+  }, []);
 
   if (!hasBooted) {
     // TODO style splash screen
