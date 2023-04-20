@@ -20,6 +20,7 @@
     "@rnmapbox/maps": "^10.0.2",
     "@sentry/react-native": "4.13.0",
     "eas-cli": "^3.9.2",
+    "eventemitter3": "^5.0.0",
     "expo": "^48.0.4",
     "expo-application": "~5.1.1",
     "expo-auth-session": "^4.0.3",
@@ -37,8 +38,7 @@
     "expo-updates": "~0.16.4",
     "react": "18.2.0",
     "react-native": "0.71.6",
-    "react-native-ble-manager": "^10.0.0",
-    "react-native-cycling-sensors": "https://github.com/shaunmulligan/react-native-cycling-sensors",
+    "react-native-ble-manager": "^10.0.2",
     "react-native-flex-grid": "^1.0.0",
     "react-native-gesture-handler": "^2.9.0",
     "react-native-paper": "^5.2.0",
@@ -88,7 +88,7 @@
       "<rootDir>/reporter.js"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|react-native-cycling-sensors|@sentry/.*|sentry-expo|@rnmapbox)"
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|@sentry/.*|sentry-expo|@rnmapbox)"
     ]
   }
 }

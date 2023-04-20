@@ -12,6 +12,7 @@ type Sensor = {
 };
 
 afterAll(async () => {
+  // @ts-ignore
   heartRateMonitor.clearAll();
 });
 
@@ -36,6 +37,7 @@ describe('bluetooth sensor service', () => {
     // Start the hrService
     await hrService.start();
 
+    // @ts-ignore
     heartRateMonitor._emitBleData({bpm: 100});
     expect(mockCallback).toHaveBeenCalledTimes(1);
     hrService.stop();
@@ -65,6 +67,7 @@ describe('bluetooth sensor service', () => {
 
     // Not sure what should happen when two HR monitors are connected?
     // But for now we'll check that the new sensor is subscribed.
+    // @ts-ignore
     heartRateMonitor._emitBleData({bpm: 100});
     expect(mockCallback).toHaveBeenCalledTimes(2);
     hrService.stop();

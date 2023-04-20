@@ -1,12 +1,7 @@
 {
+  "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "experimentalDecorators": true,
-    // explicitly set because of https://github.com/styled-components/styled-components/issues/2099
-    "types": [
-      "react-native",
-      "jest",
-      "styled-components-react-native"
-    ]
-  },
-  "extends": "@tsconfig/react-native/tsconfig.json"
+    "strict": true
+  }
 }

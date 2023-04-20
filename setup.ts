@@ -8,7 +8,8 @@ jest.mock(
     );
   },
 );
-jest.mock('react-native-cycling-sensors');
+
+jest.mock('./src/lib/bleManager');
 jest.mock('expo-font');
 jest.mock('expo-asset');
 jest.mock('expo-secure-store');

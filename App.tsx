@@ -7,7 +7,6 @@ import {
 import {StatusBar} from 'expo-status-bar';
 import {DrawerNav} from './src/components/DrawerNav';
 import {useEffect, useState} from 'react';
-import globalData from './src/lib/GlobalContext';
 import {
   snapshotWorker,
   simulateRealtimeDataWorker,
@@ -16,12 +15,6 @@ import {
   powerService,
 } from './src/lib/data';
 import Loading from './src/components/Loading';
-import {
-  ble,
-  powerMeter,
-  heartRateMonitor,
-  cadenceMeter,
-} from './src/lib/sensor';
 import {locationWorker} from './src/lib/location';
 import {Alert} from 'react-native';
 import {NavigationContainer, DarkTheme} from '@react-navigation/native';
@@ -34,6 +27,7 @@ import * as Sentry from 'sentry-expo';
 import 'react-native-gesture-handler';
 import Constants from './src/constants';
 import Mapbox from '@rnmapbox/maps';
+import {ble} from './src/lib/sensor';
 
 Mapbox.setAccessToken(Constants.mapboxPublicToken);
 
@@ -125,22 +119,14 @@ function App() {
   }
 
   return (
-    <globalData.Provider
-      value={{
-        ble,
-        powerMeter,
-        heartRateMonitor,
-        cadenceMeter,
-      }}>
-      <PaperProvider theme={DefaultTheme}>
-        <StatusBar hidden />
-        <StravaProvider stravaToken={stravaToken}>
-          <NavigationContainer theme={DarkTheme} ref={navigationRef}>
-            <DrawerNav />
-          </NavigationContainer>
-        </StravaProvider>
-      </PaperProvider>
-    </globalData.Provider>
+    <PaperProvider theme={DefaultTheme}>
+      <StatusBar hidden />
+      <StravaProvider stravaToken={stravaToken}>
+        <NavigationContainer theme={DarkTheme} ref={navigationRef}>
+          <DrawerNav />
+        </NavigationContainer>
+      </StravaProvider>
+    </PaperProvider>
   );
 }
 

@@ -1,12 +1,12 @@
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {Portal, Button, Text, Modal} from 'react-native-paper';
 import {Alert, FlatList} from 'react-native';
 import {Empty, GroupedButtons} from './styles';
-import {Sensor, SensorProps} from '../Sensor';
-import globalData from '../../lib/GlobalContext';
-import {db} from '../../database';
+import {Sensor} from '../Sensor';
+import {ble} from '../../lib/sensor';
+import {db, Q} from '../../database';
 import {createSensor} from '../../lib/sensor';
-import {Q} from '@nozbe/watermelondb';
+import {PeripheralSensor} from '../../lib/bleManager';
 
 type Props = {
   visible: boolean;
@@ -26,10 +26,8 @@ const handleError = (err: Error) => {
 };
 
 export function SensorDiscoveryModal(props: Props) {
-  const ble = useContext(globalData).ble;
-
   const [scanning, setScanning] = useState(false);
-  const [discovered, setDiscovered] = useState([]);
+  const [discovered, setDiscovered] = useState<PeripheralSensor[]>([]);
   const modalContainerStyle = {backgroundColor: 'black', padding: 20};
 
   const discoverSensors = async () => {
@@ -39,9 +37,11 @@ export function SensorDiscoveryModal(props: Props) {
       console.log('Scanning Stopped');
       setScanning(false);
       const sensorList = await ble.getDiscoveredSensors();
+
       console.log('sensorList: ', sensorList);
+
       const unpairedList = await Promise.all(
-        sensorList.map(async function (val: SensorProps, _index: number) {
+        sensorList.map(async function (val, _index: number) {
           const existsAlready = await db
             .get('sensor')
             .query(Q.where('address', val.id))
@@ -55,8 +55,9 @@ export function SensorDiscoveryModal(props: Props) {
         }),
       );
 
-      const filteredList = unpairedList.filter(Boolean);
-
+      const filteredList = unpairedList.filter(
+        (p): p is PeripheralSensor => p !== undefined,
+      );
       console.log('unpaired list: ', filteredList);
       setDiscovered(filteredList);
     };
@@ -100,7 +101,7 @@ export function SensorDiscoveryModal(props: Props) {
         visible={props.visible}
         onDismiss={props.onDismiss}
         style={modalContainerStyle}>
-        <FlatList<SensorProps>
+        <FlatList<PeripheralSensor>
           data={discovered}
           keyExtractor={item => item?.id}
           ListEmptyComponent={_listEmptyComponent}

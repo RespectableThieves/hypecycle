@@ -122,6 +122,7 @@ it('Screen allows adding a sensor', async () => {
   expect(text).toBeTruthy();
 
   const scanButton = tree.root.findByProps({id: 'discovery-modal-scan'});
+  // @ts-ignore
   ble.sensorsDiscovered = [
     {
       id: 'ble-xyz',
