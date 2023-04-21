@@ -12,9 +12,80 @@ import {
   HeartRateInBeatsPerMinute,
 } from 'tcx-builder';
 import * as FileSystem from 'expo-file-system';
+import {Feature, FeatureCollection, LineString, Point} from 'geojson';
 
 export async function getRideHistory(rideId: RideModel['id']) {
   return db.get<HistoryModel>('history').query(Q.where('ride_id', rideId));
+}
+
+export function historyToGeoJSON(
+  history: HistoryModel[],
+): Feature<Point> | FeatureCollection<LineString | Point> | null {
+  const coordinates = history
+    .map(h => {
+      if (!h.longitude || !h.latitude) {
+        return null;
+      }
+      return [h.longitude, h.latitude];
+    })
+    .filter((coord): coord is number[] => coord !== null);
+
+  if (coordinates.length === 0) {
+    return null;
+  }
+
+  if (coordinates.length === 1) {
+    return {
+      type: 'Feature',
+      properties: {
+        title: 'start',
+        icon: 'marker',
+      },
+      geometry: {
+        coordinates: coordinates[0],
+        type: 'Point',
+      },
+    };
+  }
+
+  const start = coordinates[0];
+  const end = coordinates[coordinates.length - 1];
+
+  return {
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          coordinates,
+          type: 'LineString',
+        },
+      },
+      {
+        type: 'Feature',
+        properties: {
+          title: 'start',
+          icon: 'markerStroked',
+        },
+        geometry: {
+          coordinates: start,
+          type: 'Point',
+        },
+      },
+      {
+        type: 'Feature',
+        properties: {
+          title: 'end',
+          icon: 'marker',
+        },
+        geometry: {
+          coordinates: end,
+          type: 'Point',
+        },
+      },
+    ],
+  };
 }
 
 export async function generateTCX(rideSummary: RideSummaryModel) {

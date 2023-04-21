@@ -1,10 +1,14 @@
 import {Container, Row, Col} from 'react-native-flex-grid';
 import {SimpleMetric} from '../../components/SimpleMetric';
 import MapFollowLocation from '../../components/MapFollowLocation';
+import MapRoute from '../../components/MapRoute';
+import withObservables from '@nozbe/with-observables';
+import Constants from '../../constants';
+import {db, RealtimeDataModel} from '../../database';
 
 const GUTTER = 1;
 
-const NavigationView = () => {
+const NavigationView = ({realtimeData}: {realtimeData: RealtimeDataModel}) => {
   return (
     <Container fluid noPadding>
       <Row gx={GUTTER}>
@@ -47,11 +51,21 @@ const NavigationView = () => {
           </Row>
         </Col>
         <Col gx={GUTTER}>
-          <MapFollowLocation />
+          {realtimeData.ride?.id ? (
+            <MapRoute rideId={realtimeData.ride.id} />
+          ) : (
+            <MapFollowLocation />
+          )}
         </Col>
       </Row>
     </Container>
   );
 };
 
-export default NavigationView;
+const enhance = withObservables([], () => ({
+  realtimeData: db
+    .get<RealtimeDataModel>('realtime_data')
+    .findAndObserve(Constants.realtimeDataId),
+}));
+
+export default enhance(NavigationView);

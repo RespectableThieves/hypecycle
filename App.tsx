@@ -76,7 +76,7 @@ function App() {
 
       if (!isDevice) {
         // this only runs in the emulator
-        await simulateRealtimeDataWorker.start(3000);
+        // await simulateRealtimeDataWorker.start(3000);
       }
 
       await snapshotWorker.start(1000);
