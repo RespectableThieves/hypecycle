@@ -5,7 +5,7 @@ jest.mock('@react-navigation/elements', () => ({
   useHeaderHeight: jest.fn().mockImplementation(() => 200),
 }));
 
-it('map can render renders correctly', async () => {
+it('map renders correctly', async () => {
   // not much to test on this.
   let tree!: ReactTestRenderer;
   await renderer.act(() => {
