@@ -1,6 +1,6 @@
 import {Container, Row, Col} from 'react-native-flex-grid';
 import {SimpleMetric} from '../../components/SimpleMetric';
-import {MapWidget} from '../../components/MapWidget';
+import MapFollowLocation from '../../components/MapFollowLocation';
 
 const GUTTER = 1;
 
@@ -47,7 +47,7 @@ const NavigationView = () => {
           </Row>
         </Col>
         <Col gx={GUTTER}>
-          <MapWidget title={'Route '} data={[102.6]} />
+          <MapFollowLocation />
         </Col>
       </Row>
     </Container>
