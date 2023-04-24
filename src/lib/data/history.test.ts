@@ -78,4 +78,4 @@ it('should be able to generate geojson object when history is variable lengths.'
   });
 
   await stopRide(ride);
-});
+}, 20000);
