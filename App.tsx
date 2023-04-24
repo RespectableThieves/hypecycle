@@ -1,12 +1,12 @@
 import 'react-native-gesture-handler';
-import {gestureHandlerRootHOC} from 'react-native-gesture-handler';
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import {
   MD3DarkTheme as DefaultTheme,
   Provider as PaperProvider,
 } from 'react-native-paper';
-import {StatusBar} from 'expo-status-bar';
-import {DrawerNav} from './src/components/DrawerNav';
-import {useEffect, useState} from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { DrawerNav } from './src/components/DrawerNav';
+import { useEffect, useState } from 'react';
 import {
   snapshotWorker,
   simulateRealtimeDataWorker,
@@ -15,19 +15,19 @@ import {
   powerService,
 } from './src/lib/data';
 import Loading from './src/components/Loading';
-import {locationWorker} from './src/lib/location';
-import {Alert} from 'react-native';
-import {NavigationContainer, DarkTheme} from '@react-navigation/native';
-import {navigationRef} from './src/lib/navigation';
-import {StravaProvider} from './src/lib/StravaContext';
+import { locationWorker } from './src/lib/location';
+import { Alert } from 'react-native';
+import { NavigationContainer, DarkTheme } from '@react-navigation/native';
+import { navigationRef } from './src/lib/navigation';
+import { StravaProvider } from './src/lib/StravaContext';
 import * as strava from './src/lib/strava';
-import {isDevice} from 'expo-device';
-import {useKeepAwake} from 'expo-keep-awake';
+import { isDevice } from 'expo-device';
+import { useKeepAwake } from 'expo-keep-awake';
 import * as Sentry from 'sentry-expo';
 import 'react-native-gesture-handler';
 import Constants from './src/constants';
 import Mapbox from '@rnmapbox/maps';
-import {ble} from './src/lib/sensor';
+import { ble } from './src/lib/sensor';
 
 Mapbox.setAccessToken(Constants.mapboxPublicToken);
 
@@ -76,7 +76,7 @@ function App() {
 
       if (!isDevice) {
         // this only runs in the emulator
-        // await simulateRealtimeDataWorker.start(3000);
+        await simulateRealtimeDataWorker.start(3000);
       }
 
       await snapshotWorker.start(1000);
