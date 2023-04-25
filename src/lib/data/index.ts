@@ -1,4 +1,5 @@
-import {saveTCX, generateTCX} from './history';
+import {saveTCX, generateTCX, historyToGeoJSON} from './history';
+
 import {getRideAggregates, RideAggregate} from './aggregates';
 import {
   updateRealTimeRecord,
@@ -17,6 +18,7 @@ export type {RideAggregate};
 export {
   generateTCX,
   saveTCX,
+  historyToGeoJSON,
   getOrCreateRealtimeRecord,
   updateRealTimeRecord,
   onLocation,
