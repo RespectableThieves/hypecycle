@@ -1,4 +1,4 @@
-import { db, Q, RideModel } from '../../database';
+import {db, Q, RideModel} from '../../database';
 
 export type RideAggregate = {
   avgSpeed: number;

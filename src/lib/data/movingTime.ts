@@ -1,5 +1,5 @@
-import { LocationObject } from 'expo-location';
-import { RealtimeDataModel } from '../../database';
+import {LocationObject} from 'expo-location';
+import {RealtimeDataModel} from '../../database';
 
 export function accumulateMovingTime(
   lastRealTimeRecord: RealtimeDataModel,
@@ -9,14 +9,15 @@ export function accumulateMovingTime(
   // if we have stopped we return the previous value
   if (
     currentLocation.coords.speed === null ||
-    currentLocation.coords.speed === 0
+    currentLocation.coords.speed === 0 ||
+    !lastRealTimeRecord.lastLocationAt
   ) {
     return lastRealTimeRecord.movingTime;
   }
 
   // we are moving and have speed.
   // we should increment the movingTime
-  const diff = Date.now() - lastRealTimeRecord.createdAt;
+  const diff = currentLocation.timestamp - lastRealTimeRecord.lastLocationAt;
 
   return lastRealTimeRecord.movingTime + diff;
 }

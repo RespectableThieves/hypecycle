@@ -90,6 +90,11 @@ export const realtimeDataSchema = tableSchema({
       type: 'number',
     },
     {
+      name: 'last_location_at',
+      type: 'number',
+      isOptional: true,
+    },
+    {
       name: 'ride_id',
       type: 'string',
       isOptional: true,

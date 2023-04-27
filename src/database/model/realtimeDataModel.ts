@@ -24,5 +24,6 @@ export default class RealtimeDataModel extends Model {
   @field('is_heart_rate') isHeartRate!: boolean;
   @field('is_cadence') isCadence!: boolean;
   @date('created_at') createdAt!: number;
+  @date('last_location_at') lastLocationAt!: number | null;
   @relation('ride', 'ride_id') ride!: Relation<Ride> | null;
 }

@@ -1,5 +1,5 @@
-import { startRide, stopRide } from '../ride';
-import { snapshotService } from './realtime';
+import {startRide, stopRide} from '../ride';
+import {snapshotService} from './realtime';
 
 describe('snapshot service', () => {
   jest.useFakeTimers();
