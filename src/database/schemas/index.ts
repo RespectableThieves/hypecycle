@@ -6,7 +6,7 @@ import {rideSummarySchema} from './rideSummarySchema';
 import {historySchema} from './historySchema';
 
 export const schemas = appSchema({
-  version: 4,
+  version: 1,
   tables: [
     sensorSchema,
     realtimeDataSchema,

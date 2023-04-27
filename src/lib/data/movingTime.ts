@@ -9,7 +9,7 @@ export function accumulateMovingTime(
   // if we have stopped we return the previous value
   if (
     currentLocation.coords.speed === null ||
-    currentLocation.coords.speed === 0 ||
+    currentLocation.coords.speed < 1 ||
     !lastRealTimeRecord.lastLocationAt
   ) {
     return lastRealTimeRecord.movingTime;

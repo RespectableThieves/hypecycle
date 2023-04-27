@@ -12,6 +12,7 @@ import {
 } from '../../lib/data';
 import useSetInterval from '../../hooks/useSetInterval';
 import ElapsedTime from '../ElapsedTime';
+import MovingTime from '../MovingTime';
 
 const GUTTER = 1;
 type Widget = {
@@ -112,11 +113,7 @@ function WidgetGrid({realtimeData}: Props) {
       </Row>
       <Row gx={GUTTER} style={styles.row}>
         <Col gx={GUTTER}>
-          <SimpleMetric
-            title={'Elevation '}
-            data={rounded(realtimeData.altitude)}
-            icon={'image-filter-hdr'}
-          />
+          <MovingTime realtimeData={realtimeData} />
         </Col>
         <Col gx={GUTTER}>
           <ElapsedTime startedAt={ride?.startedAt} />

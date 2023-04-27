@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import { SimpleMetric } from '../SimpleMetric';
+import {useState} from 'react';
+import {SimpleMetric} from '../SimpleMetric';
 import useSetInterval from '../../hooks/useSetInterval';
-import { formatTimestamp } from '../../lib/utils'
+import {formatTimestamp} from '../../lib/utils';
 
-const ElapsedTime = ({ startedAt }: { startedAt: number | undefined }) => {
+const ElapsedTime = ({startedAt}: {startedAt: number | undefined}) => {
   const [elapsedTime, setElapsedTime] = useState<string>();
 
   useSetInterval(
     async () => {
       if (startedAt) {
-        const t = formatTimestamp(Date.now() - startedAt)
+        const t = formatTimestamp(Date.now() - startedAt);
         setElapsedTime(t);
       } else {
         setElapsedTime(undefined);
@@ -21,8 +21,7 @@ const ElapsedTime = ({ startedAt }: { startedAt: number | undefined }) => {
   return (
     <SimpleMetric
       title="Elapsed Time"
-      data={startedAt && elapsedTime
-      }
+      data={startedAt && elapsedTime}
       icon="watch"
     />
   );
