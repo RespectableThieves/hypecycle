@@ -1,9 +1,9 @@
 import App from './App';
-import renderer, {ReactTestRenderer} from 'react-test-renderer';
+import renderer, { ReactTestRenderer } from 'react-test-renderer';
 import Home from './src/screens/Home';
 import * as Location from 'expo-location';
-import {getOrCreateRealtimeRecord} from './src/lib/data';
-import {startRide} from './src/lib/ride';
+import { getOrCreateRealtimeRecord } from './src/lib/data';
+import { startRide } from './src/lib/ride';
 
 it('App renders correctly for signed user.', async () => {
   // check the home pages renders
@@ -108,7 +108,7 @@ it('App registers location service and logs to db without distance calculated wi
 
   let record = await getOrCreateRealtimeRecord();
 
-  console.log('RECORD', {record});
+  console.log('RECORD', { record });
   expect(record.distance).toBe(0);
   expect(record.latitude).toBe(newLocation.coords.latitude);
   expect(record.longitude).toBe(newLocation.coords.longitude);

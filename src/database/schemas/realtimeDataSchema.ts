@@ -8,6 +8,10 @@ export const realtimeDataSchema = tableSchema({
       type: 'number',
     },
     {
+      name: 'moving_time',
+      type: 'number',
+    },
+    {
       name: 'elapsed_time',
       type: 'number',
     },

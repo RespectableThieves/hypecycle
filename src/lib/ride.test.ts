@@ -1,4 +1,4 @@
-import {getRideSummary, stopRide, startRide, onRideEnd} from './ride';
+import { getRideSummary, stopRide, startRide, onRideEnd } from './ride';
 import {
   getOrCreateRealtimeRecord,
   onSnapshotEvent,

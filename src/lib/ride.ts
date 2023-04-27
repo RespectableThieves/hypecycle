@@ -92,6 +92,7 @@ export async function saveRideSummary(ride: RideModel) {
       r.avgPower = aggregates.avgPower;
       r.maxPower = aggregates.maxPower;
       r.elapsedTime = aggregates.elapsedTime;
+      r.movingTime = aggregates.movingTime;
     });
   });
 }

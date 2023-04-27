@@ -1,4 +1,4 @@
-import RealtimeDataModel from '../../database/model/realtimeDataModel';
+import {RealtimeDataModel} from '../../database';
 import {LocationObject} from 'expo-location';
 
 export type LatLngAlt = {

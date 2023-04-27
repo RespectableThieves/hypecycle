@@ -7,6 +7,7 @@ export default class RideSummaryModel extends Model {
   static table = 'ride_summary';
 
   @field('distance') distance!: number;
+  @field('moving_time') movingTime!: number;
   @field('elapsed_time') elapsedTime!: number;
   @field('avg_speed') avgSpeed!: number;
   @field('avg_power') avgPower!: number;

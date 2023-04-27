@@ -6,6 +6,7 @@ export default class HistoryModel extends Model {
   static table = 'history';
 
   @field('distance') distance!: number;
+  @field('moving_time') movingTime!: number;
   @field('speed') speed!: number | null;
   @field('latitude') latitude!: number | null;
   @field('longitude') longitude!: number | null;

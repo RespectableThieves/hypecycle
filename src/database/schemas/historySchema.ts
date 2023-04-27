@@ -1,10 +1,14 @@
-import {tableSchema} from '@nozbe/watermelondb';
+import { tableSchema } from '@nozbe/watermelondb';
 
 export const historySchema = tableSchema({
   name: 'history',
   columns: [
     {
       name: 'distance',
+      type: 'number',
+    },
+    {
+      name: 'moving_time',
       type: 'number',
     },
     {

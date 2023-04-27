@@ -1,4 +1,4 @@
-import {db, Q, RideModel} from '../../database';
+import { db, Q, RideModel } from '../../database';
 
 export type RideAggregate = {
   avgSpeed: number;
@@ -10,6 +10,7 @@ export type RideAggregate = {
   maxHr: number;
   minHr: number;
   distance: number;
+  movingTime: number;
   lastCreatedAt: number;
   elapsedTime: number;
   maxPower: number;
@@ -37,7 +38,6 @@ export async function getRideAggregates(
         MAX(instant_power) AS maxPower,
         (SELECT distance FROM history WHERE ride_id = ? ORDER BY created_at DESC LIMIT 1) AS distance,
         (SELECT created_at FROM history WHERE ride_id = ? ORDER BY created_at DESC LIMIT 1) AS lastCreatedAt
-
         FROM history
         WHERE ride_id = ?
     `,

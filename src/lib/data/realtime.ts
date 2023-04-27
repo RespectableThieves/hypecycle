@@ -1,8 +1,9 @@
-import {LocationObject} from 'expo-location';
+import { LocationObject } from 'expo-location';
 import Constants from '../../constants';
-import {Subscription} from 'rxjs';
-import {db, HistoryModel, RealtimeDataModel, RideModel} from '../../database';
-import {accumulateDistance} from './distance';
+import { Subscription } from 'rxjs';
+import { db, HistoryModel, RealtimeDataModel, RideModel } from '../../database';
+import { accumulateDistance } from './distance';
+import { accumulateMovingTime } from './movingTime';
 
 export async function getOrCreateRealtimeRecord(): Promise<RealtimeDataModel> {
   const collection = db.get<RealtimeDataModel>('realtime_data');
@@ -27,12 +28,14 @@ function randomInt(max: number = 100) {
 }
 
 // update the record on a timer
-export async function updateRealTimeRecord(record: RealtimeDataModel) {
+export async function updateRealTimeRecord(record: RealtimeDataModel, values: Partial<RealtimeDataModel>) {
   return db.write(async () => {
     return record.update(() => {
-      record.instantPower = randomInt();
-      record.heartRate = randomInt();
-      record.cadence = randomInt();
+      for (const [key, value] of Object.entries(values)) {
+        // @ts-ignore
+        // figure out how to type this.
+        record[key] = value
+      }
 
       return record;
     });
@@ -67,8 +70,14 @@ export async function onLocation(
   const distance = realtimeData.ride?.id
     ? accumulateDistance(realtimeData, location)
     : 0;
+  const movingTime = realtimeData.ride?.id
+    ? accumulateMovingTime(realtimeData, location)
+    : 0;
+
   console.log('accumulated distance: ', distance);
-  const {speed, latitude, longitude, heading, altitude} = location.coords;
+  console.log('accumulated movingTime: ', movingTime);
+
+  const { speed, latitude, longitude, heading, altitude } = location.coords;
 
   return db.write(async () => {
     return realtimeData.update(record => {
@@ -78,6 +87,7 @@ export async function onLocation(
       record.heading = heading;
       record.altitude = altitude;
       record.distance = distance;
+      record.movingTime = movingTime;
 
       return record;
     });
@@ -93,6 +103,7 @@ export async function onSnapshotEvent() {
     heading,
     altitude,
     distance,
+    movingTime,
     heartRate,
     instantPower,
     threeSecPower,
@@ -118,6 +129,7 @@ export async function onSnapshotEvent() {
         history.threeSecPower = threeSecPower;
         history.tenSecPower = tenSecPower;
         history.cadence = cadence;
+        history.movingTime = movingTime;
       });
     });
   }

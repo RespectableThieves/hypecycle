@@ -3,10 +3,10 @@ import renderer, {
   ReactTestRenderer,
   ReactTestInstance,
 } from 'react-test-renderer';
-import {updateRealTimeRecord, getOrCreateRealtimeRecord} from '../../lib/data';
+import { updateRealTimeRecordRandom, getOrCreateRealtimeRecord } from '../../lib/data';
 import App from '../../../App';
 import RealtimeDataModel from '../../database/model/realtimeDataModel';
-import {navigate} from '../../lib/navigation';
+import { navigate } from '../../lib/navigation';
 
 let tree!: ReactTestRenderer;
 let screen!: ReactTestInstance;
@@ -43,12 +43,12 @@ it('Widget page renders & updates correctly', async () => {
 
   // Check the widget is using the realtime table.
   // initial value should be 0
-  const widget = screen.findByProps({...powerProps, data: null});
+  const widget = screen.findByProps({ ...powerProps, data: null });
   expect(widget).toBeTruthy();
 
   // write to the db updating the realtime table.
   await renderer.act(async () => {
-    updatedRecord = await updateRealTimeRecord(record);
+    updatedRecord = await updateRealTimeRecordRandom(record);
   });
 
   // again check the component to see that it's re-rendered correctly
@@ -68,7 +68,7 @@ it('Can start/pause/unpause and stop a ride', async () => {
     end: 'End ride',
     unpause: 'Continue ride',
   };
-  const rideFabGroup = tree.root.findByProps({testID: 'ride-fab-group'});
+  const rideFabGroup = tree.root.findByProps({ testID: 'ride-fab-group' });
 
   const getActionLabels = () => {
     return rideFabGroup.props.actions.map((a: any) => a.label);
