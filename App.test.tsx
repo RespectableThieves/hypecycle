@@ -79,6 +79,90 @@ it('App registers location service and logs to db with distance calculated with 
   tree.unmount();
 });
 
+it.only('App registers location service and logs to db with movingTime calculated with active ride', async () => {
+  let tree!: ReactTestRenderer;
+  const coords = {
+    accuracy: 110,
+    latitude: 41.4027,
+    longitude: 2.1743,
+    heading: 10,
+    speed: 5,
+    altitude: 41.0,
+    altitudeAccuracy: 0,
+  }
+
+  await renderer.act(() => {
+    tree = renderer.create(<App />);
+  });
+  tree.root.findByType(Home);
+  const newLocation = {
+    timestamp: new Date().getUTCMilliseconds(),
+    mocked: true,
+    coords: coords,
+  };
+
+  // Trigger a location update.
+  await renderer.act(async () => {
+    // ensure there is an active ride
+    await startRide();
+    // @ts-ignore
+    // this is a mock method
+    Location._emitLocation(newLocation);
+  });
+
+  let record = await getOrCreateRealtimeRecord();
+  expect(record.movingTime).toBe(0);
+
+  // Trigger a location update.
+  await renderer.act(() => {
+    // @ts-ignore
+    // this is a mock method
+    Location._emitLocation({
+      timestamp: record.createdAt + 1000,
+      mocked: true,
+      coords,
+    });
+  });
+
+
+  expect(record.movingTime).toBe(1000);
+
+  // Trigger a location update.
+  await renderer.act(() => {
+    // @ts-ignore
+    // this is a mock method
+    Location._emitLocation({
+      timestamp: record.createdAt + 2000,
+      mocked: true,
+      coords: {
+        ...coords,
+        speed: 0
+      },
+    });
+  });
+
+  expect(record.movingTime).toBe(2000);
+
+  // Trigger a location update.
+  await renderer.act(() => {
+    // @ts-ignore
+    // this is a mock method
+    Location._emitLocation({
+      timestamp: record.createdAt + 3000,
+      mocked: true,
+      coords: {
+        ...coords,
+        speed: 0
+      },
+    });
+  });
+
+  expect(record.movingTime).toBe(2000);
+
+  // Now check for record in realtime db.
+  tree.unmount();
+});
+
 it('App registers location service and logs to db without distance calculated with inactive ride', async () => {
   let tree!: ReactTestRenderer;
   await renderer.act(() => {
