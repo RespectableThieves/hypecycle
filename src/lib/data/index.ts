@@ -1,8 +1,7 @@
-import {saveTCX, generateTCX, historyToGeoJSON} from './history';
+import { saveTCX, generateTCX, historyToGeoJSON } from './history';
 
-import {getRideAggregates, RideAggregate} from './aggregates';
+import { getRideAggregates, RideAggregate } from './aggregates';
 import {
-  updateRealTimeRecord,
   onLocation,
   snapshotWorker,
   getOrCreateRealtimeRecord,
@@ -10,17 +9,16 @@ import {
   updateRealTimeRecordRandom,
   simulateRealtimeDataWorker,
 } from './realtime';
-import {metersToKilometers} from './distance';
-import {hrService, powerService} from './bluetooth';
+import { metersToKilometers } from './distance';
+import { hrService, powerService } from './bluetooth';
 
-export type {RideAggregate};
+export type { RideAggregate };
 
 export {
   generateTCX,
   saveTCX,
   historyToGeoJSON,
   getOrCreateRealtimeRecord,
-  updateRealTimeRecord,
   onLocation,
   snapshotWorker,
   metersToKilometers,
