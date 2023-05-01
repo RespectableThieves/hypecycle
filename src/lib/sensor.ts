@@ -4,7 +4,7 @@ import {
   HeartRateMonitor,
   CadenceMeter,
 } from './bleManager';
-import {db, SensorModel} from '../database';
+import { db, SensorModel } from '../database';
 
 export const ble = new BleSensors();
 export const powerMeter = new PowerMeter();
@@ -45,7 +45,7 @@ export async function createSensor(
         data.type = type;
         data.address = address;
         data.sensorType = services;
-        data.createdAt = new Date().getTime();
+        data.createdAt = new Date()
         return data;
       })
       .catch(err => {

@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet} from 'react-native';
-import {Container, Row, Col} from 'react-native-flex-grid';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { Container, Row, Col } from 'react-native-flex-grid';
 import withObservables from '@nozbe/with-observables';
-import {SimpleMetric} from '../SimpleMetric';
+import { SimpleMetric } from '../SimpleMetric';
 import Constants from '../../constants';
-import {db, RealtimeDataModel, RideModel} from '../../database';
+import { db, RealtimeDataModel, RideModel } from '../../database';
 import {
   getRideAggregates,
   metersToKilometers,
   RideAggregate,
 } from '../../lib/data';
-import {msPerSecToKmPerSec} from '../../lib/utils';
+import { msPerSecToKmPerSec } from '../../lib/utils';
 import useSetInterval from '../../hooks/useSetInterval';
 import ElapsedTime from '../ElapsedTime';
 import MovingTime from '../MovingTime';
@@ -35,7 +35,7 @@ function rounded(data: number | null | undefined) {
   return parseFloat(data.toFixed(2));
 }
 
-function WidgetGrid({realtimeData}: Props) {
+function WidgetGrid({ realtimeData }: Props) {
   const [aggregates, setAggregates] = useState<RideAggregate>();
   const [ride, setRide] = useState<RideModel>();
 
@@ -115,7 +115,7 @@ function WidgetGrid({realtimeData}: Props) {
           <MovingTime realtimeData={realtimeData} />
         </Col>
         <Col gx={GUTTER}>
-          <ElapsedTime startedAt={ride?.startedAt} />
+          <ElapsedTime startedAt={ride?.startedAt.getTime()} />
         </Col>
         <Col gx={GUTTER}>
           <SimpleMetric

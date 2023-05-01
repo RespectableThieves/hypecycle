@@ -1,4 +1,4 @@
-import {getRideSummary, stopRide, startRide, onRideEnd} from './ride';
+import { getRideSummary, stopRide, startRide, onRideEnd } from './ride';
 import {
   getOrCreateRealtimeRecord,
   onSnapshotEvent,
@@ -44,7 +44,7 @@ describe('onRideEnd', () => {
     expect(rideSummary.stravaId).toBe(1);
     expect(rideSummary.distance).toBeGreaterThan(0);
     expect(rideSummary.elapsedTime).toBe(
-      (ride.endedAt! - ride.startedAt) / 1000,
+      (ride.endedAt!.getTime() - ride.startedAt.getTime()) / 1000,
     );
     expect(rideSummary.fileURI).toContain(ride.id);
     expect(FileSystem.writeAsStringAsync).toHaveBeenCalledWith(

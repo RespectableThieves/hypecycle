@@ -1,4 +1,4 @@
-import {db, RideModel, RideSummaryModel, Q} from '../database';
+import { db, RideModel, RideSummaryModel, Q } from '../database';
 import {
   getOrCreateRealtimeRecord,
   getRideAggregates,
@@ -20,7 +20,7 @@ export async function startRide(): Promise<RideModel> {
   // TODO stop any current rides.
   const ride = await db.write(async () => {
     return db.get<RideModel>('ride').create(r => {
-      r.startedAt = Date.now();
+      r.startedAt = new Date();
       return r;
     });
   });
@@ -38,7 +38,7 @@ export async function startRide(): Promise<RideModel> {
 export async function stopRide(ride: RideModel): Promise<RideModel> {
   const stoppedRide = await db.write(async () => {
     return ride.update(() => {
-      ride.endedAt = Date.now();
+      ride.endedAt = new Date();
       ride.isPaused = false;
       return ride;
     });
