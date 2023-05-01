@@ -1,5 +1,5 @@
-import { Relation, Model } from '@nozbe/watermelondb';
-import { relation, field, date } from '@nozbe/watermelondb/decorators';
+import {Relation, Model} from '@nozbe/watermelondb';
+import {relation, field, date} from '@nozbe/watermelondb/decorators';
 import Ride from './ride';
 
 export default class HistoryModel extends Model {

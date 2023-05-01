@@ -1,6 +1,6 @@
 import ElapsedTime from './';
-import { DataText } from '../SimpleMetric/styles';
-import renderer, { ReactTestRenderer } from 'react-test-renderer';
+import {DataText} from '../SimpleMetric/styles';
+import renderer, {ReactTestRenderer} from 'react-test-renderer';
 
 // mocking call because we aren't rendering
 // under a navigation context.
