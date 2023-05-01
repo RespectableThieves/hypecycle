@@ -1,6 +1,6 @@
 import ElapsedTime from './';
-import {DataText} from '../SimpleMetric/styles';
-import renderer, {ReactTestRenderer} from 'react-test-renderer';
+import { DataText } from '../SimpleMetric/styles';
+import renderer, { ReactTestRenderer } from 'react-test-renderer';
 
 // mocking call because we aren't rendering
 // under a navigation context.
@@ -92,29 +92,3 @@ it(
   },
   -1,
 );
-
-// it(
-//   'should not increment timer on each render if run = false',
-//   async () => {
-//     let tree!: ReactTestRenderer;
-//     const startedAt = Date.now();
-
-//     renderer.act(() => {
-//       tree = renderer.create(<ElapsedTime startedAt={startedAt} />);
-//     });
-
-//     // should render -- for undefined
-//     const timer = tree.root.findByType(DataText);
-
-//     renderer.act(() => {
-//       tree.update(<ElapsedTime startedAt={startedAt} run={false} />);
-//     });
-
-//     renderer.act(() => {
-//       jest.advanceTimersByTime(1000);
-//     });
-
-//     expect(timer.props.children).toBe('00:00:01');
-//   },
-//   -1,
-// );
