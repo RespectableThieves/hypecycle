@@ -1,17 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { Container, Row, Col } from 'react-native-flex-grid';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet} from 'react-native';
+import {Container, Row, Col} from 'react-native-flex-grid';
 import withObservables from '@nozbe/with-observables';
-import { SimpleMetric } from '../SimpleMetric';
+import {SimpleMetric} from '../SimpleMetric';
 import Constants from '../../constants';
-import { db, RealtimeDataModel, RideModel } from '../../database';
+import {db, RealtimeDataModel, RideModel} from '../../database';
 import {
   getRideAggregates,
   metersToKilometers,
   RideAggregate,
 } from '../../lib/data';
+import {msPerSecToKmPerSec} from '../../lib/utils';
 import useSetInterval from '../../hooks/useSetInterval';
 import ElapsedTime from '../ElapsedTime';
+import MovingTime from '../MovingTime';
 
 const GUTTER = 1;
 type Widget = {
@@ -33,7 +35,7 @@ function rounded(data: number | null | undefined) {
   return parseFloat(data.toFixed(2));
 }
 
-function WidgetGrid({ realtimeData }: Props) {
+function WidgetGrid({realtimeData}: Props) {
   const [aggregates, setAggregates] = useState<RideAggregate>();
   const [ride, setRide] = useState<RideModel>();
 
@@ -59,8 +61,6 @@ function WidgetGrid({ realtimeData }: Props) {
       fetchRide();
     }
   }, [realtimeData.ride, realtimeData.ride?.id]);
-
-  const movingTime = realtimeData.lastLocationAt ? realtimeData.lastLocationAt + realtimeData.movingTime : 0
 
   return (
     <Container fluid noPadding>
@@ -98,7 +98,7 @@ function WidgetGrid({ realtimeData }: Props) {
         <Col gx={GUTTER}>
           <SimpleMetric
             title={'Speed '}
-            data={rounded(realtimeData.speed)}
+            data={rounded(msPerSecToKmPerSec(realtimeData.speed))}
             icon={'speedometer'}
           />
         </Col>
@@ -112,7 +112,7 @@ function WidgetGrid({ realtimeData }: Props) {
       </Row>
       <Row gx={GUTTER} style={styles.row}>
         <Col gx={GUTTER}>
-          <ElapsedTime title="Moving Time" startedAt={movingTime} />
+          <MovingTime realtimeData={realtimeData} />
         </Col>
         <Col gx={GUTTER}>
           <ElapsedTime startedAt={ride?.startedAt} />

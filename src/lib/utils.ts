@@ -13,3 +13,11 @@ export function formatTimestamp(ts: number): string {
 
   return `${pad(hours)}:${pad(minutes)}:${pad(ts)}`;
 }
+
+export function msPerSecToKmPerSec(metres: number | null) {
+  if (!metres) {
+    return 0;
+  }
+  // m/s to km/h as thats more useful
+  return metres * 3.6;
+}

@@ -28,7 +28,6 @@ export async function startRide(): Promise<RideModel> {
   const realtimeData = await getOrCreateRealtimeRecord();
   await db.write(() => {
     return realtimeData.update(() => {
-      realtimeData.distance = 0;
       realtimeData.ride!.set(ride);
     });
   });
@@ -50,6 +49,8 @@ export async function stopRide(ride: RideModel): Promise<RideModel> {
   await db.write(() => {
     return realtimeData.update(() => {
       realtimeData.ride!.id = null;
+      realtimeData.distance = 0;
+      realtimeData.movingTime = 0;
     });
   });
 

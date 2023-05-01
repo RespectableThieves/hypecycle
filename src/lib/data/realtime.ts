@@ -1,9 +1,9 @@
-import { LocationObject } from 'expo-location';
+import {LocationObject} from 'expo-location';
 import Constants from '../../constants';
-import { Subscription } from 'rxjs';
-import { db, HistoryModel, RealtimeDataModel, RideModel } from '../../database';
-import { accumulateDistance } from './distance';
-import { accumulateMovingTime } from './movingTime';
+import {Subscription} from 'rxjs';
+import {db, HistoryModel, RealtimeDataModel, RideModel} from '../../database';
+import {accumulateDistance} from './distance';
+import {accumulateMovingTime} from './movingTime';
 
 export async function getOrCreateRealtimeRecord(): Promise<RealtimeDataModel> {
   const collection = db.get<RealtimeDataModel>('realtime_data');
@@ -63,18 +63,18 @@ export async function onLocation(
   console.log('accumulated distance: ', distance);
   console.log('accumulated movingTime: ', movingTime);
 
-  const { speed, latitude, longitude, heading, altitude } = location.coords;
+  const {speed, latitude, longitude, heading, altitude} = location.coords;
 
   return db.write(async () => {
     return realtimeData.update(record => {
-      record.speed = speed ? speed * 3.6 : 0; // Convert m/s to km/h as thats more useful.
+      record.speed = speed ? speed : 0;
       record.latitude = latitude;
       record.longitude = longitude;
       record.heading = heading;
       record.altitude = altitude;
       record.distance = distance;
       record.movingTime = movingTime;
-      record.lastLocationAt = location.timestamp;
+      record.lastLocationAt = new Date(location.timestamp);
 
       return record;
     });

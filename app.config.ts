@@ -16,10 +16,12 @@ export type Config = {
   stravaClientId: string;
   secureStoreCurrentUserId: string;
   mapboxPublicToken: string;
+  movingSpeed: number;
 };
 
 const common = {
   appVariant,
+  movingSpeed: 0.5, // msPerSecond
   projectName: 'hypecycle',
   appName: `hypecycle.${appVariant}`,
   commitSHA:
