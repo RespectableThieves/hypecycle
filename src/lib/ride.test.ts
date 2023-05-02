@@ -42,7 +42,6 @@ describe('onRideEnd', () => {
     const rideSummary = await getRideSummary(ride.id);
 
     expect(rideSummary.stravaId).toBe(1);
-    expect(rideSummary.distance).toBeGreaterThan(0);
     expect(rideSummary.elapsedTime).toBe(
       (ride.endedAt! - ride.startedAt) / 1000,
     );

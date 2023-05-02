@@ -80,7 +80,7 @@
     "typescript": "^4.9.4"
   },
   "jest": {
-    "preset": "jest-expo",
+    "preset": "jest-expo/android",
     "setupFiles": [
       "<rootDir>/setup.ts"
     ],
