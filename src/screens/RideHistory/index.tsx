@@ -1,31 +1,32 @@
 import * as React from 'react';
-import { View, Text } from 'react-native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
+import RideList from '../../components/RideHistory'
+import { View, Text } from 'react-native'
 
-function RideHistory() {
-  // list view
+// function RideSummary() {
+//   return (
+//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+//       <Text>History</Text>
+//     </View>
+//   )
+// }
+//
+function HomeScreen() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>History</Text>
+      <Text>Home Screen</Text>
     </View>
   );
 }
 
-function RideSummary() {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>History</Text>
-    </View>
-  )
-}
+const Stack = createStackNavigator();
 
-const Stack = createNativeStackNavigator();
-
-function App() {
+function RideHistory() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="History" component={RideHistory} />
-      <Stack.Screen name="Summary" component={RideSummary} />
+    <Stack.Navigator
+      initialRouteName="History"
+    >
+      <Stack.Screen options={{ title: 'Overview' }} name="History" component={HomeScreen} />
     </Stack.Navigator>
   );
 }

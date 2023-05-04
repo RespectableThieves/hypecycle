@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
-import {Portal, Button, Text, Modal} from 'react-native-paper';
-import {Alert, FlatList} from 'react-native';
-import {Empty, GroupedButtons} from './styles';
-import {Sensor} from '../Sensor';
-import {ble} from '../../lib/sensor';
-import {db, Q} from '../../database';
-import {createSensor} from '../../lib/sensor';
-import {PeripheralSensor} from '../../lib/bleManager';
+import React, { useState } from 'react';
+import { Portal, Button, Text, Modal } from 'react-native-paper';
+import { Alert, FlatList } from 'react-native';
+import { Empty, GroupedButtons } from './styles';
+import { Sensor } from '../Sensor';
+import { ble } from '../../lib/sensor';
+import { db, Q } from '../../database';
+import { createSensor } from '../../lib/sensor';
+import { PeripheralSensor } from '../../lib/bleManager';
 
 type Props = {
   visible: boolean;
@@ -28,7 +28,7 @@ const handleError = (err: Error) => {
 export function SensorDiscoveryModal(props: Props) {
   const [scanning, setScanning] = useState(false);
   const [discovered, setDiscovered] = useState<PeripheralSensor[]>([]);
-  const modalContainerStyle = {backgroundColor: 'black', padding: 20};
+  const modalContainerStyle = { backgroundColor: 'black', padding: 20 };
 
   const discoverSensors = async () => {
     setDiscovered([]); //Clear the list each time we run a scan
@@ -41,7 +41,7 @@ export function SensorDiscoveryModal(props: Props) {
       console.log('sensorList: ', sensorList);
 
       const unpairedList = await Promise.all(
-        sensorList.map(async function (val, _index: number) {
+        sensorList.map(async function(val, _index: number) {
           const existsAlready = await db
             .get('sensor')
             .query(Q.where('address', val.id))
@@ -105,7 +105,7 @@ export function SensorDiscoveryModal(props: Props) {
           data={discovered}
           keyExtractor={item => item?.id}
           ListEmptyComponent={_listEmptyComponent}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <Sensor
               data={item}
               onAction={() => handlePair(item)}

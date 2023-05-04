@@ -1,4 +1,4 @@
-import {db, RideModel, RideSummaryModel, Q} from '../database';
+import { db, RideModel, RideSummaryModel, Q } from '../database';
 import {
   getOrCreateRealtimeRecord,
   getRideAggregates,
@@ -108,6 +108,8 @@ export async function onRideEnd(ride: RideModel) {
   // on ride end.
   // first save ride summary.
   const summary = await saveRideSummary(ride);
+
+  console.log(summary)
   // then generate tcx file
   const tcx = await generateTCX(summary);
   // save the tcx file to disk

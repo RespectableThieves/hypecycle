@@ -6,9 +6,9 @@ import {
 import withObservables from '@nozbe/with-observables';
 import {
   View
+
 } from 'react-native'
 import {
-  Text
 } from 'react-native-paper'
 
 
