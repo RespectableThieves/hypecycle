@@ -17,6 +17,7 @@
     "@nozbe/watermelondb": "^0.25.5",
     "@react-navigation/drawer": "^6.6.1",
     "@react-navigation/native": "^6.1.5",
+    "@react-navigation/native-stack": "^6.9.12",
     "@rnmapbox/maps": "^10.0.2",
     "@sentry/react-native": "4.13.0",
     "@turf/bbox": "^6.5.0",

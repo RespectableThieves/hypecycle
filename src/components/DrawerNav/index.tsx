@@ -5,10 +5,11 @@ import {
 } from '@react-navigation/drawer';
 import ActiveRideView from '../../screens/Home';
 import Sensors from '../../screens/Sensors';
-import {Button} from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import NavigationView from '../../screens/Navigation';
 import SettingsView from '../../screens/Settings';
-import {Drawer as PaperDrawer} from 'react-native-paper';
+import { Drawer as PaperDrawer } from 'react-native-paper';
+import { } from ''
 const Drawer = createDrawerNavigator();
 export type DrawerNavProps = DrawerScreenProps<any>;
 
@@ -57,19 +58,19 @@ const HeaderRight = () => (
 function DrawerNav() {
   return (
     <Drawer.Navigator
-      screenOptions={{headerTintColor: '#FFFFFF'}}
+      screenOptions={{ headerTintColor: '#FFFFFF' }}
       useLegacyImplementation
       initialRouteName="Active Ride"
       drawerContent={DrawerContent}>
       <Drawer.Screen
         name="Active Ride"
         component={ActiveRideView}
-        options={{drawerLabel: 'Active Ride'}}
+        options={{ drawerLabel: 'Active Ride' }}
       />
       <Drawer.Screen
         name="Navigation"
         component={NavigationView}
-        options={{drawerLabel: 'Navigation'}}
+        options={{ drawerLabel: 'Navigation' }}
       />
       <Drawer.Screen
         name="Sensors"
@@ -80,12 +81,17 @@ function DrawerNav() {
         }}
       />
       <Drawer.Screen
+        name="Rides"
+        component={RideHistory}
+        options={{ drawerLabel: 'Active Ride' }}
+      />
+      <Drawer.Screen
         name="Settings"
         component={SettingsView}
-        options={{drawerLabel: 'Settings'}}
+        options={{ drawerLabel: 'Settings' }}
       />
     </Drawer.Navigator>
   );
 }
 
-export {DrawerNav};
+export { DrawerNav };
