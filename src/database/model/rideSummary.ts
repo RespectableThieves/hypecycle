@@ -1,6 +1,6 @@
-import {Model, Relation} from '@nozbe/watermelondb';
-import {field, readonly, date, writer} from '@nozbe/watermelondb/decorators';
-import {immutableRelation} from '@nozbe/watermelondb/decorators';
+import { Model, Relation } from '@nozbe/watermelondb';
+import { field, readonly, date, writer } from '@nozbe/watermelondb/decorators';
+import { immutableRelation } from '@nozbe/watermelondb/decorators';
 import Ride from './ride';
 
 export default class RideSummaryModel extends Model {
