@@ -3,7 +3,10 @@ import renderer, {
   ReactTestRenderer,
   ReactTestInstance,
 } from 'react-test-renderer';
-import {updateRealTimeRecord, getOrCreateRealtimeRecord} from '../../lib/data';
+import {
+  updateRealTimeRecordRandom,
+  getOrCreateRealtimeRecord,
+} from '../../lib/data';
 import App from '../../../App';
 import RealtimeDataModel from '../../database/model/realtimeDataModel';
 import {navigate} from '../../lib/navigation';
@@ -48,7 +51,7 @@ it('Widget page renders & updates correctly', async () => {
 
   // write to the db updating the realtime table.
   await renderer.act(async () => {
-    updatedRecord = await updateRealTimeRecord(record);
+    updatedRecord = await updateRealTimeRecordRandom(record);
   });
 
   // again check the component to see that it's re-rendered correctly

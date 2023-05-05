@@ -10,8 +10,10 @@ import {
   metersToKilometers,
   RideAggregate,
 } from '../../lib/data';
+import {msPerSecToKmPerSec} from '../../lib/utils';
 import useSetInterval from '../../hooks/useSetInterval';
 import ElapsedTime from '../ElapsedTime';
+import MovingTime from '../MovingTime';
 
 const GUTTER = 1;
 type Widget = {
@@ -36,8 +38,6 @@ function rounded(data: number | null | undefined) {
 function WidgetGrid({realtimeData}: Props) {
   const [aggregates, setAggregates] = useState<RideAggregate>();
   const [ride, setRide] = useState<RideModel>();
-
-  console.log(ride?.startedAt);
 
   useSetInterval(
     async () => {
@@ -98,7 +98,7 @@ function WidgetGrid({realtimeData}: Props) {
         <Col gx={GUTTER}>
           <SimpleMetric
             title={'Speed '}
-            data={rounded(realtimeData.speed)}
+            data={rounded(msPerSecToKmPerSec(realtimeData.speed))}
             icon={'speedometer'}
           />
         </Col>
@@ -112,14 +112,10 @@ function WidgetGrid({realtimeData}: Props) {
       </Row>
       <Row gx={GUTTER} style={styles.row}>
         <Col gx={GUTTER}>
-          <SimpleMetric
-            title={'Elevation '}
-            data={rounded(realtimeData.altitude)}
-            icon={'image-filter-hdr'}
-          />
+          <MovingTime realtimeData={realtimeData} />
         </Col>
         <Col gx={GUTTER}>
-          <ElapsedTime startedAt={ride?.startedAt} />
+          <ElapsedTime startedAt={ride?.startedAt.getTime()} />
         </Col>
         <Col gx={GUTTER}>
           <SimpleMetric

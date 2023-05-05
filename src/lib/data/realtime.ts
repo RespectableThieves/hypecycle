@@ -3,6 +3,7 @@ import Constants from '../../constants';
 import {Subscription} from 'rxjs';
 import {db, HistoryModel, RealtimeDataModel, RideModel} from '../../database';
 import {accumulateDistance} from './distance';
+import {accumulateMovingTime} from './movingTime';
 
 export async function getOrCreateRealtimeRecord(): Promise<RealtimeDataModel> {
   const collection = db.get<RealtimeDataModel>('realtime_data');
@@ -24,19 +25,6 @@ export async function getOrCreateRealtimeRecord(): Promise<RealtimeDataModel> {
 
 function randomInt(max: number = 100) {
   return Math.floor(Math.random() * max);
-}
-
-// update the record on a timer
-export async function updateRealTimeRecord(record: RealtimeDataModel) {
-  return db.write(async () => {
-    return record.update(() => {
-      record.instantPower = randomInt();
-      record.heartRate = randomInt();
-      record.cadence = randomInt();
-
-      return record;
-    });
-  });
 }
 
 // used for tests
@@ -67,17 +55,26 @@ export async function onLocation(
   const distance = realtimeData.ride?.id
     ? accumulateDistance(realtimeData, location)
     : 0;
+
+  const movingTime = realtimeData.ride?.id
+    ? accumulateMovingTime(realtimeData, location)
+    : 0;
+
   console.log('accumulated distance: ', distance);
+  console.log('accumulated movingTime: ', movingTime);
+
   const {speed, latitude, longitude, heading, altitude} = location.coords;
 
   return db.write(async () => {
     return realtimeData.update(record => {
-      record.speed = speed ? speed * 3.6 : 0; // Convert m/s to km/h as thats more useful.
+      record.speed = speed ? speed : 0;
       record.latitude = latitude;
       record.longitude = longitude;
       record.heading = heading;
       record.altitude = altitude;
       record.distance = distance;
+      record.movingTime = movingTime;
+      record.lastLocationAt = new Date(location.timestamp);
 
       return record;
     });
@@ -93,6 +90,7 @@ export async function onSnapshotEvent() {
     heading,
     altitude,
     distance,
+    movingTime,
     heartRate,
     instantPower,
     threeSecPower,
@@ -118,6 +116,7 @@ export async function onSnapshotEvent() {
         history.threeSecPower = threeSecPower;
         history.tenSecPower = tenSecPower;
         history.cadence = cadence;
+        history.movingTime = movingTime;
       });
     });
   }

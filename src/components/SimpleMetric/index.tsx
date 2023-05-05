@@ -5,7 +5,7 @@ import {useHeaderHeight} from '@react-navigation/elements';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import {Surface} from 'react-native-paper';
 
-type Props = {
+export type Props = {
   title: string;
   data: number | null | undefined | string;
   icon: keyof typeof MaterialCommunityIcons.glyphMap;

@@ -13,7 +13,7 @@ export default class SensorModel extends Model {
   @field('is_primary') is_primary!: boolean;
   @field('type') type!: string;
   @json('sensor_type', sanitizeServices) sensorType: any;
-  @date('created_at') createdAt!: number;
+  @date('created_at') createdAt!: Date;
 
   @writer async deleteSensor() {
     console.log('Deleting sensor...');

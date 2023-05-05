@@ -8,6 +8,10 @@ export const historySchema = tableSchema({
       type: 'number',
     },
     {
+      name: 'moving_time',
+      type: 'number',
+    },
+    {
       name: 'speed',
       type: 'number',
       isOptional: true,

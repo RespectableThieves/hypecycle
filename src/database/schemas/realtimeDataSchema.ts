@@ -8,6 +8,10 @@ export const realtimeDataSchema = tableSchema({
       type: 'number',
     },
     {
+      name: 'moving_time',
+      type: 'number',
+    },
+    {
       name: 'elapsed_time',
       type: 'number',
     },
@@ -84,6 +88,11 @@ export const realtimeDataSchema = tableSchema({
     {
       name: 'created_at',
       type: 'number',
+    },
+    {
+      name: 'last_location_at',
+      type: 'number',
+      isOptional: true,
     },
     {
       name: 'ride_id',

@@ -20,7 +20,7 @@ export async function startRide(): Promise<RideModel> {
   // TODO stop any current rides.
   const ride = await db.write(async () => {
     return db.get<RideModel>('ride').create(r => {
-      r.startedAt = Date.now();
+      r.startedAt = new Date();
       return r;
     });
   });
@@ -28,7 +28,6 @@ export async function startRide(): Promise<RideModel> {
   const realtimeData = await getOrCreateRealtimeRecord();
   await db.write(() => {
     return realtimeData.update(() => {
-      realtimeData.distance = 0;
       realtimeData.ride!.set(ride);
     });
   });
@@ -39,7 +38,7 @@ export async function startRide(): Promise<RideModel> {
 export async function stopRide(ride: RideModel): Promise<RideModel> {
   const stoppedRide = await db.write(async () => {
     return ride.update(() => {
-      ride.endedAt = Date.now();
+      ride.endedAt = new Date();
       ride.isPaused = false;
       return ride;
     });
@@ -50,6 +49,8 @@ export async function stopRide(ride: RideModel): Promise<RideModel> {
   await db.write(() => {
     return realtimeData.update(() => {
       realtimeData.ride!.id = null;
+      realtimeData.distance = 0;
+      realtimeData.movingTime = 0;
     });
   });
 
@@ -92,6 +93,7 @@ export async function saveRideSummary(ride: RideModel) {
       r.avgPower = aggregates.avgPower;
       r.maxPower = aggregates.maxPower;
       r.elapsedTime = aggregates.elapsedTime;
+      r.movingTime = aggregates.movingTime;
     });
   });
 }

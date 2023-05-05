@@ -6,6 +6,7 @@ export default class RealtimeDataModel extends Model {
   static table = 'realtime_data';
 
   @field('distance') distance!: number;
+  @field('moving_time') movingTime!: number;
   @field('elapsed_time') elapsedTime!: number;
   @field('speed') speed!: number | null;
   @field('latitude') latitude!: number | null;
@@ -22,6 +23,7 @@ export default class RealtimeDataModel extends Model {
   @field('is_power') isPower!: boolean;
   @field('is_heart_rate') isHeartRate!: boolean;
   @field('is_cadence') isCadence!: boolean;
-  @date('created_at') createdAt!: number;
+  @date('created_at') createdAt!: Date;
+  @date('last_location_at') lastLocationAt!: Date | null;
   @relation('ride', 'ride_id') ride!: Relation<Ride> | null;
 }

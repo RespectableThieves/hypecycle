@@ -43,7 +43,7 @@ describe('onRideEnd', () => {
 
     expect(rideSummary.stravaId).toBe(1);
     expect(rideSummary.elapsedTime).toBe(
-      (ride.endedAt! - ride.startedAt) / 1000,
+      (ride.endedAt!.getTime() - ride.startedAt.getTime()) / 1000,
     );
     expect(rideSummary.fileURI).toContain(ride.id);
     expect(FileSystem.writeAsStringAsync).toHaveBeenCalledWith(

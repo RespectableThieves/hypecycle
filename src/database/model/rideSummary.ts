@@ -7,6 +7,7 @@ export default class RideSummaryModel extends Model {
   static table = 'ride_summary';
 
   @field('distance') distance!: number;
+  @field('moving_time') movingTime!: number;
   @field('elapsed_time') elapsedTime!: number;
   @field('avg_speed') avgSpeed!: number;
   @field('avg_power') avgPower!: number;
@@ -25,8 +26,8 @@ export default class RideSummaryModel extends Model {
   // so we can create links.
   @field('strava_id') stravaId!: number | null;
   @immutableRelation('ride', 'ride_id') ride!: Relation<Ride>;
-  @readonly @date('created_at') createdAt!: number;
-  @readonly @date('updated_at') updatedAt!: number;
+  @readonly @date('created_at') createdAt!: Date;
+  @readonly @date('updated_at') updatedAt!: Date;
 
   @writer async setStravaId(stravaId: number) {
     await this.update(summary => {

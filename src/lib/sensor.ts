@@ -45,7 +45,7 @@ export async function createSensor(
         data.type = type;
         data.address = address;
         data.sensorType = services;
-        data.createdAt = new Date().getTime();
+        data.createdAt = new Date();
         return data;
       })
       .catch(err => {

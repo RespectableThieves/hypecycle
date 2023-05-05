@@ -1,37 +1,38 @@
 import {useState} from 'react';
-import {SimpleMetric} from '../SimpleMetric';
+import {SimpleMetric, Props as SimpleMetricProps} from '../SimpleMetric';
 import useSetInterval from '../../hooks/useSetInterval';
+import {formatTimestamp} from '../../lib/utils';
 
-function pad(n: number) {
-  return ('0' + n).slice(-2);
-}
-
-const ElapsedTime = ({startedAt}: {startedAt: number | undefined}) => {
-  const [elapsedTime, setElapsedTime] = useState<string>();
+const ElapsedTime = ({
+  startedAt,
+  run = true,
+  title = 'Elapsed Time',
+  icon = 'watch',
+}: {
+  startedAt: number | undefined;
+  run?: boolean;
+  title?: SimpleMetricProps['title'];
+  icon?: SimpleMetricProps['icon'];
+}) => {
+  const formated = startedAt
+    ? formatTimestamp(Date.now() - startedAt)
+    : undefined;
+  const [elapsedTime, setElapsedTime] = useState<string | undefined>(formated);
 
   useSetInterval(
     async () => {
-      if (startedAt) {
-        let diff = Math.floor((Date.now() - startedAt) / 1000);
-        const hours = Math.floor(diff / 3600);
-        diff -= hours * 3600;
-        const minutes = Math.floor(diff / 60);
-        diff -= minutes * 60;
-
-        setElapsedTime(`${pad(hours)}:${pad(minutes)}:${pad(diff)}`);
+      if (startedAt && run) {
+        const t = formatTimestamp(Date.now() - startedAt);
+        setElapsedTime(t);
       } else {
         setElapsedTime(undefined);
       }
     },
-    startedAt ? 500 : null,
+    startedAt && run ? 500 : null,
   );
 
   return (
-    <SimpleMetric
-      title="Elapsed Time"
-      data={startedAt && elapsedTime}
-      icon="watch"
-    />
+    <SimpleMetric title={title} data={startedAt && elapsedTime} icon={icon} />
   );
 };
 

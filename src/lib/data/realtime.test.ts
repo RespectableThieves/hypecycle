@@ -1,7 +1,7 @@
 import {startRide, stopRide} from '../ride';
 import {snapshotService} from './realtime';
 
-describe('ride service', () => {
+describe('snapshot service', () => {
   jest.useFakeTimers();
 
   it('should start and watch for ride/start/stop events', async () => {
