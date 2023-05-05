@@ -9,21 +9,19 @@ import {
   Images,
 } from '@rnmapbox/maps';
 import { MD3DarkTheme as Theme } from 'react-native-paper';
-import { Dimensions, StyleSheet } from 'react-native';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { StyleSheet } from 'react-native';
 import getBounds from '@turf/bbox';
 // @ts-ignore
 import marker from '../../../assets/marker.png';
 // @ts-ignore
 import markerStroked from '../../../assets/marker-stroked.png';
 
-const getStyles = (height: number) =>
-  StyleSheet.create({
-    map: {
-      flex: 1,
-      borderRadius: 8,
-    },
-  });
+const styles = StyleSheet.create({
+  map: {
+    flex: 1,
+    borderRadius: 8,
+  },
+});
 
 const iconStyles = {
   iconImage: ['get', 'icon'],
@@ -31,12 +29,8 @@ const iconStyles = {
 
 export default function GeoJSONRoute({ geojson }: { geojson: any }) {
   // Give a geojson line it'll render it.
-  const headerHeight = useHeaderHeight();
-  const windowHeight = Dimensions.get('window').height;
   const camera = useRef<Camera>(null);
-  const styles = getStyles(windowHeight - headerHeight + 12);
   const [loading, setLoading] = useState(true);
-  console.log({ styles })
 
   const images = {
     marker,
