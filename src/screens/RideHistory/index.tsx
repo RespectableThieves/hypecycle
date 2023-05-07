@@ -1,11 +1,7 @@
 import * as React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
 import RideList from '../../components/RideHistory'
 import RideSummary from '../../components/RideSummary'
-import { View, Text } from 'react-native'
-
-
-const Stack = createStackNavigator();
+import Stack from '../../navigators/RideHistory'
 
 function RideHistory() {
   return (

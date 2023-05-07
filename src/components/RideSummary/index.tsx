@@ -12,6 +12,12 @@ MapRoute
 import {
   View
 } from 'react-native'
+import {
+  RouteProp
+} from '@react-navigation/native'
+import {
+  RideHistoryStack
+} from '../../navigators/RideHistory'
 
 function RideSummary({ summary }: { summary: RideSummaryModel }) {
   return (
@@ -32,7 +38,7 @@ function RideSummary({ summary }: { summary: RideSummaryModel }) {
   )
 }
 
-const enhance = withObservables([], ({ route }) => {
+const enhance = withObservables([], ({ route }: { route: RouteProp<RideHistoryStack, 'Summary'> }) => {
   const { summaryId } = route.params;
   return {
     summary: db.get<RideSummaryModel>('ride_summary').findAndObserve(summaryId),

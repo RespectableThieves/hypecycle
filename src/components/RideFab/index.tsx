@@ -9,7 +9,6 @@ import {
   startRide,
   onRideEnd,
 } from '../../lib/ride';
-import { useNavigation } from '@react-navigation/native';
 
 type Props = {
   activeRides: RideModel[];
@@ -24,7 +23,6 @@ const RideFab = ({ activeRides = [] }: Props) => {
   const [activeRide] = activeRides;
   const [state, setState] = React.useState({ open: false });
   const [message, setMessage] = React.useState('');
-  const navigation = useNavigation()
 
   const onStateChange = ({ open }: State) => setState({ open });
   const onDismissSnackBar = () => setMessage('');
@@ -42,10 +40,7 @@ const RideFab = ({ activeRides = [] }: Props) => {
         await stopRide(activeRide);
         try {
           await onRideEnd(activeRide);
-          navigation.navigate('RideSummary', {
-            itemId: 86,
-            otherParam: 'anything you want here',
-          });
+          setMessage('Successfully uploaded ride');
         } catch (err: unknown) {
           if (err instanceof Error) {
             console.log(err.message);

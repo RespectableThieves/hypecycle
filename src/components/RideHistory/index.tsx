@@ -11,10 +11,17 @@ import {
 import {
   List
 } from 'react-native-paper'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import {
+  RideHistoryStack
+} from '../../navigators/RideHistory'
+
+
+type Summary = StackNavigationProp<RideHistoryStack, 'Summary'>;
 
 function RideOverview({ summary }: { summary: RideSummaryModel }) {
-  const navigation = useNavigation()
+  const navigation = useNavigation<Summary>()
 
   return (
     <List.Item
@@ -26,7 +33,7 @@ function RideOverview({ summary }: { summary: RideSummaryModel }) {
   )
 }
 
-function RideSummary({ summaries }) {
+function RideSummary({ summaries }: { summaries: RideSummaryModel[] }) {
   return (
     <>
       <FlatList<RideSummaryModel>
