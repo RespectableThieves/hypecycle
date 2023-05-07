@@ -1,14 +1,14 @@
-import { Container, Row, Col } from 'react-native-flex-grid';
-import { SimpleMetric } from '../../components/SimpleMetric';
+import {Container, Row, Col} from 'react-native-flex-grid';
+import {SimpleMetric} from '../../components/SimpleMetric';
 import MapFollowLocation from '../../components/MapFollowLocation';
 import MapRoute from '../../components/MapRoute';
 import withObservables from '@nozbe/with-observables';
 import Constants from '../../constants';
-import { db, RealtimeDataModel } from '../../database';
+import {db, RealtimeDataModel} from '../../database';
 
 const GUTTER = 1;
 
-const NavigationView = ({ realtimeData }: { realtimeData: RealtimeDataModel }) => {
+const NavigationView = ({realtimeData}: {realtimeData: RealtimeDataModel}) => {
   return (
     <Container fluid noPadding>
       <Row gx={GUTTER}>

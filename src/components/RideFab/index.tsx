@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { FAB, Snackbar, Portal } from 'react-native-paper';
-import { db, Q, RideModel } from '../../database';
+import {FAB, Snackbar, Portal} from 'react-native-paper';
+import {db, Q, RideModel} from '../../database';
 import withObservables from '@nozbe/with-observables';
 import {
   unpauseRide,
@@ -18,16 +18,16 @@ type State = {
   open: boolean;
 };
 
-const RideFab = ({ activeRides = [] }: Props) => {
+const RideFab = ({activeRides = []}: Props) => {
   // will only ever be one.
   const [activeRide] = activeRides;
-  const [state, setState] = React.useState({ open: false });
+  const [state, setState] = React.useState({open: false});
   const [message, setMessage] = React.useState('');
 
-  const onStateChange = ({ open }: State) => setState({ open });
+  const onStateChange = ({open}: State) => setState({open});
   const onDismissSnackBar = () => setMessage('');
 
-  const { open } = state;
+  const {open} = state;
 
   const actions = [];
   if (activeRide) {

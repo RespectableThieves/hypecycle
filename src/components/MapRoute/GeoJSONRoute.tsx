@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   StyleURL,
   MapView,
@@ -8,8 +8,8 @@ import {
   SymbolLayer,
   Images,
 } from '@rnmapbox/maps';
-import { MD3DarkTheme as Theme } from 'react-native-paper';
-import { StyleSheet } from 'react-native';
+import {MD3DarkTheme as Theme} from 'react-native-paper';
+import {StyleSheet} from 'react-native';
 import getBounds from '@turf/bbox';
 // @ts-ignore
 import marker from '../../../assets/marker.png';
@@ -27,7 +27,7 @@ const iconStyles = {
   iconImage: ['get', 'icon'],
 };
 
-export default function GeoJSONRoute({ geojson }: { geojson: any }) {
+export default function GeoJSONRoute({geojson}: {geojson: any}) {
   // Give a geojson line it'll render it.
   const camera = useRef<Camera>(null);
   const [loading, setLoading] = useState(true);
@@ -60,7 +60,7 @@ export default function GeoJSONRoute({ geojson }: { geojson: any }) {
       scaleBarEnabled={false}
       styleURL={StyleURL.Dark}
       style={styles.map}
-      attributionPosition={{ bottom: 10, left: 5 }}>
+      attributionPosition={{bottom: 10, left: 5}}>
       <Images images={images} />
       <ShapeSource id="source1" shape={geojson}>
         <LineLayer id="layer1" style={fillStyle} />
