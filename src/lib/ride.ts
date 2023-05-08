@@ -1,4 +1,4 @@
-import { db, RideModel, RideSummaryModel, Q } from '../database';
+import {db, RideModel, RideSummaryModel, Q} from '../database';
 import {
   getOrCreateRealtimeRecord,
   getRideAggregates,

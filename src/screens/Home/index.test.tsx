@@ -3,12 +3,12 @@ import renderer, {
   ReactTestRenderer,
   ReactTestInstance,
 } from 'react-test-renderer';
-import { updateRealTimeRecord, getOrCreateRealtimeRecord } from '../../lib/data';
+import {updateRealTimeRecord, getOrCreateRealtimeRecord} from '../../lib/data';
 import App from '../../../App';
 import RealtimeDataModel from '../../database/model/realtimeDataModel';
-import { navigate } from '../../lib/navigation';
-import RideSummary from '../../components/RideSummary'
-import MapRoute from '../../components/MapRoute'
+import {navigate} from '../../lib/navigation';
+import RideSummary from '../../components/RideSummary';
+import MapRoute from '../../components/MapRoute';
 
 let tree!: ReactTestRenderer;
 let screen!: ReactTestInstance;
@@ -45,7 +45,7 @@ it('Widget page renders & updates correctly', async () => {
 
   // Check the widget is using the realtime table.
   // initial value should be 0
-  const widget = screen.findByProps({ ...powerProps, data: null });
+  const widget = screen.findByProps({...powerProps, data: null});
   expect(widget).toBeTruthy();
 
   // write to the db updating the realtime table.
@@ -68,7 +68,7 @@ it('Can start/pause/unpause and stop a ride', async () => {
     end: 'End ride',
     unpause: 'Continue ride',
   };
-  const rideFabGroup = tree.root.findByProps({ testID: 'ride-fab-group' });
+  const rideFabGroup = tree.root.findByProps({testID: 'ride-fab-group'});
 
   const getActionLabels = () => {
     return rideFabGroup.props.actions.map((a: any) => a.label);
@@ -97,10 +97,9 @@ it('Can start/pause/unpause and stop a ride', async () => {
   // now lets check our options
   expect(getActionLabels()).toEqual([labels.end, labels.unpause]);
 
-
   const realtimeData = await getOrCreateRealtimeRecord();
-  const rideId = realtimeData!.ride!.id
-  expect(rideId).toBeTruthy()
+  const rideId = realtimeData!.ride!.id;
+  expect(rideId).toBeTruthy();
 
   // now let's unpause the ride
   await renderer.act(async () => {
@@ -121,6 +120,6 @@ it('Can start/pause/unpause and stop a ride', async () => {
   // Check we have rendered the ride Summary
   // and the map
   tree.root.findByType(RideSummary);
-  const map = tree.root.findByType(MapRoute)
-  expect(map.props.rideId).toBe(rideId)
+  const map = tree.root.findByType(MapRoute);
+  expect(map.props.rideId).toBe(rideId);
 });
