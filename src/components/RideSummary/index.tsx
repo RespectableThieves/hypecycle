@@ -4,7 +4,7 @@ import { Button, Text, Card } from 'react-native-paper';
 import MapRoute from '../MapRoute';
 import { View, StyleSheet } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
-import { RideHistoryStack } from '../../navigators/RideHistory';
+import { RideHistoryStack } from '../../navigators/RideHistoryStack';
 
 const styles = StyleSheet.create({
   container: {
@@ -26,7 +26,9 @@ function RideSummary({ summary }: { summary: RideSummaryModel }) {
           title={summary.ride.id}
           subtitle={summary.createdAt.toString()}
         />
-        <Card.Content><Text>stats goes here.</Text></Card.Content>
+        <Card.Content>
+          <Text>stats goes here.</Text>
+        </Card.Content>
         <Card.Actions>
           <Button>share</Button>
           <Button>upload</Button>

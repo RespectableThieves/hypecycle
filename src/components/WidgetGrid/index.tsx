@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
-import { Container, Row, Col } from 'react-native-flex-grid';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet} from 'react-native';
+import {Container, Row, Col} from 'react-native-flex-grid';
 import withObservables from '@nozbe/with-observables';
-import { SimpleMetric } from '../SimpleMetric';
+import {SimpleMetric} from '../SimpleMetric';
 import Constants from '../../constants';
-import { db, RealtimeDataModel, RideModel } from '../../database';
+import {db, RealtimeDataModel, RideModel} from '../../database';
 import {
   getRideAggregates,
   metersToKilometers,
@@ -33,7 +33,7 @@ function rounded(data: number | null | undefined) {
   return parseFloat(data.toFixed(2));
 }
 
-function WidgetGrid({ realtimeData }: Props) {
+function WidgetGrid({realtimeData}: Props) {
   const [aggregates, setAggregates] = useState<RideAggregate>();
   const [ride, setRide] = useState<RideModel>();
 

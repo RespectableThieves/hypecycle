@@ -68,7 +68,7 @@ function DrawerNav() {
     <Drawer.Navigator
       screenOptions={{headerTintColor: '#FFFFFF'}}
       useLegacyImplementation
-      initialRouteName="Home"
+      initialRouteName="Active Ride"
       drawerContent={DrawerContent}>
       <Drawer.Screen
         name="Active Ride"
@@ -91,7 +91,7 @@ function DrawerNav() {
       <Drawer.Screen
         name="RideHistory"
         component={RideHistory}
-        options={{drawerLabel: 'Active Ride'}}
+        options={{drawerLabel: 'Ride History'}}
       />
       <Drawer.Screen
         name="Settings"

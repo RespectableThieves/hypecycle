@@ -96,7 +96,9 @@ export async function saveRideSummary(ride: RideModel) {
   });
 }
 
-export async function getRideSummary(rideId: RideModel['id']): Promise<RideSummaryModel> {
+export async function getRideSummary(
+  rideId: RideModel['id'],
+): Promise<RideSummaryModel> {
   const [rideSummary] = await db
     .get<RideSummaryModel>('ride_summary')
     .query(Q.where('ride_id', rideId), Q.take(1))

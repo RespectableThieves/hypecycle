@@ -1,8 +1,8 @@
 import WidgetGrid from '../../components/WidgetGrid';
 import RideFab from '../../components/RideFab';
-import { View } from 'react-native';
+import {View} from 'react-native';
 import RideSummary from '../../components/RideSummary';
-import { Portal } from 'react-native-paper';
+import {Portal} from 'react-native-paper';
 import Stack from '../../navigators/ActiveRideStack';
 
 const Stats = () => {
@@ -19,10 +19,18 @@ const Stats = () => {
 function ActiveRide() {
   return (
     <Stack.Navigator initialRouteName="Stats">
-      <Stack.Screen options={{ headerShown: false }} name="Stats" component={Stats} />
-      <Stack.Screen options={{ title: "" }} name="Summary" component={RideSummary} />
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="Stats"
+        component={Stats}
+      />
+      <Stack.Screen
+        options={{title: ''}}
+        name="Summary"
+        component={RideSummary}
+      />
     </Stack.Navigator>
-  )
+  );
 }
 
 export default ActiveRide;
