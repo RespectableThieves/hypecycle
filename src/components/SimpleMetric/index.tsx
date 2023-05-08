@@ -14,11 +14,12 @@ type Props = {
 export function SimpleMetric({ title, data, icon }: Props) {
   const headerHeight = useHeaderHeight();
   const windowHeight = Dimensions.get('window').height;
+  const h = (windowHeight - headerHeight + 6) / 3
 
   return (
     <Surface
       elevation={1}
-      style={styles({ height: (windowHeight - headerHeight + 6) / 3 }).surface}>
+      style={styles({ height: h }).surface}>
       <Title>
         {title}
         <MaterialCommunityIcons name={icon} />
@@ -35,7 +36,6 @@ const styles = ({ height }: { height: number }) =>
   StyleSheet.create({
     surface: {
       borderRadius: 5,
-      alignContent: 'center',
-      flexWrap: 'wrap',
+      height,
     },
   });

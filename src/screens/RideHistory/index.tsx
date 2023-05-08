@@ -6,7 +6,7 @@ import Stack from '../../navigators/RideHistory';
 function RideHistory() {
   return (
     <Stack.Navigator initialRouteName="History">
-      <Stack.Screen options={{ headerStyle: { height: 0 } }} name="History" component={RideList} />
+      <Stack.Screen options={{ headerShown: false }} name="History" component={RideList} />
       <Stack.Screen options={{ title: "" }} name="Summary" component={RideSummary} />
     </Stack.Navigator>
   );

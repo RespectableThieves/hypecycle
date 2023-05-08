@@ -19,7 +19,7 @@ const Stats = () => {
 function ActiveRide() {
   return (
     <Stack.Navigator initialRouteName="Stats">
-      <Stack.Screen options={{ headerStyle: { height: 0 } }} name="Stats" component={Stats} />
+      <Stack.Screen options={{ headerShown: false }} name="Stats" component={Stats} />
       <Stack.Screen options={{ title: "" }} name="Summary" component={RideSummary} />
     </Stack.Navigator>
   )
