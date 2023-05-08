@@ -1,5 +1,5 @@
 import * as React from 'react';
-import RideList from '../../components/RideHistory';
+import RideList from '../../components/RideList';
 import RideSummary from '../../components/RideSummary';
 import Stack from '../../navigators/RideHistory';
 

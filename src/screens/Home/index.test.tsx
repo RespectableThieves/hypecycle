@@ -57,8 +57,6 @@ it('Widget page renders & updates correctly', async () => {
     data: updatedRecord.instantPower,
   });
   expect(updatedWidget).toBeTruthy();
-
-  tree.unmount();
 });
 
 it('Can start/pause/unpause and stop a ride', async () => {

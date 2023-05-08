@@ -68,7 +68,7 @@ function DrawerNav() {
     <Drawer.Navigator
       screenOptions={{headerTintColor: '#FFFFFF'}}
       useLegacyImplementation
-      initialRouteName="RideHistory"
+      initialRouteName="Home"
       drawerContent={DrawerContent}>
       <Drawer.Screen
         name="Active Ride"

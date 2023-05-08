@@ -8,12 +8,12 @@ import {RideHistoryStack} from '../../navigators/RideHistory';
 
 type Summary = StackNavigationProp<RideHistoryStack, 'Summary'>;
 
-function RideOverview({summary}: {summary: RideSummaryModel}) {
+export function RideOverview({summary}: {summary: RideSummaryModel}) {
   const navigation = useNavigation<Summary>();
 
   return (
     <List.Item
-      title={summary.id}
+      title={summary.ride.id}
       description={summary.createdAt.toString()}
       onPress={() => {
         navigation.navigate('Summary', {summaryId: summary.id});
@@ -22,7 +22,7 @@ function RideOverview({summary}: {summary: RideSummaryModel}) {
   );
 }
 
-function RideSummary({summaries}: {summaries: RideSummaryModel[]}) {
+function RideList({summaries}: {summaries: RideSummaryModel[]}) {
   return (
     <>
       <FlatList<RideSummaryModel>
@@ -43,4 +43,4 @@ const enhance = withObservables([], () => {
   };
 });
 
-export default enhance(RideSummary);
+export default enhance(RideList);
