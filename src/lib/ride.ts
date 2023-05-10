@@ -98,7 +98,9 @@ export async function saveRideSummary(ride: RideModel) {
   });
 }
 
-export async function getRideSummary(rideId: RideModel['id']) {
+export async function getRideSummary(
+  rideId: RideModel['id'],
+): Promise<RideSummaryModel> {
   const [rideSummary] = await db
     .get<RideSummaryModel>('ride_summary')
     .query(Q.where('ride_id', rideId), Q.take(1))
@@ -110,6 +112,7 @@ export async function onRideEnd(ride: RideModel) {
   // on ride end.
   // first save ride summary.
   const summary = await saveRideSummary(ride);
+
   // then generate tcx file
   const tcx = await generateTCX(summary);
   // save the tcx file to disk

@@ -8,7 +8,13 @@ import {
   stopRide,
   startRide,
   onRideEnd,
+  getRideSummary,
 } from '../../lib/ride';
+import {useNavigation} from '@react-navigation/native';
+import {ActiveRideStack} from '../../navigators/ActiveRideStack';
+import {StackNavigationProp} from '@react-navigation/stack';
+
+type Summary = StackNavigationProp<ActiveRideStack, 'Summary'>;
 
 type Props = {
   activeRides: RideModel[];
@@ -23,6 +29,7 @@ const RideFab = ({activeRides = []}: Props) => {
   const [activeRide] = activeRides;
   const [state, setState] = React.useState({open: false});
   const [message, setMessage] = React.useState('');
+  const navigation = useNavigation<Summary>();
 
   const onStateChange = ({open}: State) => setState({open});
   const onDismissSnackBar = () => setMessage('');
@@ -48,6 +55,13 @@ const RideFab = ({activeRides = []}: Props) => {
           } else {
             console.log('An unexpected error occurred:', err);
             setMessage('An unexpected error occurred');
+          }
+        } finally {
+          try {
+            const summary = await getRideSummary(activeRide.id);
+            navigation.navigate('Summary', {summaryId: summary.id});
+          } catch (err) {
+            console.log(err);
           }
         }
       },

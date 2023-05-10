@@ -1,9 +1,11 @@
 import WidgetGrid from '../../components/WidgetGrid';
 import RideFab from '../../components/RideFab';
 import {View} from 'react-native';
+import RideSummary from '../../components/RideSummary';
 import {Portal} from 'react-native-paper';
+import Stack from '../../navigators/ActiveRideStack';
 
-const ActiveRideView = () => {
+const Stats = () => {
   return (
     <Portal.Host>
       <View>
@@ -14,4 +16,21 @@ const ActiveRideView = () => {
   );
 };
 
-export default ActiveRideView;
+function ActiveRide() {
+  return (
+    <Stack.Navigator initialRouteName="Stats">
+      <Stack.Screen
+        options={{headerShown: false}}
+        name="Stats"
+        component={Stats}
+      />
+      <Stack.Screen
+        options={{title: ''}}
+        name="Summary"
+        component={RideSummary}
+      />
+    </Stack.Navigator>
+  );
+}
+
+export default ActiveRide;

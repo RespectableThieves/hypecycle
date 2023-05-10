@@ -10,6 +10,8 @@ import {
 import App from '../../../App';
 import RealtimeDataModel from '../../database/model/realtimeDataModel';
 import {navigate} from '../../lib/navigation';
+import RideSummary from '../../components/RideSummary';
+import MapRoute from '../../components/MapRoute';
 
 let tree!: ReactTestRenderer;
 let screen!: ReactTestInstance;
@@ -60,8 +62,6 @@ it('Widget page renders & updates correctly', async () => {
     data: updatedRecord.instantPower,
   });
   expect(updatedWidget).toBeTruthy();
-
-  tree.unmount();
 });
 
 it('Can start/pause/unpause and stop a ride', async () => {
@@ -100,6 +100,10 @@ it('Can start/pause/unpause and stop a ride', async () => {
   // now lets check our options
   expect(getActionLabels()).toEqual([labels.end, labels.unpause]);
 
+  const realtimeData = await getOrCreateRealtimeRecord();
+  const rideId = realtimeData!.ride!.id;
+  expect(rideId).toBeTruthy();
+
   // now let's unpause the ride
   await renderer.act(async () => {
     await findActionLabel(labels.unpause).onPress();
@@ -115,4 +119,10 @@ it('Can start/pause/unpause and stop a ride', async () => {
 
   // check we can only see the start option again.
   expect(getActionLabels()).toEqual([labels.start]);
+
+  // Check we have rendered the ride Summary
+  // and the map
+  tree.root.findByType(RideSummary);
+  const map = tree.root.findByType(MapRoute);
+  expect(map.props.rideId).toBe(rideId);
 });

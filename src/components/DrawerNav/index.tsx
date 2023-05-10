@@ -8,7 +8,9 @@ import Sensors from '../../screens/Sensors';
 import {Button} from 'react-native-paper';
 import NavigationView from '../../screens/Navigation';
 import SettingsView from '../../screens/Settings';
+import RideHistory from '../../screens/RideHistory';
 import {Drawer as PaperDrawer} from 'react-native-paper';
+
 const Drawer = createDrawerNavigator();
 export type DrawerNavProps = DrawerScreenProps<any>;
 
@@ -34,6 +36,13 @@ const DrawerContent = (props: any) => {
         label="Sensors"
         onPress={() => {
           props.navigation.navigate('Sensors');
+        }}
+      />
+      <PaperDrawer.Item
+        label="Rides"
+        icon="bike"
+        onPress={() => {
+          props.navigation.navigate('RideHistory');
         }}
       />
       <PaperDrawer.Item
@@ -78,6 +87,11 @@ function DrawerNav() {
           drawerLabel: 'Sensors',
           headerRight: HeaderRight,
         }}
+      />
+      <Drawer.Screen
+        name="RideHistory"
+        component={RideHistory}
+        options={{drawerLabel: 'Ride History'}}
       />
       <Drawer.Screen
         name="Settings"
