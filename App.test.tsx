@@ -1,9 +1,9 @@
 import App from './App';
-import renderer, {ReactTestRenderer} from 'react-test-renderer';
+import renderer, { ReactTestRenderer } from 'react-test-renderer';
 import Home from './src/screens/Home';
 import * as Location from 'expo-location';
-import {getOrCreateRealtimeRecord} from './src/lib/data';
-import {startRide} from './src/lib/ride';
+import { getOrCreateRealtimeRecord } from './src/lib/data';
+import { startRide } from './src/lib/ride';
 
 it('App renders correctly for signed user.', async () => {
   // check the home pages renders
@@ -79,6 +79,71 @@ it('App registers location service and logs to db with distance calculated with 
   tree.unmount();
 });
 
+it.only('MovingTime correct handles locations recorded before the ride start.', async () => {
+  let tree!: ReactTestRenderer;
+
+  const coords = {
+    accuracy: 110,
+    latitude: 41.4027,
+    longitude: 2.1743,
+    heading: 10,
+    altitude: 41.0,
+    altitudeAccuracy: 0,
+  };
+
+  await renderer.act(async () => {
+    tree = renderer.create(<App />);
+  });
+
+  tree.root.findByType(Home);
+
+  const record = await getOrCreateRealtimeRecord();
+  const startTime = Date.now();
+
+  // Trigger a location update.
+  await renderer.act(async () => {
+    // @ts-ignore
+    // this is a mock method
+    await Location._emitLocation({
+      timestamp: startTime - 5000,
+      mocked: true,
+      coords: {
+        ...coords,
+        speed: 1,
+      },
+    });
+  });
+
+  await renderer.act(async () => {
+    // ensure there is an active ride
+    await startRide();
+    // @ts-ignore
+    // this is a mock method
+  });
+
+  await renderer.act(async () => {
+    // @ts-ignore
+    // this is a mock method
+    await Location._emitLocation({
+      timestamp: startTime + 1000,
+      mocked: true,
+      coords: {
+        ...coords,
+        speed: 1,
+      },
+    });
+  });
+
+
+  // now ensure record.movingTime is back to zero.
+  // and doesn't take the location recorded 
+  // before ride start into account.
+  expect(record.ride!.id).toBeTruthy();
+  expect(record.movingTime).toBe(1000);
+  expect(record.lastLocationAt).toEqual(new Date(startTime + 1000));
+})
+
+
 it('App registers location service and logs to db with movingTime calculated with active ride', async () => {
   let tree!: ReactTestRenderer;
   const coords = {
@@ -96,7 +161,6 @@ it('App registers location service and logs to db with movingTime calculated wit
 
   tree.root.findByType(Home);
 
-  // Trigger a location update.
   await renderer.act(async () => {
     // ensure there is an active ride
     await startRide();
@@ -138,7 +202,6 @@ it('App registers location service and logs to db with movingTime calculated wit
     });
   });
 
-  // check that
   expect(record.movingTime).toBe(1000);
 
   // Trigger a location update.
@@ -155,7 +218,6 @@ it('App registers location service and logs to db with movingTime calculated wit
     });
   });
 
-  // check that
   expect(record.movingTime).toBe(2000);
 
   // Trigger a location update.
@@ -176,7 +238,7 @@ it('App registers location service and logs to db with movingTime calculated wit
   // because speed is == 0
   expect(record.movingTime).toBe(2000);
 
-  // Now check for record in realtime db.
+
   tree.unmount();
 });
 
