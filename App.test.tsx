@@ -80,7 +80,7 @@ it('App registers location service and logs to db with distance calculated with 
   tree.unmount();
 });
 
-it('MovingTime correct handles locations recorded before the ride start.', async () => {
+it('MovingTime correctly handles locations recorded before the ride start.', async () => {
   let tree!: ReactTestRenderer;
   let ride!: RideModel;
 
