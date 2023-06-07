@@ -318,10 +318,8 @@ it('App registers location service and logs to db with without movingTime calcul
 
 it('App registers location service and logs to db without distance calculated with inactive ride', async () => {
   let tree!: ReactTestRenderer;
+  let record!: RealtimeDataModel;
 
-  await renderer.act(async () => {
-    record = await getOrCreateRealtimeRecord();
-  });
   await renderer.act(() => {
     tree = renderer.create(<App />);
   });
@@ -347,8 +345,9 @@ it('App registers location service and logs to db without distance calculated wi
     Location._emitLocation(newLocation);
   });
 
-  let record = await getOrCreateRealtimeRecord();
-
+  await renderer.act(async () => {
+    record = await getOrCreateRealtimeRecord();
+  });
   expect(record.distance).toBe(0);
   expect(record.latitude).toBe(newLocation.coords.latitude);
   expect(record.longitude).toBe(newLocation.coords.longitude);
