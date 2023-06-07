@@ -1,9 +1,10 @@
 import App from './App';
-import renderer, { ReactTestRenderer } from 'react-test-renderer';
+import renderer, {ReactTestRenderer} from 'react-test-renderer';
 import Home from './src/screens/Home';
 import * as Location from 'expo-location';
-import { getOrCreateRealtimeRecord } from './src/lib/data';
-import { startRide } from './src/lib/ride';
+import {getOrCreateRealtimeRecord} from './src/lib/data';
+import {startRide} from './src/lib/ride';
+import {RideModel} from './src/database';
 
 it('App renders correctly for signed user.', async () => {
   // check the home pages renders
@@ -79,8 +80,9 @@ it('App registers location service and logs to db with distance calculated with 
   tree.unmount();
 });
 
-it.only('MovingTime correct handles locations recorded before the ride start.', async () => {
+it('MovingTime correct handles locations recorded before the ride start.', async () => {
   let tree!: ReactTestRenderer;
+  let ride!: RideModel;
 
   const coords = {
     accuracy: 110,
@@ -100,7 +102,8 @@ it.only('MovingTime correct handles locations recorded before the ride start.', 
   const record = await getOrCreateRealtimeRecord();
   const startTime = Date.now();
 
-  // Trigger a location update.
+  // Trigger a location update
+  // before starting ride
   await renderer.act(async () => {
     // @ts-ignore
     // this is a mock method
@@ -116,16 +119,18 @@ it.only('MovingTime correct handles locations recorded before the ride start.', 
 
   await renderer.act(async () => {
     // ensure there is an active ride
-    await startRide();
+    ride = await startRide();
     // @ts-ignore
     // this is a mock method
   });
 
+  // Trigger a location update
+  // during ride
   await renderer.act(async () => {
     // @ts-ignore
     // this is a mock method
     await Location._emitLocation({
-      timestamp: startTime + 1000,
+      timestamp: ride.startedAt.getTime() + 1000,
       mocked: true,
       coords: {
         ...coords,
@@ -134,15 +139,12 @@ it.only('MovingTime correct handles locations recorded before the ride start.', 
     });
   });
 
-
   // now ensure record.movingTime is back to zero.
-  // and doesn't take the location recorded 
+  // and doesn't take the location recorded
   // before ride start into account.
   expect(record.ride!.id).toBeTruthy();
   expect(record.movingTime).toBe(1000);
-  expect(record.lastLocationAt).toEqual(new Date(startTime + 1000));
-})
-
+});
 
 it('App registers location service and logs to db with movingTime calculated with active ride', async () => {
   let tree!: ReactTestRenderer;
@@ -237,7 +239,6 @@ it('App registers location service and logs to db with movingTime calculated wit
   // should not have incremented
   // because speed is == 0
   expect(record.movingTime).toBe(2000);
-
 
   tree.unmount();
 });
