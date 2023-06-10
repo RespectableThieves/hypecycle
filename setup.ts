@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler/jestSetup';
 
+jest.useFakeTimers();
 jest.mock(
   '@nozbe/watermelondb/adapters/sqlite/makeDispatcher/index.native.js',
   () => {

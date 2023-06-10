@@ -8,7 +8,7 @@ jest.mock('@react-navigation/elements', () => ({
 it('map renders correctly', async () => {
   // not much to test on this.
   let tree!: ReactTestRenderer;
-  await renderer.act(() => {
+  renderer.act(() => {
     tree = renderer.create(<MapWidget />);
   });
   tree.root.findByType(MapWidget);
