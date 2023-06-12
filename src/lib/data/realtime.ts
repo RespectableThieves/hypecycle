@@ -57,7 +57,7 @@ export async function onLocation(
     : 0;
 
   const movingTime = realtimeData.ride?.id
-    ? accumulateMovingTime(realtimeData, location)
+    ? await accumulateMovingTime(realtimeData, location)
     : 0;
 
   console.log('accumulated distance: ', distance);
