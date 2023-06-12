@@ -1708,11 +1708,6 @@
   dependencies:
     "@hapi/hoek" "^9.0.0"
 
-"@homee/react-native-mapbox-navigation@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@homee/react-native-mapbox-navigation/-/react-native-mapbox-navigation-1.1.0.tgz#e91f0019c178be9d23379a06f75e08ba77f3798c"
-  integrity sha512-ZORQsezRds20p8jc2c+bIiVZ9o6NIptbhjnDQ6IsOn4UzeXt0qAQnR6WzMj3tEsMjMyJAtPVJBkjfyyiOW9GIw==
-
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.8.tgz#03595ac2075a4dc0f191cc2131de14fbd7d410b9"
@@ -9298,6 +9293,10 @@ react-native-gradle-plugin@^0.71.17:
   version "0.71.17"
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.71.17.tgz#cf780a27270f0a32dca8184eff91555d7627dd00"
   integrity sha512-OXXYgpISEqERwjSlaCiaQY6cTY5CH6j73gdkWpK0hedxtiWMWgH+i5TOi4hIGYitm9kQBeyDu+wim9fA8ROFJA==
+
+"react-native-mapbox-navigation@https://github.com/craigmulligan/react-native-mapbox-navigation.git":
+  version "2.0.1"
+  resolved "https://github.com/craigmulligan/react-native-mapbox-navigation.git#5fedb075d884349fbaca42d2a990754a41a2f2d8"
 
 react-native-paper@^5.2.0:
   version "5.6.0"

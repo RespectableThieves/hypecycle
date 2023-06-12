@@ -13,7 +13,6 @@
   "dependencies": {
     "@config-plugins/react-native-ble-plx": "^6.0.0",
     "@expo/vector-icons": "^13.0.0",
-    "@homee/react-native-mapbox-navigation": "^1.1.0",
     "@morrowdigital/watermelondb-expo-plugin": "^2.1.0",
     "@nozbe/watermelondb": "^0.25.5",
     "@react-navigation/drawer": "^6.6.1",
@@ -45,6 +44,7 @@
     "react-native-ble-plx": "^2.0.3",
     "react-native-flex-grid": "^1.0.0",
     "react-native-gesture-handler": "^2.9.0",
+    "react-native-mapbox-navigation": "https://github.com/craigmulligan/react-native-mapbox-navigation.git",
     "react-native-paper": "^5.2.0",
     "react-native-reanimated": "~2.14.4",
     "react-native-safe-area-context": "4.5.0",
