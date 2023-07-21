@@ -89,9 +89,6 @@ type StravaUpload = {
 };
 
 export async function getUpload(id: number, t: Token): Promise<StravaUpload> {
-  // TODO pass in token
-  // strava processes uploads async so we want to wait
-  // until we
   const res = await fetch(`${Constants.stravaBackend}/uploads/${id}`, {
     method: 'GET',
     headers: {
