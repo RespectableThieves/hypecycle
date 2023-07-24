@@ -108,11 +108,7 @@ export async function getRideSummary(
   return rideSummary;
 }
 
-export async function onRideEnd(ride: RideModel) {
-  // on ride end.
-  // first save ride summary.
-  const summary = await saveRideSummary(ride);
-
+export async function rideUpload(summary: RideSummaryModel) {
   // then generate tcx file
   const tcx = await generateTCX(summary);
   // save the tcx file to disk
@@ -126,8 +122,18 @@ export async function onRideEnd(ride: RideModel) {
       'Not uploading - not authenticated with strava.',
     );
   }
+
   // upload to strava.
-  const upload = await strava.upload(token!, ride, fileURI);
+  const upload = await strava.upload(token!, summary.ride.id, fileURI);
+
   // mark as uploaded.
   await summary.setStravaId(upload.id);
+}
+
+export async function onRideEnd(ride: RideModel) {
+  // on ride end.
+  // first save ride summary.
+  const summary = await saveRideSummary(ride);
+
+  return rideUpload(summary);
 }
